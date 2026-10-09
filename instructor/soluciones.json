@@ -1,0 +1,26 @@
+{
+  "01": {
+    "E01": "minutos / 60",
+    "E02": "90 - total_min",
+    "E03": "minutos_a_horas(45)",
+    "E04": "np.mean(registros_min)",
+    "M01": "np.sum(etapas_min)",
+    "M02": "minutos_a_horas(total_mision_min)",
+    "M03": "reserva_min - total_mision_min",
+    "M04": "total_mision_min <= reserva_min"
+  },
+  "02": {
+    "Q01": "r_ohm = 1.68e-8*30/2.5e-6\ncaida_v = 3*r_ohm\ncarga_v = 48-caida_v\nperdida_w = 3**2*r_ohm\nmostrar([r_ohm, caida_v, carga_v, perdida_w], [0.2016, 0.6048, 47.3952, 1.8144], ['R [Ω]', 'Caída [V]', 'Carga [V]', 'Pérdida [W]'])",
+    "Q02": "i_a = 120/24\nnominal_wh = 24*100\nautonomia_h = nominal_wh*0.50*0.85/120\nmostrar([i_a, nominal_wh, autonomia_h], [5, 2400, 8.5], ['I [A]', 'Nominal [Wh]', 'Autonomía [h]'])",
+    "Q03": "periodo_us = 1/2000*1e6\nduty = 1e-6*2000\nmedia_w = 50e3*duty\nb_mhz = 1/1e-6/1e6\nmostrar([periodo_us, duty, media_w, b_mhz], [500, 0.002, 100, 1], ['Tr [µs]', 'Duty', 'Media [W]', 'B aprox. [MHz]'])",
+    "Q04": "fspl = 20*np.log10(4*np.pi*200e3/(C/1090e6))\nsensibilidad = -174+10*np.log10(10e6)+3+10\npr_dbm = 50+3+8-2-fspl\nmargen_db = pr_dbm-sensibilidad\nmostrar([fspl, sensibilidad, pr_dbm, margen_db], [139.21090205814076, -91, -80.21090205814076, 10.78909794185924], ['FSPL [dB]', 'Sensibilidad [dBm]', 'Pr [dBm]', 'Margen [dB]'])",
+    "Q05": "horizonte = 4.12*(np.sqrt(25)+np.sqrt(10000))\nradio = np.sqrt((C/1090e6)*100e3*100e3/200e3)\ndespeje = 0.6*radio\nmostrar([horizonte, radio, despeje], [432.6, 117.30928, 70.385568], ['Horizonte [km]', 'Fresnel [m]', '60% [m]'])",
+    "Q06": "reflexion = (75-50)/(75+50)\nvswr = (1+abs(reflexion))/(1-abs(reflexion))\nreflejada_pct = 100*abs(reflexion)**2\npolar_db = -20*np.log10(abs(np.cos(np.deg2rad(45))))\nmostrar([reflexion, vswr, reflejada_pct, polar_db], [0.2, 1.5, 4, 3.010299956], ['Γ', 'VSWR', 'Reflejada [%]', 'Polarización [dB]'])",
+    "Q07": "ts_us = 1/5e6*1e6\nniveles = 2**10\npaso_mv = 2/niveles*1000\nsqnr_db = 6.02*10+1.76\nmostrar([ts_us, niveles, paso_mv, sqnr_db], [0.2, 1024, 1.953125, 61.96], ['Ts [µs]', 'Niveles', 'Paso [mV]', 'SQNR [dB]'])",
+    "Q08": "duracion_us = (112/1e6+8e-6)*1e6\nmostrar([duracion_us], [120], ['Mensaje [µs]'])",
+    "Q09": "psr_km = C*400e-6/2/1000\nac_km = C*(403e-6-3e-6)/2/1000\ns_km = C*(528e-6-128e-6)/2/1000\nmostrar([psr_km, ac_km, s_km], [60, 60, 60], ['PSR [km]', 'SSR A/C [km]', 'Mode S [km]'])",
+    "Q10": "camino_m = C*100e-9\nmostrar([camino_m], [30], ['Diferencia [m]'])",
+    "Q11": "latencia_ms = (200*8/1e6+20e3/2e8+2e-3+5e-3)*1000\nplr_pct = 100*10/1000\nmostrar([latencia_ms, plr_pct], [8.7, 1], ['Latencia [ms]', 'PLR [%]'])",
+    "Q12": "ruta_pct = 100*1000/(1000+2)\npar_pct = 100*(1-(1-ruta_pct/100)**2)\nmostrar([ruta_pct, par_pct], [99.8003992016, 99.9996015952], ['Una ruta [%]', 'Dos rutas [%]'])"
+  }
+}
