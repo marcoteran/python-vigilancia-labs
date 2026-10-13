@@ -3,3 +3,14 @@ __pycache__/
 .ipynb_checkpoints/
 *.pyc
 .DS_Store
+
+# Laboratorio SDR: compilación LaTeX y archivo local de borradores
+lab_SDR_surveillance_LaTeX/build/
+lab_SDR_surveillance_LaTeX/_hist/
+*.aux
+*.toc
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv

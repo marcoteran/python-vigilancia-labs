@@ -1,0 +1,115 @@
+% Laboratorio integrado de SDR aplicado a vigilancia aeronáutica
+% Documento maestro. El contenido está en laboratorio_sdr_3.tex.
+%
+% Compilación recomendada (XeLaTeX, tres pasadas; ver README.md):
+%   xelatex -output-directory=build -jobname=laboratorio_sdr_surveillance main.tex
+%
+% IMPORTANTE: deliberadamente NO se usa \DocumentMetadata en esta edición.
+% En instalaciones MiKTeX parcialmente actualizadas, esa instrucción puede activar
+% el stack experimental latex-lab/tagpdf y provocar errores de sockets/comandos.
+
+\documentclass[11pt,a4paper]{scrartcl}
+\usepackage[palette=signal,mode=lab,body=serif]{marco-academic}
+\usepackage{longtable}
+\usepackage{calc}
+\usepackage{float}
+\usepackage{bookmark}
+\usepackage{fvextra}
+\usepackage{amssymb}
+
+% Las secciones ya llevan su propio rótulo («Práctica 1 --», «3D.»): sin numeración
+% automática para evitar rótulos dobles como «5.4. 3D.». El índice muestra secciones.
+\setcounter{secnumdepth}{0}
+\setcounter{tocdepth}{1}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.14}
+
+\MASetup{
+ title={Laboratorio de SDR aplicado a Vigilancia Aeronáutica},
+ subtitle={Del espectro RF a la información aeronáutica: recepción AM/FM, transmisión FM conducida, Wi-Fi/BLE y ADS-B/Mode S con HackRF One, SDRangel y GNU Radio},
+ author={Marco Teran},
+ institution={Manual universitario · Guía del estudiante y del instructor},
+ course={Vigilancia aeronáutica · Instrumentación RF y SDR},
+ code={LAB-SDR-1090},
+ version={1.2},
+ date={13 de octubre de 2026},
+ header-left={Laboratorio SDR · Vigilancia Aeronáutica},
+ header-right={HackRF One · SDRangel · GNU Radio},
+ cover-note={\textbf{Pregunta guía:} ¿cómo se pasa de energía electromagnética observable a información de vigilancia en la que se pueda confiar?\\[1.5mm]
+  \textbf{Modalidad RF:} recepción con antena; transmisión \emph{exclusivamente conducida}, con atenuación, hacia el analizador de espectro. Nunca se transmite por antena.\\[1.5mm]
+  \textbf{Contexto:} complemento con hardware de los laboratorios de Python del repositorio \texttt{python-vigilancia-labs}.}
+}
+
+% Figure helper: coloque los PNG en figures/ con el nombre indicado. Mientras no
+% existan, aparece un placeholder editorial. La edición actual no inserta figuras.
+\newcommand{\MAInsertVisual}[4]{%
+  \begin{figure}[H]
+    \centering
+    \IfFileExists{figures/#2}{%
+      \includegraphics[width=\linewidth]{figures/#2}%
+    }{%
+      \begin{tcolorbox}[enhanced,frame hidden,colback=MASurfaceAlt,boxrule=0pt,arc=2mm,
+        width=\linewidth,height=.48\textwidth,valign=center,
+        borderline west={3pt}{0pt}{MAPrimary},left=8mm,right=8mm]
+        \centering
+        {\sffamily\bfseries\large\color{MAPrimaryDark}FIGURA MAESTRA\\[3mm]}
+        {\ttfamily\small\color{MAMuted}\detokenize{#1}\\[5mm]}
+        {\sffamily\bfseries\Large\color{MAInk}#3\\[5mm]}
+        {\sffamily\small\color{MAMuted}Espacio editorial 16:9. Sustituir automáticamente colocando \texttt{\detokenize{#2}} en la carpeta \texttt{figures/}.}
+      \end{tcolorbox}%
+    }
+    \caption{#4}
+  \end{figure}%
+}
+
+\definecolor{grisclaro}{HTML}{F3F4F6}
+
+\hypersetup{
+	pdftitle={Laboratorio de SDR aplicado a Vigilancia Aeronáutica},
+	pdfsubject={Recepción AM/FM, transmisión FM conducida, Wi-Fi/BLE y ADS-B/Mode S},
+	pdfkeywords={SDR, HackRF One, SDRangel, GNU Radio, ADS-B, Mode S, Wi-Fi, BLE},
+	pdflang={es},
+	bookmarksnumbered=false,
+	bookmarksopen=true
+}
+% marco-academic fija pdftitle/pdfsubject al iniciar el documento; se reafirman aquí.
+\AtBeginDocument{\hypersetup{pdftitle={Laboratorio de SDR aplicado a Vigilancia Aeronáutica},
+	pdfsubject={Recepción AM/FM, transmisión FM conducida, Wi-Fi/BLE y ADS-B/Mode S}}}
+
+\lstset{
+	style=ma-code,
+	basicstyle=\ttfamily\small,
+	backgroundcolor=\color{grisclaro},
+	frame=single,
+	rulecolor=\color{gray!35},
+	breaklines=true,
+	columns=fullflexible,
+	keepspaces=true,
+	showstringspaces=false,
+	numbers=none,
+	xleftmargin=0.4em,
+	xrightmargin=0.4em,
+	aboveskip=0.6em,
+	belowskip=0.6em
+}
+
+\setlist[itemize]{leftmargin=1.55em,itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.35em,topsep=0.35em}
+
+% Entornos propios del manual, sobre el sistema de recuadros de marco-academic:
+% objetivo y nota vienen del paquete; estos tres completan la semántica.
+\newtcolorbox{esperado}{ma/base,colback=MASuccessSoft,coltitle=MASuccess,borderline west={2.5pt}{0pt}{MASuccess},title={QUÉ DEBE OBSERVAR Y POR QUÉ}}
+\newtcolorbox{alerta}{ma/base,colback=MADangerSoft,coltitle=MADanger,borderline west={3pt}{0pt}{MADanger},title={ADVERTENCIA}}
+\newtcolorbox{diagnostico}{ma/base,colback=MASurfaceAlt,coltitle=MAInk,borderline west={2.5pt}{0pt}{MAMuted},title={DIAGNÓSTICO RÁPIDO}}
+
+\begin{document}
+\MAMakeTitle
+
+\tableofcontents
+\clearpage
+
+\input{laboratorio_sdr_3}
+
+\end{document}

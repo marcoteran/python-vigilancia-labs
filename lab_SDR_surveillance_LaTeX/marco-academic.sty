@@ -1,0 +1,456 @@
+%% marco-academic.sty
+%% Modern academic / technical document system for KOMA-Script
+%% Version 1.0.0 - 2026-08-26
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{marco-academic}[2026/08/26 v1.0 Modern academic document system]
+
+\RequirePackage{kvoptions}
+\SetupKeyvalOptions{family=MA,prefix=MA@}
+\DeclareStringOption[vertex]{palette}
+\DeclareStringOption[serif]{body}
+\DeclareStringOption[notes]{mode}
+\DeclareStringOption[spanish]{language}
+\DeclareBoolOption[false]{tintedpaper}
+\DeclareBoolOption[true]{colorlinks}
+\ProcessKeyvalOptions*
+
+\RequirePackage{iftex}
+\RequirePackage{etoolbox}
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage{microtype}
+\RequirePackage{mathtools}
+\RequirePackage{libertinus}
+\RequirePackage{plex-sans}
+\RequirePackage{sourcecodepro}
+\ifdefstring{\MA@language}{spanish}{\RequirePackage[spanish,es-nodecimaldot]{babel}}{\RequirePackage[english]{babel}}
+\RequirePackage{geometry}
+\RequirePackage{scrlayer-scrpage}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{breakable,skins,listings}
+\RequirePackage{listings}
+\RequirePackage{booktabs}
+\RequirePackage{tabularx}
+\RequirePackage{array}
+\RequirePackage{enumitem}
+\RequirePackage{caption}
+\RequirePackage{siunitx}
+\RequirePackage{xurl}
+\RequirePackage{hyperref}
+\RequirePackage[capitalise,nameinlink,noabbrev]{cleveref}
+\RequirePackage{pgfkeys}
+\RequirePackage{needspace}
+\RequirePackage{lastpage}
+\RequirePackage{ragged2e}
+
+\makeatletter
+
+\@ifundefined{KOMAClassName}{%
+  \PackageError{marco-academic}{This package requires a KOMA-Script class}%
+  {Use scrartcl, scrreprt, or scrbook as the document class.}%
+}{}
+
+%% ---------------------------------------------------------------------------
+%% Palette system - semantic roles inspired by modern design-token practice.
+%% Every dark semantic accent is chosen to pass WCAG AA against white.
+%% ---------------------------------------------------------------------------
+\newcommand{\MA@definepalette@vertex}{%
+  \definecolor{MACanvas}{HTML}{FBFAF7}%
+  \definecolor{MASurface}{HTML}{FFFFFF}%
+  \definecolor{MASurfaceAlt}{HTML}{F2F5FA}%
+  \definecolor{MAInk}{HTML}{172033}%
+  \definecolor{MAMuted}{HTML}{5E6675}%
+  \definecolor{MAPrimary}{HTML}{2457D6}%
+  \definecolor{MAPrimaryDark}{HTML}{173A91}%
+  \definecolor{MAPrimarySoft}{HTML}{E7EEFF}%
+  \definecolor{MASecondary}{HTML}{A84F38}%
+  \definecolor{MASecondarySoft}{HTML}{F7E8E2}%
+  \definecolor{MATertiary}{HTML}{0B746B}%
+  \definecolor{MATertiarySoft}{HTML}{DFF3F0}%
+  \definecolor{MASuccess}{HTML}{1F7A4D}%
+  \definecolor{MASuccessSoft}{HTML}{E2F4EA}%
+  \definecolor{MAWarning}{HTML}{8A5A00}%
+  \definecolor{MAWarningSoft}{HTML}{FFF2CC}%
+  \definecolor{MADanger}{HTML}{B42318}%
+  \definecolor{MADangerSoft}{HTML}{FDE7E3}%
+  \definecolor{MARule}{HTML}{D8DCE4}%
+}
+\newcommand{\MA@definepalette@material}{%
+  \definecolor{MACanvas}{HTML}{FAFBFF}%
+  \definecolor{MASurface}{HTML}{FFFFFF}%
+  \definecolor{MASurfaceAlt}{HTML}{EEF3FC}%
+  \definecolor{MAInk}{HTML}{1B1B1F}%
+  \definecolor{MAMuted}{HTML}{5F6368}%
+  \definecolor{MAPrimary}{HTML}{1A56DB}%
+  \definecolor{MAPrimaryDark}{HTML}{123B9C}%
+  \definecolor{MAPrimarySoft}{HTML}{E8F0FE}%
+  \definecolor{MASecondary}{HTML}{5556A6}%
+  \definecolor{MASecondarySoft}{HTML}{ECECFF}%
+  \definecolor{MATertiary}{HTML}{006B5F}%
+  \definecolor{MATertiarySoft}{HTML}{D7F4EE}%
+  \definecolor{MASuccess}{HTML}{176B45}%
+  \definecolor{MASuccessSoft}{HTML}{E0F4EA}%
+  \definecolor{MAWarning}{HTML}{825500}%
+  \definecolor{MAWarningSoft}{HTML}{FFF1C7}%
+  \definecolor{MADanger}{HTML}{B3261E}%
+  \definecolor{MADangerSoft}{HTML}{F9DEDC}%
+  \definecolor{MARule}{HTML}{DADCE0}%
+}
+\newcommand{\MA@definepalette@atelier}{%
+  \definecolor{MACanvas}{HTML}{FAF8F3}%
+  \definecolor{MASurface}{HTML}{FFFDF9}%
+  \definecolor{MASurfaceAlt}{HTML}{F1ECE4}%
+  \definecolor{MAInk}{HTML}{1E1D1A}%
+  \definecolor{MAMuted}{HTML}{69655E}%
+  \definecolor{MAPrimary}{HTML}{A64E35}%
+  \definecolor{MAPrimaryDark}{HTML}{753323}%
+  \definecolor{MAPrimarySoft}{HTML}{F3E4DC}%
+  \definecolor{MASecondary}{HTML}{46685F}%
+  \definecolor{MASecondarySoft}{HTML}{E4EEEA}%
+  \definecolor{MATertiary}{HTML}{7A5B17}%
+  \definecolor{MATertiarySoft}{HTML}{F2E9CC}%
+  \definecolor{MASuccess}{HTML}{3B6F4E}%
+  \definecolor{MASuccessSoft}{HTML}{E4F0E7}%
+  \definecolor{MAWarning}{HTML}{805B00}%
+  \definecolor{MAWarningSoft}{HTML}{F8E9BE}%
+  \definecolor{MADanger}{HTML}{A93E35}%
+  \definecolor{MADangerSoft}{HTML}{F6E1DD}%
+  \definecolor{MARule}{HTML}{DDD7CE}%
+}
+\newcommand{\MA@definepalette@signal}{%
+  \definecolor{MACanvas}{HTML}{F8FAFC}%
+  \definecolor{MASurface}{HTML}{FFFFFF}%
+  \definecolor{MASurfaceAlt}{HTML}{EFF6FF}%
+  \definecolor{MAInk}{HTML}{0F172A}%
+  \definecolor{MAMuted}{HTML}{475569}%
+  \definecolor{MAPrimary}{HTML}{0F5BC6}%
+  \definecolor{MAPrimaryDark}{HTML}{123D7A}%
+  \definecolor{MAPrimarySoft}{HTML}{E1EDFF}%
+  \definecolor{MASecondary}{HTML}{0E6F82}%
+  \definecolor{MASecondarySoft}{HTML}{DFF2F5}%
+  \definecolor{MATertiary}{HTML}{9A4A05}%
+  \definecolor{MATertiarySoft}{HTML}{FBE7D0}%
+  \definecolor{MASuccess}{HTML}{157347}%
+  \definecolor{MASuccessSoft}{HTML}{E1F4EA}%
+  \definecolor{MAWarning}{HTML}{855F00}%
+  \definecolor{MAWarningSoft}{HTML}{FFF1C2}%
+  \definecolor{MADanger}{HTML}{B42318}%
+  \definecolor{MADangerSoft}{HTML}{FDE7E3}%
+  \definecolor{MARule}{HTML}{CBD5E1}%
+}
+\newcommand{\MA@definepalette@orchid}{%
+  \definecolor{MACanvas}{HTML}{FCFAFF}%
+  \definecolor{MASurface}{HTML}{FFFFFF}%
+  \definecolor{MASurfaceAlt}{HTML}{F5F0FA}%
+  \definecolor{MAInk}{HTML}{251B2D}%
+  \definecolor{MAMuted}{HTML}{695F70}%
+  \definecolor{MAPrimary}{HTML}{6B3FB5}%
+  \definecolor{MAPrimaryDark}{HTML}{4A287E}%
+  \definecolor{MAPrimarySoft}{HTML}{EEE6FA}%
+  \definecolor{MASecondary}{HTML}{A83E70}%
+  \definecolor{MASecondarySoft}{HTML}{F8E5EE}%
+  \definecolor{MATertiary}{HTML}{176F67}%
+  \definecolor{MATertiarySoft}{HTML}{DFF2EF}%
+  \definecolor{MASuccess}{HTML}{2F764E}%
+  \definecolor{MASuccessSoft}{HTML}{E4F2E8}%
+  \definecolor{MAWarning}{HTML}{865D00}%
+  \definecolor{MAWarningSoft}{HTML}{FFF0C7}%
+  \definecolor{MADanger}{HTML}{AA2E25}%
+  \definecolor{MADangerSoft}{HTML}{FAE5E2}%
+  \definecolor{MARule}{HTML}{DED7E5}%
+}
+\newcommand{\MA@definepalette@mono}{%
+  \definecolor{MACanvas}{HTML}{FAFAF9}%
+  \definecolor{MASurface}{HTML}{FFFFFF}%
+  \definecolor{MASurfaceAlt}{HTML}{F1F1EF}%
+  \definecolor{MAInk}{HTML}{18181B}%
+  \definecolor{MAMuted}{HTML}{5F5F66}%
+  \definecolor{MAPrimary}{HTML}{343A46}%
+  \definecolor{MAPrimaryDark}{HTML}{20242C}%
+  \definecolor{MAPrimarySoft}{HTML}{E8E9EC}%
+  \definecolor{MASecondary}{HTML}{5B5147}%
+  \definecolor{MASecondarySoft}{HTML}{EEEAE6}%
+  \definecolor{MATertiary}{HTML}{4C635B}%
+  \definecolor{MATertiarySoft}{HTML}{E6ECE9}%
+  \definecolor{MASuccess}{HTML}{3E6C4E}%
+  \definecolor{MASuccessSoft}{HTML}{E6F0E9}%
+  \definecolor{MAWarning}{HTML}{735D16}%
+  \definecolor{MAWarningSoft}{HTML}{F2ECD6}%
+  \definecolor{MADanger}{HTML}{8E3832}%
+  \definecolor{MADangerSoft}{HTML}{F2E4E1}%
+  \definecolor{MARule}{HTML}{D5D5D1}%
+}
+
+\newcommand{\MASelectPalette}[1]{%
+  \ifcsname MA@definepalette@#1\endcsname
+    \csname MA@definepalette@#1\endcsname
+    \gdef\MA@currentpalette{#1}%
+    \ifMA@tintedpaper\pagecolor{MACanvas}\fi
+  \else
+    \PackageWarning{marco-academic}{Unknown palette '#1'. Falling back to vertex}%
+    \MA@definepalette@vertex
+    \gdef\MA@currentpalette{vertex}%
+  \fi
+}
+\MASelectPalette{\MA@palette}
+
+%% ---------------------------------------------------------------------------
+%% Typography and page geometry
+%% ---------------------------------------------------------------------------
+\ifdefstring{\MA@body}{sans}{\renewcommand{\familydefault}{\sfdefault}}{}
+\KOMAoptions{parskip=half-,headings=normal,numbers=noendperiod}
+\geometry{a4paper,top=23mm,bottom=25mm,left=24mm,right=24mm,headheight=16pt,headsep=7mm,footskip=13mm}
+\linespread{1.035}
+\setlength{\emergencystretch}{2em}
+\raggedbottom
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+\setkomafont{disposition}{\sffamily\bfseries\color{MAInk}}
+\setkomafont{section}{\sffamily\bfseries\Large\color{MAInk}}
+\setkomafont{subsection}{\sffamily\bfseries\large\color{MAInk}}
+\setkomafont{subsubsection}{\sffamily\bfseries\normalsize\color{MAInk}}
+\setkomafont{paragraph}{\sffamily\bfseries\color{MAInk}}
+\renewcommand*{\sectionformat}{\textcolor{MAPrimary}{\thesection}\enskip}
+\renewcommand*{\subsectionformat}{\textcolor{MAPrimary}{\thesubsection}\enskip}
+\renewcommand*{\subsubsectionformat}{\textcolor{MAMuted}{\thesubsubsection}\enskip}
+
+\@ifundefined{chapter}{}{%
+  \setkomafont{chapter}{\sffamily\bfseries\fontsize{27}{30}\selectfont\color{MAInk}}
+  \renewcommand*{\chapterformat}{%
+    \mbox{\textcolor{MAPrimary}{\sffamily\bfseries\fontsize{13}{13}\selectfont
+    \MakeUppercase{\chaptername}\enskip\thechapter}}\par\vspace{.5ex}%
+  }
+}
+
+%% ---------------------------------------------------------------------------
+%% Metadata and setup
+%% ---------------------------------------------------------------------------
+\def\MA@title{Documento técnico}
+\def\MA@subtitle{}
+\def\MA@author{}
+\def\MA@institution{}
+\def\MA@course{}
+\def\MA@doctype{}
+\def\MA@code{}
+\def\MA@version{1.0}
+\def\MA@date{\today}
+\def\MA@headerleft{\MA@course}
+\def\MA@headerright{\MA@code}
+\def\MA@footerleft{\MA@author}
+\def\MA@covernote{}
+
+\ifdefstring{\MA@mode}{lab}{\def\MA@doctype{Guía de laboratorio}}{}
+\ifdefstring{\MA@mode}{notes}{\def\MA@doctype{Notas de clase}}{}
+\ifdefstring{\MA@mode}{article}{\def\MA@doctype{Artículo técnico}}{}
+\ifdefstring{\MA@mode}{manual}{\def\MA@doctype{Manual técnico}}{}
+
+\pgfkeys{/ma/.is family,/ma,
+  title/.store in=\MA@title,
+  subtitle/.store in=\MA@subtitle,
+  author/.store in=\MA@author,
+  institution/.store in=\MA@institution,
+  course/.store in=\MA@course,
+  document-type/.store in=\MA@doctype,
+  code/.store in=\MA@code,
+  version/.store in=\MA@version,
+  date/.store in=\MA@date,
+  header-left/.store in=\MA@headerleft,
+  header-right/.store in=\MA@headerright,
+  footer-left/.store in=\MA@footerleft,
+  cover-note/.store in=\MA@covernote
+}
+\newcommand{\MASetup}[1]{\pgfkeys{/ma,#1}}
+
+%% ---------------------------------------------------------------------------
+%% Headers / footers
+%% ---------------------------------------------------------------------------
+\setkomafont{pageheadfoot}{\normalfont\sffamily}
+\clearpairofpagestyles
+\ihead{\sffamily\footnotesize\color{MAMuted}\MA@headerleft}
+\ohead{\sffamily\footnotesize\color{MAMuted}\MA@headerright}
+\ifoot{\sffamily\scriptsize\color{MAMuted}\MA@footerleft}
+\ofoot{\sffamily\scriptsize\color{MAMuted}\thepage\,/\,\pageref*{LastPage}}
+\KOMAoptions{headsepline=.35pt}
+\setkomafont{headsepline}{\color{MARule}}
+\pagestyle{scrheadings}
+
+%% ---------------------------------------------------------------------------
+%% Hyperlinks, captions and references
+%% ---------------------------------------------------------------------------
+\ifMA@colorlinks
+  \hypersetup{colorlinks=true,linkcolor=MAPrimaryDark,urlcolor=MAPrimaryDark,citecolor=MATertiary,pdfborder={0 0 0}}
+\else
+  \hypersetup{hidelinks}
+\fi
+\AtBeginDocument{%
+  \hypersetup{pdftitle={\MA@title},pdfauthor={\MA@author},pdfsubject={\MA@subtitle}}%
+  \ifMA@tintedpaper\pagecolor{MACanvas}\fi
+}
+\urlstyle{same}
+\captionsetup{font=small,labelfont={sf,bf,color=MAInk},textfont={color=MAMuted},labelsep=period,skip=6pt}
+\crefname{figure}{figura}{figuras}
+\crefname{table}{tabla}{tablas}
+\crefname{section}{sección}{secciones}
+\crefname{equation}{ecuación}{ecuaciones}
+
+%% ---------------------------------------------------------------------------
+%% Cover / title system
+%% ---------------------------------------------------------------------------
+\newcommand{\MA@accentbars}{%
+  {\setlength{\fboxsep}{0pt}%
+  \colorbox{MAPrimary}{\rule{0pt}{4pt}\hspace{.48\linewidth}}%
+  \colorbox{MASecondary}{\rule{0pt}{4pt}\hspace{.19\linewidth}}%
+  \colorbox{MATertiary}{\rule{0pt}{4pt}\hspace{.12\linewidth}}}%
+}
+
+\newcommand{\MAMakeTitle}{%
+  \begin{titlepage}
+  \thispagestyle{empty}
+  \pagecolor{MACanvas}
+  \color{MAInk}
+  \vspace*{4mm}
+  \begin{minipage}[t]{.66\linewidth}
+    {\sffamily\bfseries\footnotesize\color{MAPrimary}\MakeUppercase{\MA@doctype}}\\[2mm]
+    {\sffamily\scriptsize\color{MAMuted}\MA@course}
+  \end{minipage}%
+  \begin{minipage}[t]{.34\linewidth}
+    \RaggedLeft{\sffamily\scriptsize\color{MAMuted}\MA@code}
+  \end{minipage}
+
+  \vspace{22mm}
+  {\sffamily\bfseries\fontsize{34}{38}\selectfont\hyphenpenalty=10000\exhyphenpenalty=10000\RaggedRight \MA@title\par}
+  \ifstrempty{\MA@subtitle}{}{%
+    \vspace{5mm}
+    {\fontsize{14}{20}\selectfont\color{MAMuted}\hyphenpenalty=10000\exhyphenpenalty=10000\RaggedRight \MA@subtitle\par}%
+  }
+
+  \vspace{10mm}
+  \MA@accentbars
+
+  \vfill
+  \ifstrempty{\MA@covernote}{}{%
+    \begin{tcolorbox}[enhanced,frame hidden,colback=MASurfaceAlt,boxrule=0pt,arc=2mm,left=5mm,right=5mm,top=4mm,bottom=4mm]
+      {\sffamily\small\color{MAInk}\MA@covernote}
+    \end{tcolorbox}
+    \vspace{7mm}
+  }
+
+  \begin{tabularx}{\linewidth}{@{}>{\sffamily\small}X>{\sffamily\small\RaggedLeft\arraybackslash}X@{}}
+    \textbf{\MA@author} & \textbf{Versión \MA@version}\\[1.5mm]
+    \color{MAMuted}\MA@institution & \color{MAMuted}\MA@date
+  \end{tabularx}
+  \vspace{4mm}
+  {\sffamily\scriptsize\color{MAMuted}MARCO ACADEMIC · palette \MA@currentpalette}
+  \end{titlepage}
+  \ifMA@tintedpaper\pagecolor{MACanvas}\else\nopagecolor\fi
+}
+
+\newcommand{\MAIntro}[1]{%
+  \begin{tcolorbox}[enhanced,frame hidden,colback=MASurfaceAlt,boxrule=0pt,arc=2mm,left=5mm,right=5mm,top=4mm,bottom=4mm,borderline west={2.5pt}{0pt}{MAPrimary}]
+  {\sffamily\fontsize{11.5}{16}\selectfont\color{MAInk}#1}
+  \end{tcolorbox}
+}
+\newcommand{\MAKicker}[1]{{\sffamily\bfseries\scriptsize\color{MAPrimary}\MakeUppercase{#1}}}
+\newcommand{\keyterm}[1]{\textcolor{MAPrimaryDark}{\textbf{#1}}}
+\newcommand{\muted}[1]{\textcolor{MAMuted}{#1}}
+\newcommand{\highlight}[1]{{\setlength{\fboxsep}{1.5pt}\colorbox{MAPrimarySoft}{#1}}}
+
+%% ---------------------------------------------------------------------------
+%% Semantic callouts
+%% ---------------------------------------------------------------------------
+\tcbset{
+  ma/base/.style={enhanced,breakable,frame hidden,boxrule=0pt,arc=1.5mm,
+    left=4.5mm,right=4.5mm,top=3.5mm,bottom=3.8mm,
+    before skip=8pt,after skip=8pt,
+    fonttitle=\sffamily\bfseries\footnotesize,toptitle=0pt,bottomtitle=1.5mm,
+    coltext=MAInk},
+  ma/code/.style={enhanced,breakable,boxrule=.4pt,arc=1.5mm,colframe=MARule,
+    colback=MASurfaceAlt,left=2mm,right=2mm,top=1mm,bottom=1mm,
+    before skip=8pt,after skip=8pt}
+}
+
+\newtcolorbox{nota}[1][]{ma/base,colback=MAPrimarySoft,coltitle=MAPrimaryDark,borderline west={2.5pt}{0pt}{MAPrimary},title={NOTA\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{idea}[1][]{ma/base,colback=MAPrimarySoft,coltitle=MAPrimaryDark,borderline west={3pt}{0pt}{MAPrimary},title={IDEA CLAVE\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{importante}[1][]{ma/base,colback=MASecondarySoft,coltitle=MASecondary,borderline west={2.5pt}{0pt}{MASecondary},title={IMPORTANTE\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{advertencia}[1][]{ma/base,colback=MADangerSoft,coltitle=MADanger,borderline west={2.5pt}{0pt}{MADanger},title={ADVERTENCIA\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{ejemplo}[1][]{ma/base,colback=MATertiarySoft,coltitle=MATertiary,borderline west={2.5pt}{0pt}{MATertiary},title={EJEMPLO\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{resultado}[1][]{ma/base,colback=MASuccessSoft,coltitle=MASuccess,borderline west={2.5pt}{0pt}{MASuccess},title={RESULTADO\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{objetivo}[1][]{ma/base,colback=MAPrimarySoft,coltitle=MAPrimaryDark,borderline west={2.5pt}{0pt}{MAPrimary},title={OBJETIVO\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{equipo}[1][]{ma/base,colback=MASurfaceAlt,coltitle=MAMuted,borderline west={2.5pt}{0pt}{MAMuted},title={EQUIPO Y RECURSOS\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{observacion}[1][]{ma/base,colback=MASecondarySoft,coltitle=MASecondary,borderline west={2.5pt}{0pt}{MASecondary},title={OBSERVACIÓN\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{pregunta}[1][]{ma/base,colback=MAPrimarySoft,coltitle=MAPrimaryDark,borderline west={2.5pt}{0pt}{MAPrimary},title={PREGUNTA\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{entregable}[1][]{ma/base,colback=MASuccessSoft,coltitle=MASuccess,borderline west={2.5pt}{0pt}{MASuccess},title={ENTREGABLE\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{checkpoint}[1][]{ma/base,colback=MAWarningSoft,coltitle=MAWarning,borderline west={2.5pt}{0pt}{MAWarning},title={COMPROBACIÓN\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{procedimiento}[1][]{ma/base,colback=MASurfaceAlt,coltitle=MAPrimaryDark,borderline west={2.5pt}{0pt}{MAPrimary},title={PROCEDIMIENTO\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{resumenejecutivo}[1][]{ma/base,colback=MASurfaceAlt,coltitle=MAInk,borderline west={3pt}{0pt}{MAInk},title={RESUMEN EJECUTIVO\ifstrempty{#1}{}{ · #1}}}
+
+%% ---------------------------------------------------------------------------
+%% Lists, steps, checklists
+%% ---------------------------------------------------------------------------
+\setlist[itemize]{leftmargin=1.6em,itemsep=.22em,topsep=.35em,parsep=0pt,label=\textcolor{MAPrimary}{\textbullet}}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=.22em,topsep=.35em,parsep=0pt,label=\textcolor{MAPrimary}{\sffamily\bfseries\arabic*.}}
+\newlist{pasos}{enumerate}{1}
+\setlist[pasos]{leftmargin=2.1em,itemsep=.65em,topsep=.4em,label=\textcolor{MAPrimary}{\sffamily\bfseries\arabic*.}}
+\newlist{checklist}{itemize}{1}
+\newcommand{\MAcheckbox}{{\color{MAPrimary}\setlength{\fboxsep}{0pt}\fbox{\rule{0pt}{.8ex}\rule{.8ex}{0pt}}}}
+\setlist[checklist]{leftmargin=1.8em,itemsep=.4em,topsep=.3em,label=\MAcheckbox}
+
+%% ---------------------------------------------------------------------------
+%% Code and terminal-like content - portable; no shell escape required.
+%% ---------------------------------------------------------------------------
+\lstdefinestyle{ma-code}{
+  basicstyle=\ttfamily\small\color{MAInk},
+  backgroundcolor=\color{MASurfaceAlt},
+  numbers=left,
+  numberstyle=\scriptsize\color{MAMuted},
+  numbersep=10pt,
+  frame=none,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=false,
+  keepspaces=true,
+  columns=fullflexible,
+  tabsize=2,
+  keywordstyle=\bfseries\color{MAPrimaryDark},
+  commentstyle=\itshape\color{MATertiary},
+  stringstyle=\color{MASecondary},
+  rulecolor=\color{MARule},
+  xleftmargin=2pt,
+  xrightmargin=2pt,
+  aboveskip=0pt,
+  belowskip=0pt
+}
+\newtcblisting{codigo}[2][]{ma/code,title={\sffamily\bfseries\footnotesize\color{MAInk}#2},colbacktitle=MASurfaceAlt,coltitle=MAInk,
+  listing only,listing options={style=ma-code,#1}}
+\newtcolorbox{salidaesperada}[1][]{ma/base,colback=MASurfaceAlt,coltitle=MAMuted,borderline west={2.5pt}{0pt}{MAMuted},fontupper=\ttfamily\small,title={SALIDA ESPERADA\ifstrempty{#1}{}{ · #1}}}
+\newcommand{\inlinecode}[1]{{\ttfamily\small\color{MAInk}\setlength{\fboxsep}{1.5pt}\colorbox{MASurfaceAlt}{#1}}}
+
+%% ---------------------------------------------------------------------------
+%% Tables and small utility patterns
+%% ---------------------------------------------------------------------------
+\newcommand{\thead}[1]{{\sffamily\bfseries\small\color{MAInk}#1}}
+\newcommand{\tablemuted}[1]{{\sffamily\small\color{MAMuted}#1}}
+\newcommand{\MAMetric}[2]{%
+  \begin{minipage}[t]{.46\linewidth}
+    {\sffamily\bfseries\fontsize{22}{24}\selectfont\color{MAPrimary}#1\par}
+    {\sffamily\small\color{MAMuted}#2}
+  \end{minipage}%
+}
+\newcommand{\MASectionBreak}[1]{%
+  \par\Needspace{8\baselineskip}\vspace{1.2em}%
+  \MAKicker{#1}\par\vspace{.4em}%
+  {\color{MARule}\rule{\linewidth}{.5pt}}\par\vspace{.7em}%
+}
+
+%% Final microtype setup after font selection.
+% XeTeX supports protrusion but not font expansion in microtype.
+\ifXeTeX
+  \microtypesetup{protrusion=true,expansion=false}
+\else
+  \microtypesetup{protrusion=true,expansion=true}
+\fi
+
+\makeatother
+\endinput

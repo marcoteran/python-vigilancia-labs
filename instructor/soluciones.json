@@ -7,7 +7,8 @@
     "M01": "np.sum(etapas_min)",
     "M02": "minutos_a_horas(total_mision_min)",
     "M03": "reserva_min - total_mision_min",
-    "M04": "total_mision_min <= reserva_min"
+    "M04": "total_mision_min <= reserva_min",
+    "R01": "2 * distancia_m / c_m_s * 1e6"
   },
   "02": {
     "Q01": "r_ohm = 1.68e-8*30/2.5e-6\ncaida_v = 3*r_ohm\ncarga_v = 48-caida_v\nperdida_w = 3**2*r_ohm\nmostrar([r_ohm, caida_v, carga_v, perdida_w], [0.2016, 0.6048, 47.3952, 1.8144], ['R [Ω]', 'Caída [V]', 'Carga [V]', 'Pérdida [W]'])",

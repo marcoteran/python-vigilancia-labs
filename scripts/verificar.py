@@ -6,7 +6,8 @@ from IPython.utils.capture import capture_output
 from nbclient import NotebookClient
 
 ROOT = Path(__file__).resolve().parents[1]
-answers = json.loads((ROOT / 'instructor/soluciones.json').read_text())
+# UTF-8 explícito: en Windows la codificación por defecto (cp1252) altera Ω, í y é.
+answers = json.loads((ROOT / 'instructor/soluciones.json').read_text(encoding='utf-8'))
 report = []
 
 def verify_embedded_assets(book):
@@ -97,6 +98,7 @@ for path in sorted((ROOT/'notebooks').glob('*.ipynb')):
         check = '''assert total_mision_min == 120
 assert total_mision_h == 2 and restante_min == 30 and alcanza
 assert promedio_min == 45
+assert np.isclose(ida_vuelta_us, 400)
 print("VERIFICACIÓN: correcta")'''
     else:
         check = '''assert np.isclose(radar_w(120e3)/radar_w(60e3), 1/16)
@@ -161,5 +163,6 @@ print("VERIFICACIÓN: correcta")'''
                    'template_clean_kernel':'PASS','solutions_clean_kernel':'PASS',
                    'execution_mode':'in-process kernel' if '--in-process' in sys.argv else 'Jupyter subprocess kernel',
                    'all_exercise_stdout':'PASS','widgets_browser_tested':False})
-(ROOT/'docs/verificacion.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+(ROOT/'docs/verificacion.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
+if hasattr(sys.stdout, 'reconfigure'): sys.stdout.reconfigure(encoding='utf-8')
 print(json.dumps(report,ensure_ascii=False,indent=2))

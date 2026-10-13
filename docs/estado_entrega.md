@@ -27,3 +27,7 @@ Las propuestas 01-B y 02-B quedan pendientes y están identificadas como tales.
 ## Mantenimiento
 
 El proyecto conserva `prompts/claude_code_publicar.md`, los scripts, los requisitos y el workflow de GitHub. Las modificaciones futuras deben mantener los ejercicios sin resolver en el material del alumno y conservar la evidencia de validación. No se añade una licencia de reutilización sin decisión del autor.
+
+## Revisión del 13 de octubre de 2026
+
+Notebooks revisados para principiantes absolutos, laboratorio SDR integrado en `lab_SDR_surveillance_LaTeX/` con PDF compilado, README rediseñado y verificador corregido para Windows. Detalle, resultados de pruebas y limitaciones: [auditoría pedagógica](pedagogical_audit.md). Los cambios están pendientes de revisión humana y de publicación en GitHub.

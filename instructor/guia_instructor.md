@@ -16,7 +16,9 @@ Los alumnos reciben exclusivamente los dos notebooks de `notebooks/`. Este docum
 | 46–57 | Misión M01–M04 | Da un intento individual; pide comparar fórmula, resultado y unidad por parejas. | 120 min, 2 h, 30 min, True |
 | 57–60 | Cierre | Reinicia y ejecuta; pregunta por orden y memoria. | Explica una cuenta sin leer el código |
 
-La sección pandas/for es ampliación, fuera de la hora central. No enseñes clases, entornos virtuales, instalación ni Git durante este bloque. Si el grupo se atrasa, conserva la misión y muestra una sola modificación del gráfico. No conviertas la explicación de librerías en un catálogo.
+**Revisión de octubre de 2026.** El notebook añadió contenido para que un principiante absoluto pueda llegar al Laboratorio 02 sin construcciones sin explicar: reasignación y notación científica (§2), formatos de f-string, porciones de listas (§4), funciones con valores por defecto y argumentos con nombre (§5), el ciclo `for` y la comprensión de lista (§6, antes solo en la ampliación), `np.linspace`, `np.arange`, `np.log10` y comparaciones sobre arrays (§7), un gráfico de curvas con leyenda (§8) y el puente final con la lista de comprobación y el ejercicio **R01** (ida y vuelta de un pulso: 400.0 µs). La tabla anterior es la propuesta original para el núcleo y **no se ha medido con esta versión**: con explicación presencial, la ruta completa necesita más de una hora. Asigna §6–§8 y el puente como preparación previa, o amplía la sesión.
+
+La sección pandas es ampliación, fuera de la hora central. No enseñes clases, entornos virtuales, instalación ni Git durante este bloque. Si el grupo se atrasa, conserva la misión y muestra una sola modificación del gráfico. No conviertas la explicación de librerías en un catálogo.
 
 ### Guion mínimo
 
@@ -27,7 +29,7 @@ La sección pandas/for es ampliación, fuera de la hora central. No enseñes cla
 
 `None` evita errores mientras el ejercicio está pendiente. Las condiciones de guardia están proporcionadas: el alumno completa la expresión, no tiene que inventar ese mecanismo. En la misión debe resolver las preguntas en orden porque M02–M04 usan M01.
 
-**Criterio de avance:** completa al menos tres de E01–E04 y las cuatro partes de la misión; puede explicar una división con unidades, llamar una función e identificar por qué un resultado antiguo no prueba que su código actual funciona. Corrige los fallos antes del laboratorio 02; no uses la rapidez como criterio.
+**Criterio de avance:** completa al menos tres de E01–E04, las cuatro partes de la misión y R01; puede explicar una división con unidades, llamar una función e identificar por qué un resultado antiguo no prueba que su código actual funciona. Corrige los fallos antes del laboratorio 02; no uses la rapidez como criterio.
 
 Errores que debes provocar y reparar: variable con mayúscula distinta, texto que se concatena, `^` confundido con potencia, falta de dos puntos y lista dividida por un número. Hazlo en una celda temporal que luego se elimina, para que el archivo entregado ejecute completo.
 
@@ -72,6 +74,15 @@ Si el frontend no dibuja controles, usa `dibujar_antena(8, 20)` y `dibujar_radar
 - TDoA: cΔt es diferencia de camino, no error de posición. Una pareja no localiza de forma única.
 - Red: latencia sin overhead ni retransmisión. Dos rutas pueden compartir alimentación, reloj o red: «independientes» requiere evidencia.
 - Diagnóstico: separar síntoma, falla e hipótesis causal. Una detección no garantiza mensaje válido; un mensaje no garantiza track válido.
+- PPM: desde octubre de 2026 la figura de §8 sigue la convención de Mode S/ADS-B (1 = pulso en la primera mitad del bit). La versión anterior usaba la convención inversa sin declararla.
+- Enlace frente a eco: §6 incluye un gráfico normalizado R⁻² frente a R⁻⁴ en escala logarítmica (−20 dB y −40 dB por década). Úsalo antes de los controles del radar para fijar la diferencia.
+- Recuadros «Python nuevo»: explican justo a tiempo FFT, números complejos, *broadcasting*, `try`/`except`, `np.where`, `np.meshgrid` y conversiones grados/radianes. Q06 necesita `np.deg2rad`.
+
+## Laboratorio SDR · complemento con hardware
+
+El manual [`lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf`](../lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf) propone cinco prácticas con HackRF One, SDRangel, GNU Radio y un analizador SIGLENT SSA3032X Plus. No es requisito de los notebooks; los notebooks tampoco bastan como preparación para el banco: el alumno necesita además instalar software en Windows y Ubuntu, manejar hardware RF y conocer las reglas de transmisión conducida.
+
+Antes de asignarlo: ensaya cada práctica con tu banco y las versiones de software instaladas, confirma el atenuador y los niveles máximos de entrada del analizador, y verifica la normativa local de radiofrecuencia. La revisión de este repositorio compiló el PDF y revisó el texto; **no** probó los procedimientos con hardware.
 
 ### Preguntas de las cápsulas: respuestas de referencia
 

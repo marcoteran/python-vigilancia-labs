@@ -1,0 +1,1414 @@
+\begin{objetivo}
+Construir, ejecutar e interpretar cinco prácticas SDR conectadas entre sí. Las tres primeras se realizan en Windows y las dos últimas en Linux. El documento no presupone experiencia previa con SDRangel ni GNU Radio Companion: se indica dónde encontrar cada dispositivo, bloque, menú, parámetro y resultado esperado.
+\end{objetivo}
+
+\section{Cómo usar este manual}
+
+\subsection{Prerrequisitos}
+
+\begin{itemize}
+    \item \textbf{Conceptos:} frecuencia y longitud de onda, decibelios (dB, dBm), ancho de banda, muestreo, modulación AM/FM y la diferencia entre radar primario, radar secundario y ADS-B. Los laboratorios de Python del repositorio \texttt{python-vigilancia-labs} (Laboratorio 02, secciones 1, 3, 4, 7 y 8) cubren estas bases con cálculos y gráficos.
+    \item \textbf{Habilidades adicionales que los notebooks no enseñan:} instalar software en Windows y Ubuntu, usar una terminal de Linux, conectar cables SMA y atenuadores, y operar un analizador de espectro.
+    \item \textbf{Equipo:} un banco con los elementos de la tabla de equipos y supervisión del instructor durante las prácticas de transmisión.
+\end{itemize}
+
+Cada práctica sigue la misma estructura: \textbf{objetivo} $\rightarrow$ procedimiento numerado $\rightarrow$ recuadros \textbf{Qué debe observar y por qué} $\rightarrow$ preguntas. Los recuadros \textbf{Advertencia} contienen reglas de seguridad que no son opcionales.
+
+\begin{nota}[Estado de validación de esta edición]
+Esta edición se revisó documentalmente y el PDF se compiló sin errores. Los procedimientos \textbf{no} se han vuelto a ensayar con hardware en esta revisión: nombres de botones, versiones de software y comportamiento del HackRF o del SIGLENT pueden variar. El instructor debe ensayar cada práctica en su banco antes de la sesión.
+\end{nota}
+
+\section{Arquitectura del laboratorio}
+
+El laboratorio sigue una progresión deliberada desde una señal observable hasta información de protocolo:
+
+\[
+\boxed{
+\text{RF}
+\rightarrow
+\text{I/Q}
+\rightarrow
+\text{DSP}
+\rightarrow
+\text{demodulación/sincronización}
+\rightarrow
+\text{trama}
+\rightarrow
+\text{información}
+}
+\]
+
+Las prácticas son:
+
+\begin{enumerate}
+    \item \textbf{Windows -- SDRangel: receptor AM/FM.}
+    \item \textbf{Windows -- SDRangel: transmisor FM conducido.}
+    \item \textbf{Windows -- GNU Radio: transmisor FM conducido, primero con tono y luego con micrófono.}
+    \item \textbf{Linux -- GNU Radio: analizador Wi-Fi robusto}, incluyendo inventario de SSID/BSSID/canal, espectro y waterfall con HackRF, recepción OFDM 802.11a/g/p con \texttt{gr-ieee802-11}, constelaciones, tramas MAC y archivo PCAP para Wireshark. Se incluye una extensión BLE.
+    \item \textbf{Linux -- SDRangel: receptor ADS-B/Mode S robusto}, con tabla de aeronaves, Mode S ELS/EHS, mapa, estadísticas, cobertura, comparación externa y reproducción IQ como plan de respaldo.
+\end{enumerate}
+
+\subsection{Niveles de evidencia}
+
+Cada observación del laboratorio debe clasificarse por el nivel de evidencia que realmente aporta. Un nivel superior exige los anteriores, pero ninguno los sustituye:
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.33\linewidth}@{}}
+\toprule
+\textbf{Nivel} & \textbf{Qué demuestra} & \textbf{Qué todavía no demuestra} \\
+\midrule
+\endhead
+1. Energía RF & Hay actividad en una frecuencia: espectro, waterfall o SIGLENT. & Qué sistema la emite ni qué contiene. \\
+2. Demodulación & Se recupera la señal moduladora: audio AM/FM o envolvente de pulsos. & Que exista una trama digital válida. \\
+3. Sincronización & El receptor encontró la estructura del protocolo: preámbulo Mode S, preámbulo OFDM. & Que los bits sean correctos; la sincronización también ocurre sobre ruido. \\
+4. Trama válida & Los bits superan la comprobación del protocolo: paridad/CRC de Mode S, FCS de 802.11. & Que el contenido sea verdadero o vigente. \\
+5. Información decodificada & Campos transmitidos: dirección ICAO, callsign, altitud, SSID, BSSID. & Su exactitud física: el emisor puede reportar datos erróneos. \\
+6. Información derivada & Cálculos del receptor: posición CPR, distancia al receptor, estadísticas. & Independencia de los supuestos de cálculo, como la posición configurada del receptor. \\
+7. Información externa & Datos de bases o servicios: modelo, matrícula, ruta comercial. & Que la aeronave los haya transmitido. \\
+\bottomrule
+\end{longtable}
+
+Un waterfall activo es nivel 1: \textbf{no prueba} que haya decodificación de protocolo.
+
+\subsection{Equipos}
+
+\begin{longtable}{@{}p{0.28\linewidth}p{0.64\linewidth}@{}}
+\toprule
+\textbf{Elemento} & \textbf{Uso} \\
+\midrule
+\endhead
+HackRF One & Fuente/sumidero SDR. Es half-duplex; no transmite y recibe simultáneamente. Su rango nominal es 1 MHz--6 GHz y admite 2--20 MSa/s. \\
+Antena adecuada & FM comercial, AM alrededor de 1 MHz, 2.4 GHz y 1090 MHz. Una sola antena ``genérica'' no rinde igual en todas las bandas. \\
+SIGLENT SSA3032X Plus & Verificación de frecuencia y ocupación espectral en TX. \\
+Atenuador fijo 30--60 dB & Protección del analizador durante TX conducido. Su potencia nominal debe superar la máxima que puede entregar el HackRF. \\
+Cable SMA & Conexión conducida HackRF--atenuador--SIGLENT. \\
+PC Windows 10/11 & Prácticas 1--3. \\
+PC/partición Ubuntu 24.04 LTS & Prácticas 4--5. Se recomienda instalación nativa; una VM suele complicar el acceso USB sostenido a 20 MSa/s. \\
+\bottomrule
+\end{longtable}
+
+\begin{alerta}
+En transmisión no conecte una antena. Use \textbf{HackRF TX $\rightarrow$ atenuador 30--60 dB $\rightarrow$ SIGLENT}. Esta práctica evita la radiación intencional usando conexión conducida; la responsabilidad de cumplir la regulación radioeléctrica recae en el usuario y en la institución.
+
+Dos entradas deben protegerse. La del \textbf{analizador}: consulte su nivel máximo de entrada en el manual del SSA3032X Plus y mantenga un margen amplio mediante el atenuador externo. La del \textbf{HackRF en recepción}: su documentación oficial indica un máximo de $-5$~dBm; nunca conecte la salida TX de un HackRF a la entrada de otro SDR sin atenuación suficiente.
+\end{alerta}
+
+\subsection{Regla de exclusividad del HackRF}
+
+Una unidad HackRF debe estar abierta por \textbf{una sola aplicación a la vez}. Antes de cambiar entre SDRangel y GNU Radio:
+
+\begin{enumerate}
+    \item pulse Stop dentro de la aplicación actual;
+    \item cierre esa aplicación por completo;
+    \item espere unos segundos;
+    \item si el siguiente programa no encuentra el dispositivo, desconecte y reconecte el USB;
+    \item verifique con \texttt{hackrf\_info}.
+\end{enumerate}
+
+El error típico en GNU Radio es:
+
+\begin{lstlisting}
+RuntimeError: no hackrf device matches
+\end{lstlisting}
+
+Esto normalmente indica que el HackRF está ocupado por SDRangel u otro proceso, no que el flowgraph esté mal construido.
+
+\needspace{18\baselineskip}
+\subsection{Protocolo de transmisión conducida}
+\label{sec:protocolo-tx}
+
+Las Prácticas 2 y 3 transmiten. Siga este orden \textbf{cada vez}:
+
+\begin{enumerate}
+    \item Con el HackRF \textbf{detenido}, retire cualquier antena del puerto RF.
+    \item Conecte \textbf{HackRF RF $\rightarrow$ atenuador 30--60 dB $\rightarrow$ entrada del SIGLENT} y apriete los conectores SMA.
+    \item En el SIGLENT, deje la atenuación de entrada en automático o alta y un nivel de referencia alto antes de transmitir; ajuste la escala después de ver la señal.
+    \item Configure la transmisión con \textbf{RF Amp = OFF} y ganancia TX baja (el manual usa VGA = 12 dB como punto de partida).
+    \item Transmita solo durante la observación y aumente la ganancia de forma gradual, si es necesario.
+    \item \textbf{Detenga TX antes de tocar cualquier conexión}: cambiar cables, atenuadores o instrumento con el transmisor activo puede dañar equipos.
+\end{enumerate}
+
+\clearpage
+\section{Parte I -- Windows 10/11 desde cero}
+
+\subsection{Instalación 1: Radioconda y GNU Radio Companion}
+
+Radioconda es una distribución de software radio basada en Conda. Para Windows se distribuye un instalador gráfico \texttt{radioconda-Windows-x86\_64.exe}.
+
+\begin{enumerate}
+    \item Abra el navegador y vaya a:
+    \begin{center}
+    \url{https://github.com/radioconda/radioconda-installer}
+    \end{center}
+    \item Entre a \textbf{Releases} y descargue el instalador \textbf{Windows x86\_64 Graphical}.
+    \item Ejecute el instalador. Para un laboratorio académico basta una instalación para el usuario actual.
+    \item Al finalizar, abra el menú Inicio de Windows.
+    \item Busque la carpeta \textbf{radioconda}.
+    \item Deben aparecer accesos como \textbf{radioconda Prompt} y \textbf{GNU Radio Companion}.
+    \item Abra \textbf{radioconda Prompt} y ejecute:
+\end{enumerate}
+
+\begin{lstlisting}
+python --version
+gnuradio-config-info --version
+\end{lstlisting}
+
+\begin{esperado}
+Debe aparecer una versión de Python perteneciente a Radioconda y una versión de GNU Radio. Si GNU Radio Companion abre pero Windows muestra un aviso \texttt{missing xterm executable}, pulse \textbf{OK}. \texttt{xterm} es un terminal típico de Linux y ese aviso no impide la ejecución normal del flowgraph en Windows.
+\end{esperado}
+
+\subsection{Instalación 2: driver WinUSB con Zadig}
+
+\begin{enumerate}
+    \item Descargue Zadig desde:
+    \begin{center}
+    \url{https://zadig.akeo.ie/}
+    \end{center}
+    \item Conecte el HackRF One por USB.
+    \item Ejecute Zadig.
+    \item En la barra de menú seleccione \textbf{Options $>$ List All Devices}.
+    \item En la lista superior seleccione \textbf{HackRF One}.
+    \item Observe el controlador actual a la izquierda y el controlador objetivo a la derecha.
+    \item El controlador compatible debe ser \textbf{WinUSB}.
+\end{enumerate}
+
+\begin{alerta}
+Si Zadig ya muestra \textbf{WINUSB} como driver actual y el botón grande dice \textbf{Downgrade WCID Driver}, \textbf{no pulse ese botón}. En ese caso Windows ya tiene un WinUSB funcional y Zadig está proponiendo reemplazarlo por una versión más antigua. Cierre Zadig y continúe con \texttt{hackrf\_info}.
+\end{alerta}
+
+Si el HackRF no tuviera WinUSB, seleccione WinUSB como objetivo y use \textbf{Install Driver} o \textbf{Replace Driver}. Luego cierre Zadig.
+
+\subsection{Instalación 3: verificar HackRF}
+
+Abra \textbf{radioconda Prompt} y ejecute:
+
+\begin{lstlisting}
+hackrf_info
+\end{lstlisting}
+
+\begin{esperado}
+La consola debe mostrar un HackRF One, número de serie y versiones de firmware/API. Si aparece \texttt{No HackRF boards found}, revise cable USB, Zadig, que ninguna aplicación SDR esté usando el dispositivo y vuelva a conectar el USB.
+\end{esperado}
+
+\subsection{Instalación 4: SDRangel en Windows}
+
+Para este laboratorio \textbf{no se compila SDRangel desde código fuente}. Se instala el binario oficial.
+
+\begin{enumerate}
+    \item Abra:
+    \begin{center}
+    \url{https://github.com/f4exb/sdrangel/releases}
+    \end{center}
+    \item Descargue el instalador de Windows correspondiente a la versión estable, con nombre similar a:
+    \begin{lstlisting}
+sdrangel-<version>-win64.exe
+    \end{lstlisting}
+    \item Ejecute el instalador.
+    \item Si Windows informa que falta el runtime de Visual C++, instale \texttt{vc\_redist.x64.exe} de Microsoft.
+    \item Abra \textbf{SDRangel} desde Inicio.
+\end{enumerate}
+
+La versión estable de referencia al preparar este laboratorio es SDRangel 7.27.2. Si existe una versión posterior estable, use la versión estable más reciente y conserve los mismos nombres de plugins.
+
+\begin{nota}
+Los enlaces \emph{Compile in Windows}, Qt, Boost, Ninja y NSIS son relevantes para desarrolladores que desean construir SDRangel. \textbf{No son prerrequisitos del estudiante}. No clone \texttt{f4exb/sdrangel}, no ejecute \texttt{git submodule update}, no instale Qt/Boost/Ninja/NSIS y no cree un directorio \texttt{build} para realizar este laboratorio.
+\end{nota}
+
+\subsection{Orientación rápida en SDRangel: no asumir la interfaz}
+
+Al abrir SDRangel verá una ventana vacía con una barra superior.
+
+\begin{itemize}
+    \item \textbf{Añadir receptor (RX):} pulse \texttt{Ctrl+R}. En la ventana que aparece seleccione \textbf{HackRF Input}.
+    \item \textbf{Añadir transmisor (TX):} pulse \texttt{Ctrl+T}. Seleccione \textbf{HackRF Output}.
+    \item \textbf{Arrancar/parar dispositivo:} en el panel HackRF, el triángulo azul significa ``listo para arrancar''. Al iniciar, el control pasa a estado de ejecución; vuelva a pulsarlo para detener.
+    \item \textbf{Añadir demodulador/modulador:} use el botón \emph{Add channels} del panel del dispositivo. El canal agregado aparece como una ventana independiente.
+    \item \textbf{Mover un canal:} el número naranja de offset en la parte superior del demodulador/modulador representa el desplazamiento respecto a la frecuencia central del HackRF. Para una señal centrada, déjelo en \textbf{0 Hz}.
+\end{itemize}
+
+\clearpage
+\section{Práctica 1 -- SDRangel: recepción FM y AM en Windows}
+
+\begin{objetivo}
+Aprender la diferencia entre configurar el dispositivo físico HackRF y configurar un canal de demodulación. Recuperar audio FM y AM y relacionar frecuencia central, offset, ancho de banda, ganancia, squelch y dispositivo de audio.
+\end{objetivo}
+
+\subsection{1A. Añadir HackRF Input}
+
+\begin{enumerate}
+    \item Cierre GNU Radio Companion si está abierto.
+    \item Conecte una antena apropiada al HackRF.
+    \item Abra SDRangel.
+    \item Pulse \texttt{Ctrl+R}.
+    \item Seleccione \textbf{HackRF Input} y confirme.
+    \item Aparecerá un panel \textbf{HackRF[0]} y una ventana de espectro/waterfall.
+    \item En el panel HackRF ubique:
+    \begin{itemize}
+        \item la frecuencia grande en la parte superior;
+        \item \textbf{SR}: sample rate;
+        \item \textbf{RF Amp};
+        \item \textbf{LNA};
+        \item \textbf{VGA};
+        \item \textbf{DC} e \textbf{IQ};
+        \item \textbf{BBF}: filtro baseband.
+    \end{itemize}
+    \item Configure inicialmente:
+    \begin{itemize}
+        \item SR = \textbf{2.4 MSa/s};
+        \item Decimation = 1;
+        \item RF Amp = OFF;
+        \item LNA = 16 dB;
+        \item VGA = 16 dB;
+        \item DC = ON;
+        \item IQ = ON;
+        \item BBF automático o 1.75 MHz como punto de partida.
+    \end{itemize}
+    \item Pulse el triángulo azul del panel HackRF.
+\end{enumerate}
+
+\begin{esperado}
+El espectro deja de estar vacío y aparece el piso de ruido. El waterfall comienza a desplazarse verticalmente. Ver ruido ya demuestra que el stream I/Q está activo; todavía no demuestra que exista una emisora bien sintonizada.
+\end{esperado}
+
+\subsection{1B. Recepción FM comercial: Caracol Radio Bogotá 100.9 MHz}
+
+\begin{enumerate}
+    \item En la frecuencia grande de \textbf{HackRF[0]} escriba o ajuste \textbf{100.900 MHz}.
+    \item Mantenga SR = 2.4 MSa/s.
+    \item En el panel HackRF pulse \textbf{Add channels}.
+    \item Busque y seleccione \textbf{Broadcast FM Demodulator}. No seleccione NFM: NFM es FM estrecha, no radiodifusión comercial.
+    \item Pulse \textbf{Apply} y cierre el selector de canales.
+    \item En la ventana \textbf{Broadcast FM Demod} deje el offset superior en \textbf{0 Hz} para comenzar.
+    \item Configure:
+    \begin{itemize}
+        \item RF BW = \textbf{180 kHz};
+        \item AF BW = \textbf{15 kHz};
+        \item De-emphasis = \textbf{75 $\mu$s};
+        \item Volume = 2--5;
+        \item Squelch = \textbf{-90 dB} durante la primera prueba, para evitar que el squelch silencie una señal válida.
+    \end{itemize}
+    \item Verifique que el canal BFM está sobre la señal de 100.9 MHz. Si la emisora aparece desplazada por error de oscilador, mueva suavemente el offset hasta centrarla.
+\end{enumerate}
+
+\subsubsection{Si hay señal pero no se escucha audio}
+
+Siga exactamente este orden:
+
+\begin{enumerate}
+    \item Verifique que el canal no esté en mute.
+    \item Suba Volume a 5 temporalmente.
+    \item Deje Squelch cerca de -90 dB.
+    \item En SDRangel abra \textbf{Preferences $>$ Audio} y verifique que exista una salida de audio válida.
+    \item En BFM, haga \textbf{clic derecho sobre el control Mono/Stereo} para seleccionar el dispositivo de audio del canal.
+    \item Revise el mezclador de volumen de Windows y confirme que SDRangel no esté silenciado.
+\end{enumerate}
+
+\begin{esperado}
+En 100.9 MHz debe verse una señal ancha, mucho más ancha que una portadora AM de voz. Con audio correctamente configurado debe escucharse programación. Si la estación transmite RDS y existe suficiente SNR, la sección RDS puede comenzar a mostrar información; no es requisito para validar la demodulación FM.
+\end{esperado}
+
+\subsection{1C. Recepción AM: ejemplo alrededor de 1.050 MHz (1050 kHz)}
+
+El HackRF One está especificado nominalmente desde 1 MHz. Por esa razón se usa como ejemplo una emisora encontrada alrededor de \textbf{1.050 MHz}, es decir, 1050 kHz (en este manual el punto separa decimales); una estación de 810 kHz queda por debajo del rango nominal de 1 MHz y no es una buena frecuencia para hacer obligatoria la práctica.
+
+\begin{enumerate}
+    \item Detenga o elimine el canal Broadcast FM Demod si desea simplificar la pantalla.
+    \item Cambie la frecuencia central del HackRF a \textbf{1.050 MHz}.
+    \item Mantenga SR = 2.4 MSa/s y RF Amp OFF.
+    \item Pulse \textbf{Add channels}.
+    \item Seleccione \textbf{AM Demodulator}.
+    \item En el AM Demodulator coloque el offset superior en \textbf{0 Hz} si la portadora está exactamente en el centro.
+    \item Configure:
+    \begin{itemize}
+        \item RF BW = \textbf{10 kHz};
+        \item AF BW = \textbf{5 kHz};
+        \item DSB = activado;
+        \item Volume = 3--5;
+        \item Squelch = -90 dB para la prueba inicial.
+    \end{itemize}
+    \item Si la señal está débil, aumente primero LNA de 16 a 24 dB y luego VGA de 16 a 24 dB. No active RF Amp como primera respuesta.
+    \item Si el audio tiene demasiado ruido, reduzca AF BW a 3--4 kHz y compare inteligibilidad.
+\end{enumerate}
+
+\begin{esperado}
+Una emisora AM fuerte muestra una portadora estrecha y bandas laterales alrededor. El offset del demodulador debe coincidir con la portadora: si el panel AM indica, por ejemplo, +7.453 kHz mientras la portadora está centrada en el espectro, está demodulando otra porción del canal; lleve el offset a 0 Hz.
+\end{esperado}
+
+\begin{nota}[Componente DC]
+Los SDR de conversión directa como el HackRF muestran un pico en el centro exacto del espectro (componente DC), y la corrección DC lo atenúa restando el valor medio. Una portadora AM ubicada exactamente en el centro puede quedar afectada por ambos efectos. Si el audio se distorsiona, sintonice el HackRF unas decenas de kHz por encima (por ejemplo, 1.100 MHz) y lleve el offset del AM Demodulator hasta la portadora (unos $-50$ kHz). La misma técnica sirve para cualquier señal estrecha.
+\end{nota}
+
+\subsection{Preguntas de Práctica 1}
+
+\begin{enumerate}
+    \item ¿Por qué Broadcast FM necesita un RF BW mucho mayor que AM de voz?
+    \item ¿Qué diferencia visual existe entre la FM de 100.9 MHz y una AM alrededor de 1.050 MHz?
+    \item ¿Qué cambia al reducir AF BW de 5 kHz a 3 kHz en AM?
+    \item ¿Por qué no debe interpretarse una ganancia LNA/VGA mayor como una potencia RF transmitida mayor?
+    \item ¿Qué parte del procedimiento demuestra recepción RF y qué parte demuestra demodulación correcta?
+\end{enumerate}
+
+\clearpage
+\section{Práctica 2 -- SDRangel: transmisión FM conducida en Windows}
+
+\begin{objetivo}
+Generar una señal WFM en SDRangel y verificarla con el SIGLENT. Primero se usa un tono interno de 1 kHz porque elimina problemas de micrófono; después se habilita audio real.
+\end{objetivo}
+
+\begin{alerta}
+Retire la antena. Monte \textbf{HackRF TX $\rightarrow$ atenuador 30--60 dB $\rightarrow$ SIGLENT}. Mantenga potencia/ganancia TX baja. No use 100 MHz radiado; 100 MHz se utiliza únicamente como frecuencia de prueba \textbf{conducida}. Aplique el protocolo de la página~\pageref{sec:protocolo-tx}.
+\end{alerta}
+
+\subsection{2A. Añadir HackRF Output}
+
+\begin{enumerate}
+    \item Cierre cualquier HackRF Input activo o detenga RX.
+    \item En SDRangel pulse \texttt{Ctrl+T}.
+    \item Seleccione \textbf{HackRF Output}.
+    \item En el panel TX ajuste:
+    \begin{itemize}
+        \item frecuencia = \textbf{100.000 MHz};
+        \item sample rate = \textbf{2.4 MSa/s};
+        \item RF Amp = OFF;
+        \item VGA TX = valor bajo; \textbf{12 dB} es un punto de partida razonable para la prueba conducida con atenuación.
+    \end{itemize}
+    \item No arranque TX todavía.
+\end{enumerate}
+
+\subsection{2B. Añadir WFM Modulator}
+
+\begin{enumerate}
+    \item En el panel HackRF Output pulse \textbf{Add channels}.
+    \item Seleccione \textbf{WFM Modulator}.
+    \item Configure:
+    \begin{itemize}
+        \item offset = 0 Hz;
+        \item RFBW = \textbf{180 kHz};
+        \item AFBW = \textbf{15 kHz};
+        \item Deviation = \textbf{$\pm$75 kHz};
+        \item Volume aproximadamente 1.0--1.4.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{2C. Fuente interna de tono: prueba determinística}
+
+En la fila de fuentes del WFM Modulator localice el botón de \textbf{Tone input}. La documentación del plugin permite tonos de 0.1 a 2.5 kHz.
+
+\begin{enumerate}
+    \item Asegúrese de que el micrófono no sea la fuente activa.
+    \item Active \textbf{Tone input}.
+    \item Configure Tone Frequency = \textbf{1.00 kHz}.
+    \item Observe el medidor de nivel del modulador. Mantenga el pico por debajo de 100\%; si llega a rojo/clipping, reduzca Volume.
+    \item En el SIGLENT configure:
+    \begin{itemize}
+        \item Center Frequency = 100 MHz;
+        \item Span = 500 kHz;
+        \item RBW = 10 kHz como inicio;
+        \item referencia/atenuación de forma que la entrada no se sobrecargue.
+    \end{itemize}
+    \item Arranque el HackRF Output durante pocos segundos.
+    \item Observe la señal en el SIGLENT.
+    \item Cambie Deviation 20 kHz $\rightarrow$ 50 kHz $\rightarrow$ 75 kHz y observe cómo se modifica la ocupación espectral.
+    \item Detenga TX antes de cambiar conexiones.
+\end{enumerate}
+
+\begin{esperado}
+Con un tono fijo el espectro no tiene por qué ``bailar'' como con voz. Lo importante es que exista energía centrada en 100 MHz y que la estructura/anchura cambie de manera coherente al variar la desviación. El tono interno demuestra que HackRF Output + WFM Modulator funcionan sin depender de Windows Audio.
+\end{esperado}
+
+\subsection{2D. Cambiar a micrófono}
+
+\begin{enumerate}
+    \item Detenga TX.
+    \item Desactive Tone input.
+    \item Active \textbf{Audio input}.
+    \item Haga \textbf{clic derecho sobre el botón de audio} y seleccione el micrófono real del PC.
+    \item Hable y observe el medidor de nivel del WFM Modulator.
+    \item Si el medidor no se mueve, el problema es la fuente de audio/permisos, no la RF.
+    \item Arranque TX nuevamente y observe en el SIGLENT cómo el espectro cambia con la voz.
+\end{enumerate}
+
+\subsection{Preguntas de Práctica 2}
+
+\begin{enumerate}
+    \item ¿Por qué el tono interno es mejor primera prueba que el micrófono?
+    \item ¿Qué efecto tuvo la desviación sobre el espectro observado?
+    \item ¿Por qué RFBW y AFBW representan filtros distintos?
+    \item ¿Qué evidencia confirma modulación y qué evidencia únicamente confirma existencia de portadora/energía?
+\end{enumerate}
+
+\clearpage
+\section{Práctica 3 -- GNU Radio: transmisor FM conducido en Windows}
+
+\begin{objetivo}
+Construir manualmente un flowgraph de transmisión FM para comprender la relación entre audio rate, quadrature rate, remuestreo y sample rate del HackRF. Se comienza con un tono de 1 kHz y luego se añade micrófono opcional mediante un Selector.
+\end{objetivo}
+
+\subsection{3A. Cómo encontrar y agregar bloques en GNU Radio Companion}
+
+Abra \textbf{GNU Radio Companion} desde Inicio $>$ radioconda.
+
+En GRC:
+
+\begin{itemize}
+    \item El lienzo central contiene los bloques.
+    \item El panel de bloques está normalmente a la derecha. Use su cuadro de búsqueda/lupa para escribir el nombre exacto del bloque.
+    \item Para agregar un bloque, búsquelo y haga doble clic o arrástrelo al lienzo.
+    \item Para editar un bloque, haga doble clic sobre él.
+    \item Para conectar, haga clic en el puerto \textbf{out} del bloque origen y luego en el puerto \textbf{in} del bloque destino.
+    \item El triángulo superior ejecuta el flowgraph; el cuadrado lo detiene.
+\end{itemize}
+
+\subsection{3B. Crear variables}
+
+Busque el bloque \textbf{Variable} y cree cinco instancias. Configure:
+
+\begin{lstlisting}
+audio_rate = 48000
+quad_rate  = 480000
+samp_rate  = 2000000
+tx_freq    = 100000000
+tx_gain    = 12
+\end{lstlisting}
+
+\subsection{3C. Fuente de tono}
+
+En el panel de bloques busque \textbf{Signal Source}. Suele aparecer en la categoría \textbf{Sources}.
+
+Configure:
+
+\begin{itemize}
+    \item Output Type = Float;
+    \item Sample Rate = \texttt{audio\_rate};
+    \item Waveform = Cosine;
+    \item Frequency = 1000;
+    \item Amplitude = 0.5;
+    \item Offset = 0.
+\end{itemize}
+
+\subsection{3D. WBFM Transmit}
+
+Busque \textbf{WBFM Transmit}, normalmente bajo \textbf{Modulators}.
+
+Configure:
+
+\begin{itemize}
+    \item Audio Rate = \texttt{audio\_rate};
+    \item Quadrature Rate = \texttt{quad\_rate};
+    \item Tau = 75e-6;
+    \item Max Deviation = 75e3.
+\end{itemize}
+
+Conecte \textbf{Signal Source $\rightarrow$ WBFM Transmit}.
+
+\subsection{3E. Rational Resampler}
+
+Busque \textbf{Rational Resampler}, normalmente bajo \textbf{Resamplers}. Configure:
+
+\begin{itemize}
+    \item Interpolation = \textbf{25};
+    \item Decimation = \textbf{6};
+    \item Taps = vacío/default.
+\end{itemize}
+
+La razón no es arbitraria:
+
+\[
+480000\frac{25}{6}=2000000~\text{Sa/s}.
+\]
+
+El WBFM trabaja internamente a 480 kSa/s y el HackRF recibe 2 MSa/s. Conecte \textbf{WBFM Transmit $\rightarrow$ Rational Resampler}.
+
+\subsection{3F. Multiply Const}
+
+Busque \textbf{Multiply Const}, normalmente en \textbf{Math Operators}. Configure Constant = \textbf{0.3}. Conecte:
+
+\[
+\text{Rational Resampler}\rightarrow\text{Multiply Const}.
+\]
+
+\subsection{3G. Soapy HackRF Sink}
+
+En el panel derecho abra o busque \textbf{Soapy}. En instalaciones actuales puede verse como:
+
+\begin{center}
+\textbf{Soapy $>$ Sink $>$ Soapy HackRF Sink}.
+\end{center}
+
+Configure el bloque:
+
+\begin{itemize}
+    \item Sample Rate = \texttt{samp\_rate};
+    \item Center Freq = \texttt{tx\_freq};
+    \item Bandwidth = \texttt{samp\_rate};
+    \item RF Amp = False/OFF;
+    \item VGA Gain = \texttt{tx\_gain}.
+\end{itemize}
+
+Conecte \textbf{Multiply Const $\rightarrow$ Soapy HackRF Sink}.
+
+El flowgraph completo debe ser:
+
+\[
+\boxed{
+\begin{array}{c}
+\text{Signal Source 1 kHz}
+\rightarrow
+\text{WBFM Transmit}
+\rightarrow
+\text{Rational Resampler }25/6\\[1mm]
+\rightarrow
+\text{Multiply Const }0.3
+\rightarrow
+\text{Soapy HackRF Sink}
+\end{array}
+}
+\]
+
+\begin{nota}[Flowgraphs de referencia]
+La carpeta \texttt{grc/} que acompaña a este manual contiene dos flowgraphs de referencia para GNU Radio 3.10: \texttt{lab02\_wbfmtx\_signalsource.grc} (tono de 1 kHz, la cadena anterior) y \texttt{lab02\_wbfmtx.grc} (la misma cadena con Audio Source). Construya primero el flowgraph a mano; use los archivos para comparar parámetros si algo no funciona.
+\end{nota}
+
+\subsection{3H. Evitar la ventana QT vacía}
+
+Si el flowgraph no contiene ningún QT GUI Sink, haga doble clic en \textbf{Options} y cambie \textbf{Generate Options} a \textbf{No GUI}. Esto evita que aparezca una ventana QT vacía que no aporta información.
+
+\subsection{3I. Ejecutar}
+
+\begin{enumerate}
+    \item Cierre completamente SDRangel.
+    \item Confirme el montaje conducido HackRF--atenuador--SIGLENT según el protocolo de la página~\pageref{sec:protocolo-tx}.
+    \item Ejecute \texttt{hackrf\_info} si tiene dudas sobre el dispositivo.
+    \item Pulse Run (triángulo) en GRC.
+    \item Observe 100 MHz en el SIGLENT.
+    \item Pulse Stop (cuadrado) para finalizar. Detenga siempre el flowgraph antes de cambiar conexiones o añadir el micrófono.
+\end{enumerate}
+
+\subsection{3J. Añadir micrófono sin eliminar el tono}
+
+Para poder escoger entre tono y micrófono:
+
+\begin{enumerate}
+    \item Busque \textbf{Audio Source} en \textbf{Sources}. Configure Sample Rate = \texttt{audio\_rate}.
+    \item Busque \textbf{Selector}. Configure dos entradas y una salida.
+    \item Conecte Signal Source a Input 0 del Selector.
+    \item Conecte Audio Source a Input 1.
+    \item Conecte la salida del Selector a WBFM Transmit.
+    \item Input Index = 0 selecciona tono; Input Index = 1 selecciona micrófono.
+\end{enumerate}
+
+\subsection{3K. Mensajes que pueden aparecer y qué significan}
+
+\begin{diagnostico}
+\textbf{Warning: missing xterm executable.} En Windows puede ignorarse. Pulse OK. No instale xterm.
+
+\textbf{SoapyVOLKConverters: no VOLK config file found.} No es un error fatal. En radioconda Prompt puede ejecutar \texttt{volk\_profile} para optimizar SIMD.
+
+\textbf{RuntimeError: no hackrf device matches.} Cierre SDRangel y cualquier otro programa SDR, desconecte/reconecte el HackRF y ejecute \texttt{hackrf\_info}.
+
+\textbf{El botón Play queda deshabilitado.} El flowgraph sigue ejecutándose. Pulse Stop. Si un proceso queda colgado, cierre la ventana generada o finalice únicamente el \texttt{python.exe} lanzado por Radioconda.
+\end{diagnostico}
+
+\subsection{Preguntas de Práctica 3}
+
+\begin{enumerate}
+    \item ¿Por qué se necesitan dos tasas intermedias (48 kSa/s y 480 kSa/s) antes de llegar a 2 MSa/s?
+    \item Demuestre matemáticamente la relación 25/6 del Rational Resampler.
+    \item ¿Qué diferencia experimental existe entre variar \texttt{Multiply Const} y variar VGA Gain del HackRF?
+    \item ¿Qué ventaja tiene conservar tono y micrófono mediante un Selector?
+\end{enumerate}
+
+\clearpage
+\section{Parte II -- Linux desde cero para Wi-Fi, BLE y ADS-B/Mode S}
+
+Esta parte está diseñada para \textbf{Ubuntu 24.04 LTS nativo}. Los pasos se dan desde un sistema recién instalado.
+
+\subsection{4.0. Preparar Ubuntu}
+
+Abra Terminal con \texttt{Ctrl+Alt+T}.
+
+\subsubsection{Actualizar el sistema}
+
+\begin{lstlisting}
+sudo apt update
+sudo apt full-upgrade -y
+sudo reboot
+\end{lstlisting}
+
+Después del reinicio:
+
+\begin{lstlisting}
+sudo apt install -y git cmake build-essential pkg-config \
+  python3-dev python3-numpy python3-mako pybind11-dev swig \
+  gnuradio gnuradio-dev hackrf libhackrf-dev \
+  soapysdr-tools libsoapysdr-dev soapysdr-module-hackrf \
+  wireshark tshark network-manager iw
+\end{lstlisting}
+
+Si durante la instalación de Wireshark Ubuntu pregunta si usuarios no root podrán capturar paquetes, puede responder \textbf{Yes}. Para esta práctica el PCAP se abrirá principalmente desde archivo, por lo que no es indispensable capturar una interfaz Wi-Fi con Wireshark.
+
+\subsection{4.1. Verificar GNU Radio, HackRF y SoapySDR}
+
+Ejecute:
+
+\begin{lstlisting}
+gnuradio-config-info --version
+hackrf_info
+SoapySDRUtil --find
+\end{lstlisting}
+
+\begin{esperado}
+\texttt{hackrf\_info} debe listar HackRF One. \texttt{SoapySDRUtil --find} debe mostrar un dispositivo HackRF/Soapy disponible. Si HackRF aparece en \texttt{hackrf\_info} pero no en Soapy, revise que \texttt{soapysdr-module-hackrf} esté instalado.
+\end{esperado}
+
+\subsection{4.2. Permisos USB en Linux}
+
+Si \texttt{hackrf\_info} solo funciona con \texttt{sudo}, el problema es de reglas udev/permisos. Reinstale el paquete \texttt{hackrf}, desconecte/reconecte el dispositivo y verifique nuevamente. También puede revisar las reglas instaladas en \texttt{/lib/udev/rules.d/} o \texttt{/usr/lib/udev/rules.d/}. Evite ejecutar GNU Radio permanentemente como root.
+
+\subsection{4.3. Ejecutar VOLK profile}
+
+Antes del receptor Wi-Fi a 20 MSa/s ejecute una vez:
+
+\begin{lstlisting}
+volk_profile
+\end{lstlisting}
+
+Esto realiza benchmarks de implementaciones SIMD y crea una configuración optimizada. El proyecto \texttt{gr-ieee802-11} lo recomienda porque 20 MSa/s exige bastante CPU.
+
+\clearpage
+\section{Práctica 4 -- Analizador Wi-Fi SDR robusto en Linux}
+
+\begin{objetivo}
+Relacionar tres niveles de evidencia: (1) redes anunciadas por el subsistema Wi-Fi de Linux, (2) actividad RF observada con HackRF y GNU Radio, y (3) tramas OFDM 802.11 decodificadas por \texttt{gr-ieee802-11} y analizadas en Wireshark. La práctica busca obtener SSID/BSSID/canal cuando sea técnicamente posible, sin prometer que el HackRF decodificará todos los beacons del entorno.
+\end{objetivo}
+
+\begin{alerta}
+\textbf{Límites de privacidad y uso legítimo.} Esta práctica es \textbf{solo de recepción} y se limita a tramas de gestión que los puntos de acceso difunden abiertamente (beacons: SSID, BSSID, canal, capacidades).
+\begin{itemize}
+    \item Prefiera la red del laboratorio o un punto de acceso propio como objetivo principal.
+    \item No intente descifrar tráfico, obtener claves, asociarse a redes ajenas ni identificar a personas o dispositivos de terceros.
+    \item No ejecute ejemplos de transmisión de \texttt{gr-ieee802-11}: en este laboratorio se usan únicamente \texttt{wifi\_loopback.grc} (sin hardware) y \texttt{wifi\_rx.grc}.
+    \item Trate los archivos PCAP como datos sensibles: guárdelos solo durante la práctica y bórrelos al terminar. En el informe, enmascare los BSSID y direcciones MAC que no pertenezcan al laboratorio (por ejemplo, \texttt{aa:bb:cc:xx:xx:xx}).
+    \item Siga la política de la institución y la legislación aplicable sobre interceptación de comunicaciones.
+\end{itemize}
+\end{alerta}
+
+\subsection{4A. Por qué se usan dos caminos para SSID}
+
+\texttt{gr-ieee802-11} implementa un transceptor IEEE 802.11 \textbf{a/g/p OFDM}; no es un decoder general de 802.11b DSSS/CCK. En 2.4 GHz algunos AP pueden emitir tramas de gestión a tasas/modulaciones legacy que el receptor OFDM no decodifique. Por ello la práctica usa:
+
+\begin{itemize}
+    \item \textbf{Camino A, inventario fiable:} \texttt{nmcli}/\texttt{iw} de Linux para ver SSID, BSSID, canal, señal y seguridad anunciados por la tarjeta Wi-Fi del computador.
+    \item \textbf{Camino B, SDR:} HackRF + GNU Radio + \texttt{gr-ieee802-11} para observar RF, sincronización OFDM, constelaciones y tramas MAC OFDM válidas.
+\end{itemize}
+
+La correlación entre ambos caminos permite responder: \emph{``esta red que Linux identifica con SSID X opera en el canal Y; al sintonizar HackRF al centro de Y observo la actividad RF de ese canal y, si existen tramas 802.11g OFDM compatibles, puedo decodificar tramas MAC''}.
+
+\subsection{4B. Inventario de SSID/BSSID/canal con Linux}
+
+Primero identifique el nombre de la interfaz Wi-Fi:
+
+\begin{lstlisting}
+nmcli device status
+\end{lstlisting}
+
+Normalmente será algo como \texttt{wlp2s0} o \texttt{wlan0}.
+
+Solicite un nuevo scan:
+
+\begin{lstlisting}
+nmcli device wifi rescan
+nmcli -f IN-USE,SSID,BSSID,CHAN,FREQ,RATE,SIGNAL,SECURITY \
+  device wifi list
+\end{lstlisting}
+
+Como alternativa más detallada:
+
+\begin{lstlisting}
+sudo iw dev <INTERFAZ_WIFI> scan | less
+\end{lstlisting}
+
+\begin{esperado}
+Debe aparecer una lista con nombres de red (SSID), BSSID, canal/frecuencia, nivel relativo y seguridad. El SSID es el nombre humano de la red; BSSID normalmente identifica el radio/AP mediante dirección MAC. Una misma organización puede usar el mismo SSID en varios BSSID.
+\end{esperado}
+
+Registre al menos tres redes:
+
+\begin{longtable}{@{}p{0.27\linewidth}p{0.28\linewidth}p{0.12\linewidth}p{0.13\linewidth}p{0.13\linewidth}@{}}
+\toprule
+SSID & BSSID & Canal & Frecuencia & Señal \\
+\midrule
+\endhead
+ & & & & \\
+ & & & & \\
+ & & & & \\
+\bottomrule
+\end{longtable}
+
+\subsection{4C. Primer flowgraph: espectro y waterfall con HackRF}
+
+Antes de instalar módulos externos, confirme que GNU Radio puede observar el canal.
+
+\subsubsection{Dónde encontrar los bloques}
+
+Abra:
+
+\begin{lstlisting}
+gnuradio-companion
+\end{lstlisting}
+
+En el panel derecho:
+
+\begin{enumerate}
+    \item Busque \textbf{Soapy HackRF Source}. Debe aparecer bajo \textbf{Soapy $>$ Source} o mediante búsqueda por nombre.
+    \item Busque \textbf{QT GUI Frequency Sink}.
+    \item Busque \textbf{QT GUI Waterfall Sink}.
+    \item Arrastre/doble clic para agregarlos.
+\end{enumerate}
+
+Cree variables:
+
+\begin{lstlisting}
+samp_rate   = 20e6
+center_freq = 2.412e9
+\end{lstlisting}
+
+Configure \textbf{Soapy HackRF Source}:
+
+\begin{itemize}
+    \item Sample Rate = \texttt{samp\_rate};
+    \item Center Freq = \texttt{center\_freq};
+    \item Bandwidth = \texttt{samp\_rate};
+    \item RF Amp = OFF;
+    \item LNA/IF Gain = 16 dB como inicio;
+    \item VGA Gain = 16 dB como inicio.
+\end{itemize}
+
+Configure Frequency Sink y Waterfall Sink con Sample Rate = \texttt{samp\_rate} y Center Frequency = \texttt{center\_freq} si el bloque ofrece ese campo.
+
+Conecte la salida compleja del HackRF a ambos sinks.
+
+\subsubsection{Canales 1, 6 y 11}
+
+Ejecute secuencialmente:
+
+\begin{longtable}{@{}lll@{}}
+\toprule
+Canal & Frecuencia central & Valor \\
+\midrule
+1 & 2412 MHz & \texttt{2.412e9} \\
+6 & 2437 MHz & \texttt{2.437e9} \\
+11 & 2462 MHz & \texttt{2.462e9} \\
+\bottomrule
+\end{longtable}
+
+\begin{esperado}
+Una transmisión Wi-Fi de 20 MHz aparece como actividad relativamente ancha y en ráfagas. El waterfall permite diferenciar un canal casi vacío de uno con ocupación recurrente. El HackRF no observa simultáneamente toda la banda 2.4 GHz porque su máximo sample rate práctico es 20 MSa/s; por eso se sintoniza un canal de 20 MHz cada vez.
+\end{esperado}
+
+Seleccione el canal que coincida con una red fuerte del inventario \texttt{nmcli}.
+
+\subsection{4D. Instalar \texttt{gr-foo} y \texttt{gr-ieee802-11}}
+
+Cierre GNU Radio Companion antes de compilar módulos OOT.
+
+Cree un directorio de trabajo:
+
+\begin{lstlisting}
+mkdir -p ~/sdr
+cd ~/sdr
+\end{lstlisting}
+
+\subsubsection{Instalar gr-foo}
+
+\begin{lstlisting}
+git clone -b maint-3.10 https://github.com/bastibl/gr-foo.git
+cd gr-foo
+mkdir build
+cd build
+cmake ..
+make -j$(nproc)
+sudo make install
+sudo ldconfig
+\end{lstlisting}
+
+Si el repositorio no contiene la rama \texttt{maint-3.10} en la versión consultada, ejecute \texttt{git branch -a} y use la rama de mantenimiento que corresponda a GNU Radio 3.10; no mezcle deliberadamente módulos de GNU Radio 3.8 con 3.10.
+
+\subsubsection{Instalar gr-ieee802-11}
+
+\begin{lstlisting}
+cd ~/sdr
+git clone -b maint-3.10 https://github.com/bastibl/gr-ieee802-11.git
+cd gr-ieee802-11
+mkdir build
+cd build
+cmake ..
+make -j$(nproc)
+sudo make install
+sudo ldconfig
+\end{lstlisting}
+
+Aumente memoria compartida, como recomienda el proyecto:
+
+\begin{lstlisting}
+sudo sysctl -w kernel.shmmax=2147483648
+\end{lstlisting}
+
+\subsection{4E. Construir el bloque jerárquico PHY}
+
+El proyecto no instala automáticamente el bloque jerárquico \texttt{wifi\_phy\_hier}.
+
+\begin{enumerate}
+    \item Vaya a:
+\end{enumerate}
+
+\begin{lstlisting}
+cd ~/sdr/gr-ieee802-11/examples
+gnuradio-companion wifi_phy_hier.grc
+\end{lstlisting}
+
+\begin{enumerate}[resume]
+    \item En GNU Radio Companion pulse \textbf{Generate} (icono de engranaje/generación, según tema de GRC).
+    \item Cierre GRC.
+    \item Vuelva a abrir GNU Radio Companion.
+\end{enumerate}
+
+\begin{esperado}
+El bloque jerárquico Wi-Fi queda disponible en el catálogo local de GRC (normalmente bajo Custom/IEEE 802.11). Si GRC dice que faltan bloques \texttt{ieee802\_11\_*} o \texttt{foo\_*}, la instalación del módulo no quedó en el mismo prefijo que GNU Radio.
+\end{esperado}
+
+\subsection{4F. Prueba software obligatoria: wifi\_loopback.grc}
+
+Antes de involucrar el HackRF:
+
+\begin{lstlisting}
+cd ~/sdr/gr-ieee802-11/examples
+gnuradio-companion wifi_loopback.grc
+\end{lstlisting}
+
+Pulse Run.
+
+\begin{esperado}
+Deben aparecer paquetes decodificados en consola. Si loopback falla, no continúe a RF: arregle primero la instalación software. Esta separación evita culpar a antena/ganancia cuando el problema es un bloque OOT faltante.
+\end{esperado}
+
+\subsection{4G. Abrir el receptor oficial wifi\_rx.grc}
+
+\begin{lstlisting}
+cd ~/sdr/gr-ieee802-11/examples
+gnuradio-companion wifi_rx.grc
+\end{lstlisting}
+
+El ejemplo oficial incluye, entre otros, los bloques:
+
+\begin{itemize}
+    \item \textbf{Sync Short};
+    \item \textbf{Sync Long};
+    \item FFT;
+    \item \textbf{Frame Equalizer};
+    \item \textbf{WiFi Decode MAC};
+    \item \textbf{WiFi Parse MAC};
+    \item \textbf{QT GUI Constellation Sink};
+    \item \textbf{Wireshark Connector} de gr-foo, deshabilitado por defecto;
+    \item \textbf{File Sink} a \texttt{/tmp/wifi.pcap}, deshabilitado por defecto;
+    \item una fuente UHD USRP en el ejemplo original.
+\end{itemize}
+
+\subsection{4H. Sustituir la fuente USRP por HackRF}
+
+\begin{enumerate}
+    \item Localice el bloque \textbf{UHD: USRP Source} del ejemplo, normalmente a la izquierda.
+    \item Selecciónelo y elimínelo o desactívelo.
+    \item En el panel de bloques busque \textbf{Soapy HackRF Source}.
+    \item Agréguelo en el lugar de la fuente UHD.
+    \item Configure:
+    \begin{itemize}
+        \item Sample Rate = \textbf{20e6};
+        \item Center Freq = la frecuencia del canal elegido, por ejemplo \textbf{2.437e9} para canal 6;
+        \item Bandwidth = 20e6;
+        \item RF Amp = OFF;
+        \item LNA = 16 dB;
+        \item VGA = 16 dB.
+    \end{itemize}
+    \item El ejemplo original conecta la fuente a tres ramas de sincronización/métrica. Reproduzca las tres conexiones que antes salían de USRP Source hacia los bloques que alimentan la cadena de Sync Short. No deje puertos de entrada críticos sin conectar.
+    \item Ajuste la variable \texttt{samp\_rate} a \textbf{20e6} para 802.11g de 20 MHz.
+    \item Ajuste la variable de frecuencia al canal elegido.
+\end{enumerate}
+
+\begin{nota}
+En el ejemplo oficial \texttt{wifi\_rx.grc}, \texttt{Sync Short} usa un threshold cercano a 0.56. No reduzca agresivamente ese umbral como primera estrategia: sincronizar sobre ruido puede producir constelaciones aparentes pero tramas inválidas. Primero ajuste frecuencia, ganancia, carga de CPU y DC offset.
+\end{nota}
+
+\subsection{4I. Qué observar en la constelación}
+
+Ejecute el flowgraph con una red 802.11g activa cercana.
+
+\begin{esperado}
+La constelación puede cambiar de una trama a otra porque diferentes tramas usan diferentes MCS/modulaciones. Es posible observar agrupaciones compatibles con BPSK, QPSK o 16-QAM. Un punto concentrado en el origen puede significar sincronización falsa sobre ruido. La salida de \textbf{WiFi Decode MAC} es el criterio más fuerte: si entrega una PDU, el proyecto considera que la trama fue correctamente recibida.
+\end{esperado}
+
+Si la consola muestra \texttt{checksum wrong -- dropping}, pruebe en este orden:
+
+\begin{enumerate}
+    \item confirme exactamente 20 MSa/s;
+    \item confirme el centro correcto del canal;
+    \item reduzca/aumente ganancia gradualmente;
+    \item ejecute \texttt{volk\_profile};
+    \item cierre otras aplicaciones pesadas;
+    \item pruebe otra red/canal;
+    \item conecte \textbf{WiFi Parse MAC} a un \textbf{Message Debug} y observe únicamente PDUs válidas.
+\end{enumerate}
+
+\subsection{4J. Habilitar PCAP para Wireshark}
+
+En \texttt{wifi\_rx.grc} el \textbf{Wireshark Connector} y el \textbf{File Sink} están deshabilitados por defecto.
+
+\begin{enumerate}
+    \item Haga clic derecho en \textbf{Wireshark Connector} y cambie su estado a \textbf{Enabled}.
+    \item Haga lo mismo con \textbf{File Sink}.
+    \item Verifique que File Sink use:
+\end{enumerate}
+
+\begin{lstlisting}
+/tmp/wifi.pcap
+\end{lstlisting}
+
+\begin{enumerate}[resume]
+    \item Verifique la conexión de mensaje \textbf{WiFi Decode MAC (out) $\rightarrow$ Wireshark Connector (in)}.
+    \item Verifique la conexión byte-stream \textbf{Wireshark Connector $\rightarrow$ File Sink}.
+    \item Ejecute el receptor durante 30--60 s.
+    \item Detenga el flowgraph.
+    \item Abra el archivo:
+\end{enumerate}
+
+\begin{lstlisting}
+wireshark /tmp/wifi.pcap
+\end{lstlisting}
+
+\subsection{4K. Buscar management frames, beacon y SSID en Wireshark}
+
+En la barra \textbf{Display Filter} de Wireshark pruebe:
+
+\begin{lstlisting}
+wlan.fc.type == 0
+\end{lstlisting}
+
+Esto filtra tramas de management. Para beacons:
+
+\begin{lstlisting}
+wlan.fc.type_subtype == 0x08
+\end{lstlisting}
+
+Si hay beacons OFDM válidos, seleccione uno y expanda en el panel de detalles:
+
+\begin{itemize}
+    \item IEEE 802.11 wireless LAN management frame;
+    \item Tagged parameters;
+    \item SSID parameter set;
+    \item Supported Rates;
+    \item DS Parameter Set / canal cuando esté presente;
+    \item RSN Information cuando esté presente.
+\end{itemize}
+
+También puede escribir \texttt{wlan.ssid} en el filtro y usar autocompletado de Wireshark para confirmar el nombre de campo disponible en su versión.
+
+\begin{alerta}
+No concluya ``no hay SSID'' solo porque \texttt{gr-ieee802-11} no decodificó un beacon. El módulo implementa a/g/p OFDM; no todos los beacons de 2.4 GHz serán necesariamente recibidos por esta cadena. Use \texttt{nmcli}/\texttt{iw} como inventario de red y el SDR como evidencia RF/OFDM. Distinga claramente qué información proviene de cada fuente.
+\end{alerta}
+
+\subsection{4L. Correlación final SSID--BSSID--canal--RF}
+
+Elija una red del inventario Linux y complete:
+
+\begin{longtable}{@{}p{0.19\linewidth}p{0.24\linewidth}p{0.10\linewidth}p{0.15\linewidth}p{0.24\linewidth}@{}}
+\toprule
+SSID & BSSID & Canal & Frecuencia & Evidencia SDR \\
+\midrule
+\endhead
+ & & & & \\
+\bottomrule
+\end{longtable}
+
+Explique si hubo o no una trama MAC OFDM decodificada que pudiera asociarse al entorno observado. Para cada dato, indique su origen: el subsistema Wi-Fi del computador (\texttt{nmcli}/\texttt{iw}, que decodifica con su propio hardware) o una trama decodificada independientemente por la cadena HackRF + \texttt{gr-ieee802-11} (niveles 4--5 de la tabla de evidencia). Un waterfall en el canal correcto es solo nivel 1.
+
+\subsection{4M. Extensión BLE en Linux}
+
+BLE no se decodifica con \texttt{gr-ieee802-11}. Para comparar ocupación espectral:
+
+\begin{enumerate}
+    \item Vuelva al flowgraph simple HackRF Source $\rightarrow$ Frequency Sink + Waterfall.
+    \item Cambie sample rate a 10 MSa/s.
+    \item Observe secuencialmente los canales primarios de advertising:
+    \begin{itemize}
+        \item 2402 MHz;
+        \item 2426 MHz;
+        \item 2480 MHz.
+    \end{itemize}
+    \item Genere actividad legítima activando la búsqueda Bluetooth de su propio teléfono.
+    \item Compare duración temporal y anchura de las ráfagas BLE con Wi-Fi.
+\end{enumerate}
+
+\subsection{Preguntas de Práctica 4}
+
+\begin{enumerate}
+    \item Diferencie SSID, BSSID, canal y frecuencia central.
+    \item ¿Por qué un HackRF a 20 MSa/s no puede observar simultáneamente los 83.5 MHz completos de la banda ISM de 2.4 GHz?
+    \item ¿Qué añade una constelación respecto a un waterfall?
+    \item ¿Qué evidencia es más fuerte: energía RF, sincronización, constelación o PDU de WiFi Decode MAC? Justifique.
+    \item ¿Por qué \texttt{nmcli} puede mostrar un SSID que no aparece en el PCAP de \texttt{gr-ieee802-11}?
+    \item Compare visualmente Wi-Fi y BLE en el waterfall sin afirmar protocolo únicamente por la forma espectral.
+\end{enumerate}
+
+\clearpage
+\section{Práctica 5 -- ADS-B/Mode S robusto con SDRangel en Linux}
+
+\begin{objetivo}
+Pasar de actividad RF en 1090 MHz a frames ADS-B/Mode S decodificados, tabla de aeronaves, estadística por Type Code/Downlink Format, mapa, cobertura y análisis de qué información fue radiodifundida y qué información proviene de bases de datos externas.
+\end{objetivo}
+
+\subsection{5A. Instalar SDRangel en Ubuntu}
+
+La forma más estable para el laboratorio es utilizar un binario oficial de SDRangel. En Ubuntu, las releases pueden incluir paquetes Debian compatibles; SDRangel también documenta Snap/Flatpak según versión.
+
+Como ruta práctica con Snap cuando esté disponible:
+
+\begin{lstlisting}
+sudo snap install sdrangel
+sudo snap connect sdrangel:raw-usb
+sudo snap connect sdrangel:audio-record
+\end{lstlisting}
+
+Ejecute:
+
+\begin{lstlisting}
+/snap/bin/sdrangel
+\end{lstlisting}
+
+Si usa un paquete \texttt{.deb} oficial de la release correspondiente:
+
+\begin{lstlisting}
+sudo apt install ./sdrangel_<version>-amd64.deb
+\end{lstlisting}
+
+Use una sola ruta; no mezcle varias instalaciones si no es necesario.
+
+\subsection{5B. Verificación del HackRF antes de SDRangel}
+
+Cierre GNU Radio y ejecute:
+
+\begin{lstlisting}
+hackrf_info
+\end{lstlisting}
+
+Luego cierre la terminal si tiene otra herramienta usando el HackRF y abra SDRangel.
+
+\subsection{5C. Añadir HackRF Input y sintonizar 1090 MHz}
+
+\begin{enumerate}
+    \item Pulse \texttt{Ctrl+R}.
+    \item Seleccione \textbf{HackRF Input}.
+    \item Configure:
+    \begin{itemize}
+        \item Center Frequency = \textbf{1090.000 MHz};
+        \item Sample Rate = \textbf{4 MSa/s};
+        \item Decimation = 1;
+        \item RF Amp = OFF inicialmente;
+        \item LNA = 24 dB como punto de partida;
+        \item VGA = 24 dB como punto de partida;
+        \item DC = ON;
+        \item IQ = ON.
+    \end{itemize}
+    \item Use una antena razonablemente adecuada para 1090 MHz y, si es posible, ubíquela con vista despejada hacia el exterior.
+    \item Pulse Start.
+\end{enumerate}
+
+\begin{esperado}
+En 1090 MHz las transmisiones son ráfagas muy cortas; el espectro instantáneo puede parecer poco llamativo. El waterfall puede mostrar líneas/rastros breves. La ausencia de una ``portadora continua'' es normal: ADS-B/Mode S es pulsado.
+\end{esperado}
+
+\subsection{5D. Añadir ADS-B Demodulator}
+
+\begin{enumerate}
+    \item En el panel HackRF pulse \textbf{Add channels}.
+    \item Seleccione \textbf{ADS-B Demodulator}.
+    \item Deje el offset superior en 0 Hz.
+    \item Configure Channel Sample Rate = \textbf{4 MSa/s}. El plugin soporta 2--12 MSa/s en pasos de 2; la propia documentación indica que 2 o 4 MSa/s suelen dar buenos decodes.
+    \item Configure RF bandwidth para contener adecuadamente la señal alrededor de 1090 MHz.
+    \item Busque el botón \textbf{S} y actívelo para habilitar demodulación adicional de frames Mode S ELS/\allowbreak EHS/\allowbreak MRAR.
+    \item Busque \textbf{Correlation Threshold}. Comience entre \textbf{5 y 7 dB}. Un umbral menor intenta más frames pero incrementa falsos/invalid frames y carga de CPU.
+    \item Deje Preamble Chip Errors (PCE) conservador inicialmente; aumentarlo puede recuperar frames marginales pero también eleva el riesgo de inválidos.
+\end{enumerate}
+
+\subsection{5E. Descargar bases de datos: distinguir RF de enriquecimiento}
+
+El ADS-B Demodulator puede descargar:
+
+\begin{itemize}
+    \item base de datos de aeronaves;
+    \item OurAirports;
+    \item OpenAIP para espacios aéreos/NAVAIDs.
+\end{itemize}
+
+Estas bases enriquecen la interfaz con registro, modelo, propietario, aeropuertos o rutas. \textbf{No todo dato mostrado fue transmitido por la aeronave}. En el informe, separe:
+
+\begin{itemize}
+    \item \textbf{datos derivados de frames recibidos}: ICAO, callsign cuando se transmite, altitud, posición, velocidad, etc.;
+    \item \textbf{datos externos}: modelo/registro/propietario/ruta enriquecida por bases descargadas o APIs.
+\end{itemize}
+
+\subsection{5F. Leer la tabla ADS-B/Mode S}
+
+Espere unos minutos. Según tráfico y recepción pueden aparecer columnas como:
+
+\begin{itemize}
+    \item ICAO;
+    \item Callsign;
+    \item Altitude;
+    \item Ground speed;
+    \item Heading/track;
+    \item Latitude/Longitude;
+    \item Correlation;
+    \item DF/TC y campos derivados, según configuración/versión.
+\end{itemize}
+
+Seleccione una aeronave y registre:
+
+\begin{longtable}{@{}p{0.24\linewidth}p{0.32\linewidth}p{0.32\linewidth}@{}}
+\toprule
+Campo & Valor observado & Fuente: RF o externa \\
+\midrule
+\endhead
+ICAO & & RF \\
+Callsign & & RF si fue transmitido \\
+Altitud & & RF \\
+Velocidad & & RF cuando disponible \\
+Posición & & RF cuando puede calcularse \\
+Modelo/registro & & Puede ser base externa \\
+Ruta comercial & & Puede ser API/base externa \\
+\bottomrule
+\end{longtable}
+
+\subsection{5G. Añadir Map Feature}
+
+\begin{enumerate}
+    \item Abra \textbf{Preferences $>$ My Position} y configure correctamente la posición del receptor. Esto es importante para referencias de distancia y visualización.
+    \item En la barra de Features de SDRangel agregue \textbf{Map}.
+    \item En el ADS-B Demodulator habilite/abra la visualización de mapa según la disposición de la interfaz.
+    \item Espere a que una aeronave tenga posición calculable. Una sola trama no siempre basta para disponer de posición.
+\end{enumerate}
+
+\begin{nota}[De dónde sale la posición]
+ADS-B codifica la latitud y la longitud en formato compacto (CPR). Para obtener una posición sin ambigüedad, el decodificador combina una trama ``par'' y una ``impar'' recientes de la misma aeronave, o bien usa una posición de referencia cercana, como la configurada en \textbf{My Position}. Por eso la posición es \textbf{información derivada} (nivel 6), y una posición de receptor mal configurada puede afectar distancias, alcance máximo y, en algunos casos, la propia posición calculada.
+\end{nota}
+
+\begin{esperado}
+Las aeronaves con posición válida aparecen en el mapa. Seleccionarlas permite correlacionar fila de tabla y símbolo geográfico. El Map Feature puede mostrar mapas 2D/3D y datos provenientes de otros plugins.
+\end{esperado}
+
+\subsection{5H. Activar estadísticas y gráfico}
+
+En el ADS-B Demodulator localice \textbf{Display Statistics} y \textbf{Display Chart}.
+
+Las estadísticas incluyen, según la documentación del plugin:
+
+\begin{itemize}
+    \item total de frames recibidos;
+    \item tasa de recepción en frames/s;
+    \item datos por Type Code (TC);
+    \item frames Mode S por Downlink Format (DF);
+    \item máximo alcance;
+    \item máxima altitud;
+    \item máximo frame rate.
+\end{itemize}
+
+La distribución por DF/TC solo es significativa para tramas que superaron la comprobación de paridad/CRC (nivel 4); consulte en la documentación del plugin cómo cuenta su versión los frames inválidos. El máximo alcance es derivado: depende de posiciones decodificadas y de la posición configurada del receptor.
+
+Registre durante 3--5 minutos:
+
+\begin{longtable}{@{}p{0.46\linewidth}p{0.34\linewidth}@{}}
+\toprule
+Métrica & Resultado \\
+\midrule
+\endhead
+Frames totales & \\
+Frame rate aproximado & \\
+Aeronaves simultáneas & \\
+Máximo alcance & \\
+DF más frecuente observado & \\
+TC más frecuente observado & \\
+\bottomrule
+\end{longtable}
+
+\subsection{5I. Experimento de umbral y ganancia}
+
+Realice tres condiciones de 60 s cada una sin mover antena:
+
+\begin{longtable}{@{}lllll@{}}
+\toprule
+Condición & LNA & VGA & Correlation Th. & Frames válidos \\
+\midrule
+A & 16 dB & 16 dB & 7 dB & \\
+B & 24 dB & 24 dB & 7 dB & \\
+C & 24 dB & 24 dB & 5 dB & \\
+\bottomrule
+\end{longtable}
+
+No concluya que ``más ganancia es mejor'' solo porque aparecen más intentos de decode. Compare frames válidos, estabilidad y cualquier evidencia de sobrecarga/ruido.
+
+\subsection{5J. Receiver Coverage Map}
+
+Active \textbf{Receiver Coverage Map}. SDRangel acumula el máximo rango por dirección y diferencia visualmente, entre otros, aeronaves por encima/debajo de cierto nivel de altitud. Manténgalo activo durante parte de la sesión y capture la cobertura final.
+
+\subsection{5K. Modo ATC y Flight Paths}
+
+Pruebe:
+
+\begin{itemize}
+    \item \textbf{Display Flight Path} para la aeronave seleccionada;
+    \item \textbf{Display All Flight Paths} si el PC mantiene rendimiento suficiente;
+    \item \textbf{ATC Mode} para mostrar información operacional adicional en etiquetas.
+\end{itemize}
+
+No confunda ruta dibujada desde posiciones ADS-B recibidas con un plan de vuelo oficial.
+
+\subsection{5L. Comparación tipo FlightRadar}
+
+Abra un servicio público de seguimiento de vuelos únicamente como referencia visual y seleccione una aeronave que aparezca en SDRangel.
+
+Compare:
+
+\begin{itemize}
+    \item callsign;
+    \item altitud aproximada;
+    \item posición aproximada;
+    \item velocidad/track cuando esté disponible;
+    \item tiempo de actualización.
+\end{itemize}
+
+\begin{nota}
+No espere listas idénticas. Un agregador comercial recibe datos de muchos receptores y fuentes; su HackRF es un receptor local con una antena, ubicación y horizonte específicos. La diferencia es parte del experimento.
+\end{nota}
+
+\subsection{5M. Plan B: reproducción IQ real}
+
+Si durante la clase no hay suficientes aeronaves o la antena/ubicación es deficiente, use una captura IQ real previamente grabada.
+
+SDRangel dispone de \textbf{File Input} para leer capturas \texttt{.sdriq} y otros formatos compatibles. La reproducción conserva sample rate y center frequency cuando el formato contiene metadatos.
+
+Procedimiento conceptual:
+
+\begin{enumerate}
+    \item detenga HackRF Input;
+    \item añada \textbf{File Input};
+    \item cargue la captura real de 1090 MHz;
+    \item añada ADS-B Demodulator;
+    \item use Channel Sample Rate coherente con la grabación;
+    \item identifique toda evidencia obtenida como \textbf{offline/replay}, no como tráfico en vivo.
+\end{enumerate}
+
+\subsection{5N. Preguntas de Práctica 5}
+
+\begin{enumerate}
+    \item ¿Por qué observar energía en 1090 MHz no demuestra todavía un frame Mode S válido?
+    \item ¿Por qué el plugin necesita al menos 2 MSa/s y por qué se usan 4 MSa/s en esta práctica?
+    \item ¿Qué hace el Correlation Threshold y cuál es el costo de reducirlo?
+    \item ¿Qué añade el botón S respecto al ADS-B/1090ES básico?
+    \item Cite tres campos que pueden provenir de RF y dos que pueden provenir de bases externas.
+    \item ¿Por qué SDRangel puede ver menos aeronaves que un agregador web?
+    \item ¿Qué evidencia proporcionan Statistics y Coverage Map que una sola captura de pantalla de una aeronave no proporciona?
+\end{enumerate}
+
+\clearpage
+\section{Troubleshooting consolidado}
+
+\begin{longtable}{@{}p{0.30\linewidth}p{0.63\linewidth}@{}}
+\toprule
+\textbf{Síntoma} & \textbf{Qué hacer} \\
+\midrule
+\endhead
+Zadig muestra ``Downgrade WCID Driver'' & No degrade si el driver actual ya es WINUSB. Cierre Zadig y pruebe \texttt{hackrf\_info}. \\
+\texttt{hackrf\_info}: no device & Cierre aplicaciones SDR, cambie cable/puerto, revise WinUSB en Windows o permisos/udev en Linux. \\
+SDRangel abre pero espectro vacío & Asegúrese de haber pulsado Start en HackRF Input; revise antena, SR, frecuencia y que el dispositivo no esté ocupado. \\
+BFM tiene señal pero no audio & Mute, volumen, squelch, Preferences $>$ Audio, selección de salida por canal. \\
+AM suena distorsionada & Centre offset, reduzca AF BW, ajuste LNA/VGA. \\
+WFM TX parece no moverse & Use Tone input 1 kHz primero. Observe nivel del modulador y el SIGLENT; un tono fijo no produce un waterfall ``variable'' como voz. \\
+GRC: missing xterm executable & Aviso no fatal en Windows. Pulse OK. \\
+GRC: no VOLK config & Ejecute \texttt{volk\_profile}; no es fallo fatal. \\
+GRC: no hackrf device matches & Cierre SDRangel y otras aplicaciones; reconecte USB; \texttt{hackrf\_info}. \\
+Play de GRC deshabilitado & El flowgraph sigue activo. Pulse Stop; si queda colgado cierre proceso Python de Radioconda correspondiente. \\
+Soapy HackRF no aparece en Linux & Instale \texttt{soapysdr-module-hackrf}; verifique \texttt{SoapySDRUtil --find}. \\
+GRC no encuentra \texttt{ieee802\_11\_*} & Compile la rama compatible con GNU Radio 3.10, \texttt{sudo make install}, \texttt{sudo ldconfig}; revise prefijo de instalación. \\
+Wi-Fi tiene waterfall pero no frames & Confirme 20 MSa/s, canal exacto, OFDM 11g activo, ganancia, CPU, VOLK, umbral de sync y loopback software. \\
+PCAP vacío & Habilite Wireshark Connector y File Sink; verifique conexión Decode MAC $\rightarrow$ Connector $\rightarrow$ File Sink. \\
+SSID aparece en nmcli pero no en PCAP & Puede ser beacon legacy/DSSS o simplemente no haberse decodificado. No es contradicción. \\
+ADS-B sin aeronaves & 1090 MHz, 4 MSa/s, antena 1090, mejor ubicación, LNA/VGA moderados, threshold 5--7; use replay IQ como respaldo. \\
+ADS-B tabla sin mapa & Espere frames de posición, configure Preferences $>$ My Position, agregue Map Feature. \\
+\bottomrule
+\end{longtable}
+
+\section{Entregables y criterios de evaluación}
+
+El informe final no debe exceder 8 páginas y debe incluir únicamente evidencia útil.
+
+\begin{enumerate}
+    \item FM 100.9 MHz: captura de espectro/demodulador y parámetros.
+    \item AM alrededor de 1.050 MHz: captura, offset, BW y ganancias.
+    \item SDRangel TX: captura SIGLENT con tono de 1 kHz y configuración WFM.
+    \item GNU Radio TX: captura del flowgraph completo y captura SIGLENT.
+    \item Wi-Fi Linux: inventario SSID/BSSID/canal; waterfall del canal elegido; constelación o evidencia de decode; PCAP/Wireshark si se obtuvieron tramas válidas; explicación si no hubo SSID vía SDR. Enmascare los BSSID/MAC ajenos al laboratorio.
+    \item BLE: un waterfall de advertising y comparación cualitativa con Wi-Fi.
+    \item ADS-B/Mode S: tabla con aeronaves, mapa, Statistics y un análisis de campo RF vs dato externo.
+    \item Respuestas técnicas a las preguntas de cada práctica.
+\end{enumerate}
+
+\begin{longtable}{@{}p{0.29\linewidth}p{0.60\linewidth}@{}}
+\toprule
+\textbf{Criterio} & \textbf{Qué se evalúa} \\
+\midrule
+\endhead
+Instalación reproducible & Driver/permisos correctos y verificación con herramientas de línea de comandos. \\
+Uso de SDRangel & Distingue dispositivo, canal, frecuencia central, offset, BW y audio. \\
+TX seguro & Montaje conducido, tono de prueba, nivel controlado y detención antes de reconectar. \\
+GNU Radio & Construye y explica el flowgraph; entiende tasas y resampler. \\
+Wi-Fi & Correlaciona SSID/BSSID/canal con RF; distingue limitaciones OFDM del decoder. \\
+ADS-B/Mode S & Pasa de 1090 MHz a frames, tabla, mapa y estadísticas sin confundir bases externas con contenido radiado. \\
+Interpretación & Conclusiones ligadas a evidencia y no a lo que ``debería'' haber ocurrido. \\
+\bottomrule
+\end{longtable}
+
+\section{Fuentes técnicas de referencia}
+
+Las instrucciones se redactaron a partir de la documentación oficial de cada proyecto. Conserve estos enlaces junto al laboratorio porque las interfaces evolucionan; ante una discrepancia, prevalece la documentación de la versión instalada:
+
+\begin{itemize}
+    \item Radioconda installer: \url{https://github.com/radioconda/radioconda-installer}
+    \item Zadig: \url{https://zadig.akeo.ie/}
+    \item SDRangel: \url{https://www.sdrangel.org/}
+    \item SDRangel GitHub: \url{https://github.com/f4exb/sdrangel}
+    \item SDRangel Releases: \url{https://github.com/f4exb/sdrangel/releases}
+    \item SDRangel Quick Start: \url{https://github.com/f4exb/sdrangel/wiki/Quick-start}
+    \item HackRF Input plugin: \url{https://github.com/f4exb/sdrangel/blob/master/plugins/samplesource/hackrfinput/readme.md}
+    \item Broadcast FM Demodulator: \url{https://github.com/f4exb/sdrangel/blob/master/plugins/channelrx/demodbfm/readme.md}
+    \item WFM Modulator: \url{https://github.com/f4exb/sdrangel/blob/master/plugins/channeltx/modwfm/readme.md}
+    \item ADS-B Demodulator: \url{https://github.com/f4exb/sdrangel/blob/master/plugins/channelrx/demodadsb/readme.md}
+    \item Map Feature: \url{https://github.com/f4exb/sdrangel/blob/master/plugins/feature/map/readme.md}
+    \item HackRF One documentation: \url{https://hackrf.readthedocs.io/en/stable/hackrf_one.html}
+    \item gr-ieee802-11, rama GNU Radio 3.10: \url{https://github.com/bastibl/gr-ieee802-11/tree/maint-3.10}
+    \item gr-foo: \url{https://github.com/bastibl/gr-foo}
+    \item Wireshark 802.11 display fields: \url{https://www.wireshark.org/docs/dfref/w/wlan.html}
+\end{itemize}
+
+\subsection*{Enlaces de compilación de SDRangel que no son necesarios para el estudiante}
+
+Se conservan como referencia de desarrollo, pero \textbf{no forman parte de la instalación del laboratorio}:
+
+\begin{itemize}
+    \item Compile in Windows: \url{https://github.com/f4exb/sdrangel/wiki/Compile-in-Windows}
+    \item Qt OSS Installer: \url{https://www.qt.io/development/download-qt-installer-oss}
+    \item Boost: \url{https://www.boost.org/releases/latest/}
+    \item Ninja: \url{https://ninja-build.org/}
+    \item NSIS: \url{https://sourceforge.net/projects/nsis/}
+\end{itemize}
+
+\begin{nota}
+Este laboratorio prioriza procedimientos reproducibles para estudiantes. Cuando una versión futura cambie un nombre de botón, se debe validar primero contra la documentación del plugin correspondiente y no contra una captura antigua de pantalla.
+\end{nota}

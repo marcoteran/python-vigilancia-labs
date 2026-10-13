@@ -1,10 +1,10 @@
 [
   {
     "notebook": "01_python_desde_cero.ipynb",
-    "cells": 43,
-    "exercises": 8,
-    "student_words": 939,
-    "figures": 1,
+    "cells": 62,
+    "exercises": 9,
+    "student_words": 3477,
+    "figures": 2,
     "embedded_markdown_images": 2,
     "ai_illustrations": 1,
     "embedded_assets": "PASS",
@@ -16,10 +16,10 @@
   },
   {
     "notebook": "02_calculos_vigilancia.ipynb",
-    "cells": 77,
+    "cells": 94,
     "exercises": 12,
-    "student_words": 3104,
-    "figures": 7,
+    "student_words": 6354,
+    "figures": 8,
     "embedded_markdown_images": 2,
     "ai_illustrations": 1,
     "embedded_assets": "PASS",

@@ -49,3 +49,9 @@ reserva_min - total_mision_min
 ```python
 total_mision_min <= reserva_min
 ```
+
+## R01
+
+```python
+2 * distancia_m / c_m_s * 1e6
+```
