@@ -33,3 +33,9 @@ Python 3.14.6 · Windows 11 Enterprise · `.\.venv\Scripts\python.exe scripts\ve
 Antes de esta revisión, el comando fallaba en Windows aunque los notebooks estaban bien: `verificar.py` leía `instructor/soluciones.json` con la codificación por defecto del sistema (cp1252), y las soluciones con `Ω` o `í` dejaban de coincidir con la salida esperada. Ahora lee y escribe en UTF-8 de forma explícita. No se probó el modo por defecto, con kernels en procesos separados, en este equipo.
 
 Manual SDR: MiKTeX 25.12 (XeTeX 4.16), tres pasadas de XeLaTeX sin errores, sin cajas desbordadas, sin referencias indefinidas y sin glifos ausentes; 41 páginas. LuaLaTeX también compila el documento. No se ensayaron procedimientos con HackRF One ni con el SIGLENT SSA3032X Plus.
+
+## Revisión del 14 de octubre de 2026 · Windows
+
+Python 3.14.6 · Windows 11 Enterprise · mismas versiones de paquetes que el 13 de octubre (numpy 2.5.4, matplotlib 3.11.2, pandas 2.3.3, ipywidgets 8.1.9, nbformat 5.11.1, nbclient 0.11.0, ipykernel 7.4.0).
+
+Se probaron los dos modos: `.\.venv\Scripts\python.exe scripts\verificar.py` (kernels de Jupyter en procesos separados, el mismo modo que GitHub Actions) y `--in-process`. Ambos pasan. Los notebooks publicados se generaron con el modo por defecto, que conserva el orden real de textos y figuras. No se probó Colab ni la interacción con widgets en un navegador.

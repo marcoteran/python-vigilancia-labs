@@ -4,80 +4,128 @@
 
 <p align="center">
   <b>Python, radar y vigilancia aeronáutica, aprendidos calculando.</b><br>
-  Dos notebooks en español que llevan desde cero en programación hasta la ecuación radar,<br>
+  Una presentación y dos notebooks en español que llevan desde cero en programación hasta la ecuación radar,<br>
   y un manual SDR que conecta esos modelos con señales RF reales.
 </p>
 
 <p align="center">
-  <a href="https://colab.research.google.com/github/marcoteran/python-vigilancia-labs/blob/main/notebooks/01_python_desde_cero.ipynb"><b>Abrir Laboratorio 01 en Colab</b></a> ·
-  <a href="https://colab.research.google.com/github/marcoteran/python-vigilancia-labs/blob/main/notebooks/02_calculos_vigilancia.ipynb"><b>Abrir Laboratorio 02 en Colab</b></a> ·
+  <a href="slides/python_lab_slides.pdf"><b>Presentación (PDF)</b></a> ·
+  <a href="https://colab.research.google.com/github/marcoteran/python-vigilancia-labs/blob/main/notebooks/01_python_desde_cero.ipynb"><b>Laboratorio 01 en Colab</b></a> ·
+  <a href="https://colab.research.google.com/github/marcoteran/python-vigilancia-labs/blob/main/notebooks/02_calculos_vigilancia.ipynb"><b>Laboratorio 02 en Colab</b></a> ·
   <a href="lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf"><b>Manual SDR (PDF)</b></a>
 </p>
 
 ---
 
-**Para quién es.** Para estudiantes que nunca han programado y quieren entender, con números y gráficos, cómo un radar mide la distancia, por qué un eco es tan débil, cómo una antena forma un haz y qué diferencia hay entre PSR, SSR, Mode S y ADS-B. También para instructores que necesitan material reproducible, con soluciones separadas y validación automática.
+**Para quién es.** Para estudiantes de vigilancia aeronáutica que nunca han programado y quieren entender, con números y gráficos, cómo un radar mide la distancia, por qué un eco es tan débil, cómo una antena forma un haz y qué diferencia hay entre PSR, SSR, Mode S y ADS-B. También para instructores que necesitan material reproducible, con soluciones separadas y validación automática.
 
 **Qué lo distingue.** Cada fórmula declara sus variables, unidades y supuestos; cada gráfico se interpreta físicamente; cada ejercicio muestra la salida esperada. Los modelos son didácticos y los datos, sintéticos: el repositorio nunca presenta una simulación como si fuera una medición.
 
 ## Contenido
 
+- [Empieza aquí](#empieza-aquí)
 - [La ruta de aprendizaje](#la-ruta-de-aprendizaje)
-- [Empieza ahora](#empieza-ahora)
-- [Los tres laboratorios](#los-tres-laboratorios)
+- [La presentación](#la-presentación)
+- [Laboratorio 01: Python desde cero](#laboratorio-01-python-desde-cero)
+- [Laboratorio 02: Python aplicado a radar y vigilancia](#laboratorio-02-python-aplicado-a-radar-y-vigilancia)
 - [Qué verás en los notebooks](#qué-verás-en-los-notebooks)
+- [Modelos, no mediciones](#modelos-no-mediciones)
+- [Si algo falla](#si-algo-falla)
 - [Laboratorio SDR](#laboratorio-sdr)
-- [Instalación local](#instalación-local)
-- [Cómo está diseñado el aprendizaje](#cómo-está-diseñado-el-aprendizaje)
-- [Validación y reproducibilidad](#validación-y-reproducibilidad)
-- [Estructura del repositorio](#estructura-del-repositorio)
-- [Para instructores](#para-instructores)
+- [Instalación local (opcional)](#instalación-local-opcional)
+- [Para instructores y mantenedores](#para-instructores-y-mantenedores)
 - [Referencias, autoría y contribución](#referencias-autoría-y-contribución)
+
+## Empieza aquí
+
+No necesitas instalar nada. Los notebooks se abren en Google Colab, que puede pedirte una cuenta de Google para ejecutar y guardar.
+
+| Paso | Material | Abrir | Descargar |
+|---|---|---|---|
+| **1** | Presentación: Python desde cero | [PDF, 28 páginas](slides/python_lab_slides.pdf) | — |
+| **2** | Laboratorio 01 · Python desde cero | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/marcoteran/python-vigilancia-labs/blob/main/notebooks/01_python_desde_cero.ipynb) | [`.ipynb`](https://raw.githubusercontent.com/marcoteran/python-vigilancia-labs/main/notebooks/01_python_desde_cero.ipynb) |
+| **3** | Laboratorio 02 · Python aplicado a radar y vigilancia | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/marcoteran/python-vigilancia-labs/blob/main/notebooks/02_calculos_vigilancia.ipynb) | [`.ipynb`](https://raw.githubusercontent.com/marcoteran/python-vigilancia-labs/main/notebooks/02_calculos_vigilancia.ipynb) |
+
+Para descargar un `.ipynb`, haz clic derecho en el enlace y elige **Guardar enlace como…**; solo lo necesitas para la [instalación local](#instalación-local-opcional).
+
+### Tu primera sesión en Colab
+
+1. **Archivo → Guardar una copia en Drive.** Trabaja siempre en tu copia: no modifica el original de GitHub y conserva tus respuestas.
+2. **Conecta, si es necesario.** La primera celda puede tardar unos segundos mientras Colab prepara un entorno de ejecución.
+3. **Ejecuta las celdas de arriba hacia abajo** con ▶ o `Shift + Enter`. Muchas usan datos creados en celdas anteriores.
+4. **Predice antes de ejecutar** y compara con lo que aparece debajo de la celda.
+5. **En los ejercicios**, cambia solo las líneas que contienen `None` por tus expresiones.
+
+El archivo se guarda en Drive, pero las variables viven en la **sesión**: si Colab se desconecta o reinicias, se pierden aunque sigas viendo resultados antiguos. Vuelve a ejecutar desde el inicio (menú **Entorno de ejecución**, o `Ctrl + F9` para ejecutar todas).
+
+No necesitas sensores, archivos de datos, claves ni montar Drive.
+
+### Cómo saber que terminaste
+
+| Laboratorio | Criterio |
+|---|---|
+| 01 | Los nueve ejercicios (E01–E04, M01–M04 y R01) imprimen **exactamente** la salida esperada, con su unidad. |
+| 02 | Las doce hojas de la misión (Q01–Q12) muestran ✓ en cada línea y respondiste «Concluye con evidencia». |
+| Ambos | Reiniciaste la sesión, ejecutaste todo de arriba abajo y los resultados se repitieron. |
+
+El formato de entrega lo define tu instructor. Tu copia en Drive contiene tu trabajo; en Colab puedes descargarla con **Archivo → Descargar → Descargar .ipynb**.
 
 ## La ruta de aprendizaje
 
 ```mermaid
 flowchart LR
-    A["Laboratorio 01<br/>Python desde cero"] --> B["Laboratorio 02<br/>Python aplicado a<br/>radar y vigilancia"]
+    P["Presentación<br/>Python desde cero"] --> A["Laboratorio 01<br/>Python desde cero"]
+    A --> B["Laboratorio 02<br/>Python aplicado a<br/>radar y vigilancia"]
     B -.-> C["Laboratorio SDR<br/>Del espectro RF a la<br/>información aeronáutica"]
 ```
 
-Es una progresión recomendada, no una cadena obligatoria. Los notebooks funcionan sin hardware y sin el manual SDR. El manual SDR es útil por sí solo, pero exige más que los notebooks: hardware RF, instalación de software en Windows y Ubuntu, y supervisión durante las prácticas de transmisión. Cada instructor puede elegir qué actividades asignar.
+Primero se comprende la herramienta y después el fenómeno. La presentación explica cada idea con un diagrama; el Laboratorio 01 la convierte en código que ejecutas y modificas; el Laboratorio 02 la aplica a señales, propagación, antenas, radar y redes de vigilancia. El laboratorio SDR es un complemento opcional con hardware: los notebooks funcionan sin él.
 
-## Empieza ahora
+## La presentación
 
-No necesitas instalar nada: los notebooks se abren en Google Colab, que puede requerir una cuenta de Google para ejecutar y guardar.
+[**`slides/python_lab_slides.pdf`**](slides/python_lab_slides.pdf) es la presentación de clase del Laboratorio 01 y un adelanto del 02. La presentación explica; el notebook te deja experimentar. No hay una correspondencia diapositiva por celda, pero cada idea tiene su lugar:
 
-| | Laboratorio | Abrir | Descargar |
-|---|---|---|---|
-| **01** | Python desde cero | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/marcoteran/python-vigilancia-labs/blob/main/notebooks/01_python_desde_cero.ipynb) | [`.ipynb`](https://raw.githubusercontent.com/marcoteran/python-vigilancia-labs/main/notebooks/01_python_desde_cero.ipynb) |
-| **02** | Python aplicado a radar y vigilancia | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/marcoteran/python-vigilancia-labs/blob/main/notebooks/02_calculos_vigilancia.ipynb) | [`.ipynb`](https://raw.githubusercontent.com/marcoteran/python-vigilancia-labs/main/notebooks/02_calculos_vigilancia.ipynb) |
-| **SDR** | Del espectro RF a la información aeronáutica | [Manual PDF](lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf) | [Fuentes LaTeX](lab_SDR_surveillance_LaTeX/) |
+| Páginas del PDF | Idea | Dónde practicarla |
+|---|---|---|
+| 4, 7, 12 | Instrucciones y salida; qué es un notebook; el documento no es la memoria | Laboratorio 01 · §1 |
+| 9, 10 | Entrar a Colab y tu primera sesión | [Empieza aquí](#empieza-aquí) |
+| 8, 11 | Python, Jupyter, Colab y Anaconda; alternativa local | [Instalación local](#instalación-local-opcional) |
+| 6, 13, 14 | Variables, operaciones, unidades y tipos | Laboratorio 01 · §2–§3 y E01 |
+| 15, 16 | Listas e índices desde 0; condiciones con `if` | Laboratorio 01 · §4 y E02 |
+| 17, 18 | Ciclos `for`; definir y llamar funciones | Laboratorio 01 · §5–§6 y E03 |
+| 19–21 | Bibliotecas, NumPy y Matplotlib | Laboratorio 01 · §7–§8 y E04 |
+| 22 | Leer un error y corregirlo | Laboratorio 01 · «Si algo falla» |
+| 23 | Cómo trabajar el Laboratorio 01 | Ejercicios E01–E04, misión M01–M04 y puente R01 |
+| 24, 25 | Alcance del Laboratorio 02; del pulso a la distancia, $R = c\,t/2$ | Laboratorio 01 · R01 y Laboratorio 02 · §7 |
 
-En Colab:
-
-1. **Archivo → Guardar una copia en Drive**, para trabajar sobre tu propia copia.
-2. Ejecuta las celdas de arriba hacia abajo con ▶ o `Shift + Enter`.
-3. En los ejercicios, cambia `None` por tu expresión y compara con la **salida esperada**.
-4. Antes de entregar, reinicia la sesión y ejecuta todo: así compruebas que tu resultado se puede repetir.
-
-No necesitas sensores, archivos de datos, claves ni montar Drive.
-
-## Los tres laboratorios
-
-### Laboratorio 01: Python desde cero
+## Laboratorio 01: Python desde cero
 
 **Requisitos:** ninguno. Pensado para quien nunca ha escrito código.
 
-Aprenderás a escribir y ejecutar instrucciones, guardar valores en variables, distinguir tipos, usar listas, decidir con `if`, repetir con `for`, crear funciones con valores por defecto, calcular con NumPy y dibujar gráficos con Matplotlib. Cada concepto sigue el mismo ciclo: qué es, para qué sirve, cómo se escribe, qué resultado esperar y cómo modificarlo.
+**Al terminar podrás** ejecutar y modificar código en un notebook, guardar valores con nombre y unidad, distinguir tipos de datos, recorrer listas, decidir con `if`, repetir con `for`, crear funciones con valores por defecto, calcular con NumPy, dibujar gráficos con Matplotlib y explicar por qué un resultado antiguo en pantalla no prueba que tu código actual funcione.
 
-Termina con **«Lo que ya sabes y cómo lo usarás en el Laboratorio 02»**: una tabla que conecta cada habilidad con un cálculo de radar, una lista de comprobación y un primer ejercicio de ida y vuelta de un pulso.
+| § | Tema | Practicas |
+|---|---|---|
+| 1 | Habla con el notebook | `print`, celdas, kernel y memoria |
+| 2 | Una calculadora que recuerda | Variables, aritmética, f-strings, notación científica · **E01** |
+| 3 | Valores de distintas clases | `int`, `float`, `str`, `bool` |
+| 4 | Varios datos y una decisión | Listas, índices, porciones, comparaciones e `if` · **E02** |
+| 5 | Una fórmula reutilizable | Funciones, `return`, valores por defecto, argumentos con nombre · **E03** |
+| 6 | Repetir sin copiar | Ciclo `for` y barrido de parámetros |
+| 7 | Una caja de herramientas | Bibliotecas, `import`, arrays de NumPy, umbrales |
+| 8 | Ver los números | Gráficos de barras y curvas con Matplotlib · **E04** |
+| 9 | Tu misión | Cuatro cálculos encadenados · **M01–M04** |
+| — | Puente al Laboratorio 02 | Tabla de correspondencias, lista de comprobación y tiempo de ida y vuelta de un pulso · **R01** |
+
+Cada concepto sigue el mismo ciclo: qué es, para qué sirve, cómo se escribe, qué resultado esperar y cómo modificarlo.
 
 *9 ejercicios con salida esperada · 2 gráficos · 1 ilustración conceptual*
 
-### Laboratorio 02: Python aplicado a radar y vigilancia
+## Laboratorio 02: Python aplicado a radar y vigilancia
 
 **Requisitos:** el Laboratorio 01. Toda sintaxis nueva se explica justo antes de usarla, en recuadros **«Python nuevo»**.
+
+**Al terminar podrás** calcular e interpretar, con unidades explícitas, potencias en W, dBm y dB; señales en el tiempo y en la frecuencia; un enlace unidireccional (∝ 1/R²) frente a un eco radar (∝ 1/R⁴); el haz de un arreglo de antenas; qué mide cada sistema de vigilancia; y qué añaden la digitalización y la red.
 
 | § | Tema | Pregunta que responde |
 |---|---|---|
@@ -91,15 +139,9 @@ Termina con **«Lo que ya sabes y cómo lo usarás en el Laboratorio 02»**: una
 | 8 | Información digital | ¿Cómo se convierte una señal en bits y los bits en mensajes? |
 | 9 | Red | ¿Qué añade la red a la edad de un dato de vigilancia? |
 
-Cierra con una misión de **doce cálculos de diagnóstico** sobre un mismo puesto de vigilancia y una reflexión sobre qué demuestra, y qué no, cada resultado.
+Cierra con una misión de **doce cálculos de diagnóstico** sobre un mismo puesto de vigilancia. La función `mostrar()` compara cada resultado con tolerancia y escribe ✓ o «revisa», sin detener el notebook. Las cápsulas «Explora más» amplían circuitos, ruido, propagación, aliasing y geometría TDoA.
 
 *12 ejercicios con salida esperada · 8 gráficos calculados · 2 controles interactivos con alternativa sin widgets · 1 ilustración conceptual*
-
-### Laboratorio SDR: del espectro RF a la información aeronáutica
-
-**Requisitos:** los conceptos del Laboratorio 02 (dB, ancho de banda, muestreo, modulación, PSR/SSR/ADS-B), además de un banco con HackRF One, analizador SIGLENT SSA3032X Plus, atenuadores y antenas, y computadores con Windows 10/11 y Ubuntu 24.04. Ver [Laboratorio SDR](#laboratorio-sdr).
-
-Duraciones: la [guía del instructor](instructor/guia_instructor.md) propone una sesión de una hora para el núcleo del Laboratorio 01 (la versión actual añade material para preparación previa) y una ruta guiada de tres horas para el Laboratorio 02. El manual SDR no fija una duración.
 
 ## Qué verás en los notebooks
 
@@ -115,7 +157,7 @@ Todos los gráficos se calculan con las mismas fórmulas que se enseñan; ningun
 
 <p align="center"><img src="assets/lab02_fig03.png" alt="Potencia del eco radar frente a distancia entre 10 y 200 km, con un umbral ilustrativo de −110 dBm y el alcance límite del modelo" width="800"></p>
 
-**El viaje de ida y vuelta.** La ecuación radar monostática frente a un umbral ilustrativo. El cruce marca el límite del modelo didáctico, no un alcance operacional: no incluye probabilidad de detección, clutter ni fluctuación de la sección radar.
+**El viaje de ida y vuelta.** La ecuación radar monostática frente a un umbral ilustrativo. El cruce marca el límite del modelo didáctico, no un alcance operacional.
 
 <details>
 <summary><b>Dos ilustraciones conceptuales</b> (generadas con IA, revisadas e incrustadas en los notebooks)</summary>
@@ -131,6 +173,33 @@ Todos los gráficos se calculan con las mismas fórmulas que se enseñan; ningun
 Prompts y estado de cada ilustración: [`prompts/ilustraciones.md`](prompts/ilustraciones.md).
 </details>
 
+## Modelos, no mediciones
+
+Un resultado correcto dentro de un modelo no garantiza el comportamiento de un sistema real. Al interpretar, distingue siempre qué supone cada cálculo:
+
+| Cálculo | Supuesto principal | Qué deja fuera |
+|---|---|---|
+| Enlace en espacio libre (§4) | Sin obstáculos ni reflexiones, campo lejano, antenas alineadas | Multitrayecto, terreno, atmósfera, interferencia |
+| Ecuación radar (§6) | Radar monostático, σ constante, umbral dado | Probabilidad de detección, clutter, fluctuación de σ, procesamiento |
+| Arreglo de antenas (§5) | Elementos isotrópicos idénticos, separación λ/2 | Ganancia absoluta, acoplamiento, reflector |
+| Distancias PSR/SSR (§7) | $c = 3.00\times10^8$ m/s y retardos dados | Errores de reloj, refracción, procesamiento del receptor |
+| Red (§9) | Sin overhead ni retransmisiones; rutas independientes | Causas comunes de falla, congestión variable |
+
+Los datos son sintéticos. Ningún notebook capta RF real, opera un radar ni decodifica tráfico ADS-B en vivo.
+
+## Si algo falla
+
+| Síntoma | Causa probable | Qué hacer |
+|---|---|---|
+| `NameError` en una celda que antes funcionaba | La sesión se reinició y las variables se perdieron | Ejecuta todo desde el inicio (`Ctrl + F9` en Colab) |
+| `NameError` con un nombre que sí escribiste | Mayúsculas distintas (`Tiempo` ≠ `tiempo`) o celda anterior sin ejecutar | Revisa la ortografía y ejecuta las celdas en orden |
+| Un ejercicio no imprime nada | La línea todavía contiene `None` | Reemplaza `None` por tu expresión |
+| «revisa» en el Laboratorio 02 | Unidades o prefijos (µs, MHz, mm²) | Convierte a SI antes de cambiar la fórmula |
+| No aparecen los controles deslizantes | Tu entorno no muestra widgets | Usa la llamada indicada en la celda, por ejemplo `dibujar_antena(8, 20)` |
+| Tus cambios no se guardan | Estás en el notebook original de GitHub | **Archivo → Guardar una copia en Drive** |
+
+Cada notebook incluye además una tabla de errores frecuentes de Python y cómo leer un *traceback*.
+
 ## Laboratorio SDR
 
 <p>
@@ -140,6 +209,8 @@ Prompts y estado de cada ilustración: [`prompts/ilustraciones.md`](prompts/ilus
 </p>
 
 Un manual universitario de cinco prácticas con **HackRF One**, **SDRangel**, **GNU Radio Companion** y un analizador **SIGLENT SSA3032X Plus**. Su eje es distinguir niveles de evidencia: ver energía en un waterfall no es lo mismo que demodular, sincronizar, validar una trama o decodificar información, y lo que muestra la pantalla puede venir de bases de datos externas y no de la aeronave.
+
+**Requisitos:** los conceptos del Laboratorio 02 (dB, ancho de banda, muestreo, modulación, PSR/SSR/ADS-B), un banco con HackRF One, analizador, atenuadores y antenas, y computadores con Windows 10/11 y Ubuntu 24.04. No es requisito de los notebooks.
 
 | # | Sistema | Práctica |
 |---|---|---|
@@ -155,11 +226,24 @@ Un manual universitario de cinco prácticas con **HackRF One**, **SDRangel**, **
 > [!NOTE]
 > El PDF se compiló sin errores y el texto se revisó técnicamente, pero los procedimientos **no** se han ensayado con hardware en esta revisión. Ensaya cada práctica en tu banco antes de la sesión.
 
-## Instalación local
+## Instalación local (opcional)
 
-Usa esta ruta si prefieres Jupyter en tu computador en lugar de Colab. Necesitas **Python 3.10 o superior**.
+Para el Laboratorio 01 basta Colab. Usa esta ruta si prefieres trabajar en tu computador. Descarga antes los `.ipynb` desde [Empieza aquí](#empieza-aquí) o clona el repositorio: los archivos de GitHub no aparecen solos en tu equipo.
 
-Un **entorno virtual** (`.venv`) es una carpeta con su propio Python y sus propias librerías: lo que instales para este curso no altera otros proyectos. `requirements.txt` lista las librerías que usan los notebooks (NumPy, Matplotlib, pandas, ipywidgets y JupyterLab).
+### Opción A · Anaconda + JupyterLab
+
+Es la alternativa que muestra la presentación. **Anaconda Distribution** instala Python y las bibliotecas científicas; **Anaconda Navigator** es el lanzador; **JupyterLab** es la interfaz web local que abre el notebook; el **kernel de Python** ejecuta el código.
+
+1. Descarga e instala [Anaconda Distribution](https://www.anaconda.com/download).
+2. Abre **Anaconda Navigator** e inicia **JupyterLab** ([guía oficial](https://www.anaconda.com/docs/legacy/anaconda-navigator/tutorials/how-to-open-jupyterlab)).
+3. En el explorador de archivos de JupyterLab, abre tu `.ipynb`.
+4. Si se solicita, selecciona el kernel **Python 3**.
+
+Anaconda Distribution ya incluye NumPy, Matplotlib, pandas, ipywidgets y JupyterLab. Tiene condiciones de uso propias: si tu institución no la autoriza, usa la opción B.
+
+### Opción B · Entorno virtual con pip
+
+Necesitas **Python 3.10 o superior**. Un **entorno virtual** (`.venv`) es una carpeta con su propio Python y sus propias bibliotecas: lo que instales para este curso no altera otros proyectos. `requirements.txt` lista lo que usan los notebooks.
 
 **Windows (PowerShell)**, desde la carpeta del repositorio:
 
@@ -182,7 +266,9 @@ python -m jupyterlab
 
 JupyterLab se abre en el navegador; entra en `notebooks/` y abre el laboratorio.
 
-## Cómo está diseñado el aprendizaje
+## Para instructores y mantenedores
+
+### Cómo está diseñado el aprendizaje
 
 **Observa → predice → ejecuta → modifica → interpreta.** El ciclo se repite en cada sección:
 
@@ -194,37 +280,50 @@ JupyterLab se abre en el navegador; entra en `notebooks/` y abre el laboratorio.
 | Modifica | «Modifica…» o «Experimenta…»: cambiar un parámetro y comparar |
 | Interpreta | «Interpreta…» después de cada gráfico: qué relación física muestra y cuál es el límite del modelo |
 
-En el Laboratorio 02, cada tema añade **problema → intuición → modelo con variables y unidades → código → interpretación → conexión con sistemas reales**. Los ejercicios cambian `None` por una expresión; la función `mostrar()` compara con tolerancia y deja pendientes los que faltan, sin detener el notebook.
+En el Laboratorio 02, cada tema añade **problema → intuición → modelo con variables y unidades → código → interpretación → conexión con sistemas reales**.
 
-## Validación y reproducibilidad
+### Recursos del instructor
 
-Esta sección es para quien modifica el repositorio. Instala también las dependencias de desarrollo:
+- **[Guía del instructor](instructor/guia_instructor.md):** tiempos propuestos, preguntas para clase, errores que conviene provocar, criterios de avance, respuestas de las cápsulas, correspondencia con la presentación y notas para el laboratorio SDR.
+- **Soluciones:** [Laboratorio 01](instructor/soluciones_01.md) · [Laboratorio 02](instructor/soluciones_02.md). Son públicas y están separadas de los notebooks del alumno, que conservan los `None`.
+- **[Cobertura temática](docs/cobertura.md):** dónde se trata cada una de las 54 familias de contenidos del curso.
+- **[Auditoría pedagógica](docs/pedagogical_audit.md):** problemas encontrados, correcciones y limitaciones de cada revisión.
+- **[Modelos y referencias](docs/referencias.md)** y **[entorno verificado](docs/entorno_verificado.md)**.
+
+Antes de impartir, abre cada enlace de Colab y prueba los controles desde la cuenta que usarás en clase.
+
+### Validación y reproducibilidad
+
+Instala también las dependencias de desarrollo y ejecuta el verificador:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
-.\.venv\Scripts\python.exe scripts\verificar.py --in-process
+.\.venv\Scripts\python.exe scripts\verificar.py
 ```
 
-En macOS o Linux: `python scripts/verificar.py`.
+En macOS o Linux: `python scripts/verificar.py`. Si tu equipo bloquea los sockets locales que usan los kernels de Jupyter, añade `--in-process`.
 
 **Qué comprueba `verificar.py`:**
 
 - estructura válida de ambos notebooks y que las imágenes incrustadas coinciden byte a byte con los archivos de `assets/`;
+- que cada enlace relativo del README apunta a un archivo existente;
 - que las plantillas del alumno se ejecutan completas en un kernel limpio, con los `None` sin resolver;
 - que, al insertar las soluciones de [`instructor/soluciones.json`](instructor/soluciones.json), **cada** ejercicio imprime exactamente la salida esperada que muestra el notebook;
-- invariantes físicos: caída de 12.04 dB al duplicar la distancia del radar, escalado con potencia y ganancia, dirección y nulos del arreglo, aliasing y coherencia de distancias PSR/SSR/Mode S;
+- invariantes físicos: pico de la FFT, coherencia entre §4 y Q04, caída de 12.04 dB al duplicar la distancia del radar, escalado con potencia y ganancia, dirección y nulos del arreglo, aliasing y coherencia de distancias PSR/SSR/Mode S;
 - los controles interactivos y sus alternativas por llamada de función.
 
-Después guarda los notebooks del alumno con salidas estáticas, exporta los gráficos a `assets/` y escribe [`docs/verificacion.json`](docs/verificacion.json). Revisa `git status` antes de confirmar: el verificador reescribe archivos.
+Después guarda los notebooks del alumno con salidas estáticas, sin marcas de tiempo ni códigos de terminal, exporta los gráficos a `assets/` y escribe [`docs/verificacion.json`](docs/verificacion.json). Revisa `git status` antes de confirmar: el verificador reescribe archivos.
 
 **Qué no comprueba:** la interacción con widgets en un navegador, la ejecución en el frontend de Colab, el aprendizaje real de estudiantes ni ningún procedimiento con hardware RF.
 
-**Por qué `--in-process`.** Por defecto, el verificador lanza kernels de Jupyter en procesos separados que se comunican por sockets ZeroMQ. En algunos equipos Windows, o en entornos que bloquean sockets, esa comunicación falla aunque los notebooks estén bien. `--in-process` ejecuta un kernel IPython dentro del mismo proceso, sin sockets, y el informe registra qué modo se usó. El flujo de [GitHub Actions](.github/workflows/verificar.yml) usa el modo por defecto en Ubuntu.
+**Modos de ejecución.** Por defecto, el verificador lanza kernels de Jupyter en procesos separados, como el flujo de [GitHub Actions](.github/workflows/verificar.yml) en Ubuntu; ese modo conserva el orden real de textos y figuras en las salidas publicadas. `--in-process` ejecuta un kernel IPython dentro del mismo proceso, sin sockets; sirve para comprobar, pero guarda el texto impreso antes que las figuras de cada celda.
 
-## Estructura del repositorio
+### Estructura del repositorio
 
 ```text
 python-vigilancia-labs/
+├── slides/
+│   └── python_lab_slides.pdf            # presentación de clase
 ├── notebooks/
 │   ├── 01_python_desde_cero.ipynb       # Laboratorio 01 (alumno)
 │   └── 02_calculos_vigilancia.ipynb     # Laboratorio 02 (alumno)
@@ -245,16 +344,6 @@ python-vigilancia-labs/
 ├── requirements.txt                     # dependencias de los notebooks
 └── requirements-dev.txt                 # dependencias de validación
 ```
-
-## Para instructores
-
-- **[Guía del instructor](instructor/guia_instructor.md):** tiempos propuestos, preguntas para clase, errores que conviene provocar, criterios de avance, respuestas de las cápsulas y notas para el laboratorio SDR.
-- **Soluciones:** [Laboratorio 01](instructor/soluciones_01.md) · [Laboratorio 02](instructor/soluciones_02.md). Son públicas y están separadas de los notebooks del alumno, que conservan los `None`.
-- **[Cobertura temática](docs/cobertura.md):** dónde se trata cada una de las 54 familias de contenidos del curso.
-- **[Auditoría pedagógica](docs/pedagogical_audit.md):** problemas encontrados, correcciones y limitaciones de la revisión de octubre de 2026.
-- **[Modelos y referencias](docs/referencias.md)** y **[entorno verificado](docs/entorno_verificado.md)**.
-
-Antes de impartir, abre cada enlace de Colab y prueba los controles desde la cuenta que usarás en clase.
 
 ## Referencias, autoría y contribución
 

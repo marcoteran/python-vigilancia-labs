@@ -30,4 +30,8 @@ El proyecto conserva `prompts/claude_code_publicar.md`, los scripts, los requisi
 
 ## Revisión del 13 de octubre de 2026
 
-Notebooks revisados para principiantes absolutos, laboratorio SDR integrado en `lab_SDR_surveillance_LaTeX/` con PDF compilado, README rediseñado y verificador corregido para Windows. Detalle, resultados de pruebas y limitaciones: [auditoría pedagógica](pedagogical_audit.md). Los cambios están pendientes de revisión humana y de publicación en GitHub.
+Notebooks revisados para principiantes absolutos, laboratorio SDR integrado en `lab_SDR_surveillance_LaTeX/` con PDF compilado, README rediseñado y verificador corregido para Windows. Detalle, resultados de pruebas y limitaciones: [auditoría pedagógica](pedagogical_audit.md). Publicada en `main` (commit `0fe9657`).
+
+## Revisión del 14 de octubre de 2026
+
+Presentación `slides/python_lab_slides.pdf` publicada y enlazada desde el README; notebooks alineados con ella; salidas de los controles limpias; verificador con comprobación de enlaces. Detalle en la sección 6 de la [auditoría pedagógica](pedagogical_audit.md).

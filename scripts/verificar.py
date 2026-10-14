@@ -58,13 +58,22 @@ def execute(book):
         manager.shutdown_kernel()
     return book
 
-def strip_widgets(book):
+ANSI = re.compile(r'\x1b\[[0-9;]*[A-Za-z]')
+
+def strip_widgets(book, original):
+    # Keep the notebook metadata under version control, not the executing kernel's.
+    book.metadata = copy.deepcopy(original.metadata)
     book.metadata.pop('widgets', None)
     for cell in book.cells:
+        # nbclient records per-cell timestamps; they would change on every run.
+        cell.metadata.pop('execution', None)
         if cell.cell_type == 'code':
             clean = []
             interactive = 'interactive' in cell.metadata.get('tags', [])
             for out in cell.get('outputs', []):
+                # The in-process kernel captures terminal control codes from widgets.
+                if out.output_type == 'stream' and not ANSI.sub('', out.text).replace('\r', '').strip():
+                    continue
                 if interactive and out.output_type in ('display_data','execute_result'): continue
                 if out.output_type in ('display_data','execute_result'):
                     out.get('data', {}).pop('application/vnd.jupyter.widget-view+json', None)
@@ -73,6 +82,25 @@ def strip_widgets(book):
                     if not out.get('data'): continue
                 clean.append(out)
             cell.outputs = clean
+            assert not any('\x1b' in o.get('text', '') for o in clean), 'Salida con códigos de terminal'
+
+def verify_readme_links():
+    """Every relative link or image in the README must point to a file in the repository."""
+    readme = (ROOT/'README.md').read_text(encoding='utf-8')
+    targets = re.findall(r'\]\(([^)\s]+)\)', readme) + re.findall(r'(?:src|href)="([^"]+)"', readme)
+    count = 0
+    for target in targets:
+        notebook = re.search(r'colab\.research\.google\.com/github/marcoteran/python-vigilancia-labs/blob/main/(.+)$', target)
+        if notebook:
+            target = notebook.group(1)
+        elif re.match(r'[a-z]+:|#', target):
+            continue
+        path = (ROOT/target.split('#')[0]).resolve()
+        assert path.is_relative_to(ROOT) and path.exists(), ('Enlace roto en README', target)
+        count += 1
+    return count
+
+readme_links = verify_readme_links()
 
 for path in sorted((ROOT/'notebooks').glob('*.ipynb')):
     book = nbformat.read(path, as_version=4)
@@ -99,9 +127,17 @@ for path in sorted((ROOT/'notebooks').glob('*.ipynb')):
 assert total_mision_h == 2 and restante_min == 30 and alcanza
 assert promedio_min == 45
 assert np.isclose(ida_vuelta_us, 400)
+assert duraciones_min[1:] == [35, 25] and np.array_equal(np.linspace(0, 1, 3), [0, 0.5, 1])
+assert np.isclose(tiempo_vuelo_h(420, velocidad_kmh=280), 1.5)
 print("VERIFICACIÓN: correcta")'''
     else:
-        check = '''assert np.isclose(radar_w(120e3)/radar_w(60e3), 1/16)
+        check = '''assert np.isclose(w_a_dbm(1), 30) and np.isclose(db_a_factor(10*np.log10(2)), 2)
+# FFT: a single 2 V peak at 50 Hz. Section 4 and Q04 must describe the same link.
+assert frecuencias[np.argmax(amplitud)] == 50 and np.isclose(amplitud.max(), 2)
+assert np.isclose(recibida_dbm, pr_dbm) and np.isclose(recibida_dbm - sensibilidad_dbm, margen_db)
+# Worked example of the slides (PDF page 25): a 100 µs echo corresponds to 15 km.
+assert np.isclose(C*100e-6/2, 15e3)
+assert np.isclose(radar_w(120e3)/radar_w(60e3), 1/16)
 assert np.isclose(radar_w(60e3, pico_kw=100)/radar_w(60e3), 2)
 assert np.isclose(radar_w(60e3, ganancia_dbi=33)/radar_w(60e3), 10**0.6)
 assert np.isclose(patron_ula(np.array([0.0]))[0], 1)
@@ -144,7 +180,7 @@ print("VERIFICACIÓN: correcta")'''
         expected = previous.split('```text\n')[1].split('\n```')[0]
         actual = ''.join(o.get('text','') for o in cell.outputs if o.output_type=='stream').strip()
         assert actual == expected, (cell.metadata.tags, actual, expected)
-    strip_widgets(template)
+    strip_widgets(template, book)
     # Publish template code with static outputs; never publish the filled version.
     nbformat.validate(template); nbformat.write(template,path)
     # Export exact figures, computed by Python, for README/teacher preview.
@@ -162,7 +198,8 @@ print("VERIFICACIÓN: correcta")'''
                    'embedded_assets':'PASS',
                    'template_clean_kernel':'PASS','solutions_clean_kernel':'PASS',
                    'execution_mode':'in-process kernel' if '--in-process' in sys.argv else 'Jupyter subprocess kernel',
-                   'all_exercise_stdout':'PASS','widgets_browser_tested':False})
+                   'all_exercise_stdout':'PASS','readme_links':readme_links,
+                   'widgets_browser_tested':False})
 (ROOT/'docs/verificacion.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
 if hasattr(sys.stdout, 'reconfigure'): sys.stdout.reconfigure(encoding='utf-8')
 print(json.dumps(report,ensure_ascii=False,indent=2))

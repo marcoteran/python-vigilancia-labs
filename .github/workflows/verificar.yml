@@ -3,6 +3,9 @@ on:
   push:
     paths:
       - 'notebooks/**'
+      - 'README.md'
+      - 'assets/**'
+      - 'slides/**'
       - 'instructor/soluciones.json'
       - 'scripts/**'
       - 'requirements*.txt'

@@ -143,3 +143,39 @@ Se conservó el alcance de las cinco prácticas. No se eliminó contenido técni
 | T16 | README no integraba el SDR | `README.md` | Rediseño completo con rutas y enlaces verificados |
 | T17 | Guía sin cambios ni nota SDR | `instructor/guia_instructor.md` | Revisión NB01, notas NB02 y sección SDR |
 | T18 | Banner con «dos laboratorios» | `assets/banner.svg` | «01 → 02 → SDR» |
+
+## 6. Revisión del 14 de octubre de 2026 · alineación con la presentación
+
+**Línea base.** `main` en `0fe9657`, igual a `origin/main`, sin cambios en archivos con seguimiento. Sin seguimiento: `slides/python_lab_slides.pdf` (28 páginas, solo imagen) y `_historic/` (copia local idéntica de los notebooks; no se publica). El verificador pasaba en los dos modos (`--in-process` y kernels en procesos separados) en Windows con Python 3.14.6.
+
+**Revisión científica.** Se recalcularon de forma independiente todas las cifras de NB02 (dB, cable, batería, FFT, ruido, Friis, horizonte, Fresnel, factor de arreglo y primer nulo, Γ/VSWR, ecuación radar y alcance límite de 111.7 km, PSR/SSR/Mode S, PPM, ADC, latencia, disponibilidad y las cápsulas). No se encontraron errores críticos; no cambió ninguna respuesta de referencia.
+
+**Presentación.** Se inspeccionaron visualmente las 28 páginas renderizadas (no tienen capa de texto). La correspondencia página → sección y los defectos de las diapositivas están en la guía del instructor. Se publican tal como están, por decisión del autor.
+
+| ID | Problema | Archivo | Corrección |
+|---|---|---|---|
+| T19 | Las celdas de controles guardaban códigos de terminal (`\x1b[2K`) como salida visible | `scripts/verificar.py`, NB02 | Se descartan flujos con solo códigos de control; el verificador falla si quedan |
+| T20 | El modo `--in-process` guarda el texto impreso antes que las figuras; el modo por defecto añadía marcas de tiempo por celda | `scripts/verificar.py` | Se eliminan `metadata.execution` y se conservan los metadatos del notebook; el modo por defecto es la referencia para publicar |
+| T21 | La celda de controles del radar dependía de que otra celda hubiera importado `ipywidgets` (`NameError` como señal) | NB02 §6 | Importación propia y `except ImportError` |
+| T22 | La presentación usa `[1:]`, `if` sin `else`, `round()`, «biblioteca» y el `NameError` por mayúsculas; el notebook no los enseñaba | NB01 §2–§4, §7, «Si algo falla» | Explicaciones breves, una línea de código y una actividad guiada para provocar y leer el error |
+| T23 | «Si algo falla» (NB01) y el encabezado de §9 (NB02) estaban dentro de otra celda: no aparecían como secciones en el índice de Colab | NB01, NB02 | Celdas propias |
+| T24 | §9 sin «El problema» y con MTBF, MTTR, PLR y jitter sin definir | NB02 §9 | Planteamiento y tabla de magnitudes con significado |
+| T25 | Resolución, alcance no ambiguo, precisión y actualización en frases sueltas | NB02 §7 | Tabla comparativa y cálculo explicado de pulsos por blanco |
+| T26 | `np.angle`, `abs(z)` y el formato `4d` sin explicar | NB02 cápsulas A y C | Recuadros «Python nuevo» |
+| T27 | Gráfico de aliasing con original y muestras en azules casi iguales; leyenda sobre las curvas | NB02 cápsula D | Original gris, alias ámbar, muestras azul; leyenda fuera del área |
+| T28 | Línea del alcance límite sin leyenda; barras con un azul fuera de la paleta | NB02 §6, NB01 §8 | Leyenda «Alcance límite del modelo»; `#2563EB` |
+| T29 | README sin presentación, sin criterio de finalización, sin solución de problemas y con instalación local distinta de la que enseñan las diapositivas | `README.md` | Presentación con mapa página → sección, primera sesión en Colab, criterio de finalización, «Modelos, no mediciones», «Si algo falla», opción Anaconda + JupyterLab |
+| T30 | Enlaces del README sin comprobación automática | `scripts/verificar.py`, workflow | Verificación de rutas relativas y de los notebooks enlazados en Colab; el workflow también se activa con README, `assets/` y `slides/` |
+| T31 | Invariantes sin cubrir la FFT ni la coherencia sección/ejercicio | `scripts/verificar.py` | Pico de 2 V en 50 Hz; §4 = Q04; `[1:]`, `linspace`, argumentos con nombre; 15 km para 100 µs (pág. 25) |
+
+**Pruebas.** `scripts/verificar.py` en modo por defecto y con `--in-process`: **PASS** (estructura, imágenes incrustadas, 30 enlaces del README, plantillas, soluciones, salida exacta de los 21 ejercicios, invariantes, controles y alternativas). Las salidas publicadas no tienen marcas de tiempo ni códigos de terminal; los metadatos de los notebooks no cambiaron. Solo cambiaron los tres gráficos modificados a propósito; los demás PNG son idénticos byte a byte.
+
+**Evaluación editorial (0–10, ponderada según la rúbrica del encargo).** No es una medición con estudiantes.
+
+| Material | Antes | Después | Mejora principal |
+|---|---:|---:|---|
+| Laboratorio 01 | 8.0 | 8.5 | Alineación con la presentación, actividad de error, estructura navegable |
+| Laboratorio 02 | 8.0 | 8.4 | Salidas limpias, §9 completa, tablas de §7, figuras con color semántico |
+| README | 7.5 | 8.6 | Presentación integrada, finalización, solución de problemas, ruta Anaconda |
+
+**Sigue abierto.** Las diapositivas con defectos (ver guía del instructor); no se probó Colab ni los widgets en un navegador; los tiempos de clase no se han medido; NB01 no tiene un ejercicio en el que el alumno escriba el cuerpo de una función o un `for` (se mantuvieron los identificadores E01–E04 que cita la pág. 23 de la presentación).

@@ -1,32 +1,34 @@
 [
   {
     "notebook": "01_python_desde_cero.ipynb",
-    "cells": 62,
+    "cells": 63,
     "exercises": 9,
-    "student_words": 3477,
+    "student_words": 3665,
     "figures": 2,
     "embedded_markdown_images": 2,
     "ai_illustrations": 1,
     "embedded_assets": "PASS",
     "template_clean_kernel": "PASS",
     "solutions_clean_kernel": "PASS",
-    "execution_mode": "in-process kernel",
+    "execution_mode": "Jupyter subprocess kernel",
     "all_exercise_stdout": "PASS",
+    "readme_links": 30,
     "widgets_browser_tested": false
   },
   {
     "notebook": "02_calculos_vigilancia.ipynb",
-    "cells": 94,
+    "cells": 95,
     "exercises": 12,
-    "student_words": 6354,
+    "student_words": 6641,
     "figures": 8,
     "embedded_markdown_images": 2,
     "ai_illustrations": 1,
     "embedded_assets": "PASS",
     "template_clean_kernel": "PASS",
     "solutions_clean_kernel": "PASS",
-    "execution_mode": "in-process kernel",
+    "execution_mode": "Jupyter subprocess kernel",
     "all_exercise_stdout": "PASS",
+    "readme_links": 30,
     "widgets_browser_tested": false
   }
 ]

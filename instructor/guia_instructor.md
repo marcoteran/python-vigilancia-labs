@@ -2,7 +2,7 @@
 
 **Marco Terán · dos laboratorios, un cambio de escala:** aprender a expresar una cuenta en Python y después elegir un modelo de vigilancia.
 
-Los alumnos reciben exclusivamente los dos notebooks de `notebooks/`. Este documento contiene tiempos, conducción de clase, respuestas y criterios de avance. No proyectes las soluciones antes del intento. Los gráficos numéricos se calculan con Python. Las dos ilustraciones de documento/memoria y enlace/eco se generaron con IA y están integradas en los notebooks; sus prompts y estado figuran en `prompts/ilustraciones.md`.
+Los alumnos reciben la presentación de `slides/` y los dos notebooks de `notebooks/`. Este documento contiene tiempos, conducción de clase, respuestas y criterios de avance. No proyectes las soluciones antes del intento. Los gráficos numéricos se calculan con Python. Las dos ilustraciones de documento/memoria y enlace/eco se generaron con IA y están integradas en los notebooks; sus prompts y estado figuran en `prompts/ilustraciones.md`.
 
 ## Laboratorio 01 · una hora con tus explicaciones
 
@@ -12,7 +12,7 @@ Los alumnos reciben exclusivamente los dos notebooks de `notebooks/`. Este docum
 | 6–17 | Calculadora y E01 | Escribe una fórmula verbal antes del código. Explica nombre, valor, unidad, `=` y decimal. | E01: 1.5 h |
 | 17–27 | Tipos, lista, decisión y E02 | Contrasta texto/número y `=`/`==`. Marca índice cero e indentación. | E02: 10 min; explica condición |
 | 27–35 | Función y E03 | Distingue definir y llamar. Haz dos llamadas con entradas distintas. | E03: 0.75 h |
-| 35–46 | Librerías, gráfico y E04 | Importar frente a instalar. Lista frente a array. Lee ejes y unidad. | E04: 45 min; cambia una barra |
+| 35–46 | Bibliotecas, gráfico y E04 | Importar frente a instalar. Lista frente a array. Lee ejes y unidad. | E04: 45 min; cambia una barra |
 | 46–57 | Misión M01–M04 | Da un intento individual; pide comparar fórmula, resultado y unidad por parejas. | 120 min, 2 h, 30 min, True |
 | 57–60 | Cierre | Reinicia y ejecuta; pregunta por orden y memoria. | Explica una cuenta sin leer el código |
 
@@ -31,7 +31,33 @@ La sección pandas es ampliación, fuera de la hora central. No enseñes clases,
 
 **Criterio de avance:** completa al menos tres de E01–E04, las cuatro partes de la misión y R01; puede explicar una división con unidades, llamar una función e identificar por qué un resultado antiguo no prueba que su código actual funciona. Corrige los fallos antes del laboratorio 02; no uses la rapidez como criterio.
 
-Errores que debes provocar y reparar: variable con mayúscula distinta, texto que se concatena, `^` confundido con potencia, falta de dos puntos y lista dividida por un número. Hazlo en una celda temporal que luego se elimina, para que el archivo entregado ejecute completo.
+Errores que debes provocar y reparar: variable con mayúscula distinta, texto que se concatena, `^` confundido con potencia, falta de dos puntos y lista dividida por un número. Hazlo en una celda temporal que luego se elimina, para que el archivo entregado ejecute completo. Desde el 14 de octubre de 2026, «Si algo falla» guía al alumno a provocar el primero (`print(Tiempo_h)`), como en la página 22 de la presentación.
+
+## Presentación · correspondencia y revisión pendiente
+
+`slides/python_lab_slides.pdf` (28 páginas, exportado de Google Slides, solo imagen) acompaña al Laboratorio 01. El README del alumno incluye una tabla página → sección del notebook. Al alinear, el notebook incorporó lo que la presentación usaba sin que el notebook lo enseñara: porción `[1:]` (pág. 15), `if` sin `else` (pág. 16), `round()` (pág. 18), «biblioteca» como término (pág. 19), «arreglo» como sinónimo de array (pág. 20) y el `NameError` por mayúsculas (pág. 22). El ejemplo de la pág. 13 (84 min → 1.4 h) no coincide con ningún ejercicio.
+
+Las diapositivas se generaron como imágenes y algunas contienen defectos que conviene corregir en la fuente antes de proyectarlas. Revisión visual del 14 de octubre de 2026, por número de página del PDF:
+
+| Pág. | Defecto | Riesgo |
+|---|---|---|
+| 2 | El código `print(* tiempo) / 2` no es Python válido; el resultado «1500000 m» contradice la interpretación «7,000 m»; las marcas de tiempo («00:45 … 13 mi») no forman una pregunta | **Alto:** enseña que el resultado y su interpretación pueden no coincidir |
+| 3 | Descripciones de las cinco etapas con texto ilegible o en inglés inventado | Medio |
+| 5 | Cita «Stack Overflow 2026 · 58 % · 8.184 de 14.099»: verifica la fuente o retírala | Medio |
+| 6 | «Verddero»; etiqueta «Tag/label» en inglés | Bajo |
+| 7 | Texto del prompt filtrado: «(28pt-equivalent or larger projected labels)» | Medio |
+| 8 | Texto ilegible bajo Python y en las ventanas; marcas de «verificado» junto a los logotipos y URL impresas | Medio |
+| 11 | Texto ilegible («Managa herramientas de masetra…», «Cjecio el archivo concoulado»); pie duplicado | Medio |
+| 14 | Comillas duplicadas en `"ADS-B"`; «Yes» en inglés | Bajo |
+| 16 | El diagrama de flujo regresa a la condición: dibuja un ciclo, no un `if` | **Alto:** confunde `if` con `while` |
+| 17 | Etiquetas «value ÷ 60», «iteration» y «Tiny optional:» (prompt filtrado); falta cerrar «» | Bajo |
+| 18 | Las llamadas no imprimen, pero se muestran como «Salida (output)»; «argud» | Medio: valor devuelto frente a salida impresa |
+| 21 | El código difiere del pedido (`plt.figure`, `ylim`, comentario en inglés) y añade «Código Limpio, Ejecución Rápida» | Bajo |
+| 24 | Eje temporal desordenado (12:00, 15:34, 15:30) | Bajo |
+| 25 | Rótulos «REQUIRED CODE» y «REQUIRED RESULT OUTPUT» filtrados del prompt | Medio |
+| 26 | «unit.» en inglés | Bajo |
+
+Física y código correctos en las páginas 4, 9, 10, 12, 13, 15, 19, 20, 22, 23 y 25 (15.0 km para 100 µs). En la pág. 20, NumPy imprime `[0.5 1.  1.5]`, con dos espacios tras `1.`.
 
 ## Laboratorio 02 · tres horas guiadas
 
