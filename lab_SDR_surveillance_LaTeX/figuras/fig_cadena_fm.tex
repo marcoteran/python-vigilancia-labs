@@ -1,0 +1,33 @@
+% Laboratorio 01: cadena de recepción FM y configuración secuencial del analizador.
+\begin{tikzpicture}[node distance=5mm and 7mm]
+  % Configuración 1: SDR
+  \node[bloqueext,minimum width=23mm] (tx) {Emisora FM\\comercial\\(88--108 MHz)};
+  \node[bloque,right=14mm of tx,minimum width=23mm] (ant) {Antena receptora\\(no calificada\\en FM)};
+  \node[bloque,right=of ant,minimum width=19mm] (coax) {Cable coaxial\\(opcional)};
+  \node[bloque,right=of coax,minimum width=26mm] (hrf) {\textbf{HackRF One}\\puerto \textbf{ANTENNA}\\(SMA hembra)};
+  \draw[flecha,decorate,decoration={snake,amplitude=1.1mm,segment length=3mm,post length=2.5mm}] (tx) -- (ant);
+  \node[rotulo,above=0.5mm] at ($(tx.east)!0.5!(ant.west)+(0,3mm)$) {onda EM};
+  \draw[flecha] (ant) -- (coax);
+  \draw[flecha] (coax) -- (hrf);
+
+  \node[bloque,below=12mm of hrf,minimum width=26mm] (pc) {PC Windows\\controlador WinUSB};
+  \draw[flecha] (hrf) -- node[right,rotulo,align=left]{USB 2.0\\I/Q} (pc);
+  \node[bloquealt,left=of pc,minimum width=24mm] (dev) {SDRangel\\\textbf{HackRF Input}\\(frecuencia central)};
+  \node[bloquealt,left=of dev,minimum width=26mm] (bfm) {\textbf{Broadcast FM}\\\textbf{Demodulator}\\(desplazamiento $\Delta f$)};
+  \node[bloque,left=of bfm,minimum width=17mm] (aud) {Salida\\de audio};
+  \draw[flecha] (pc) -- (dev);
+  \draw[flecha] (dev) -- (bfm);
+  \draw[flecha] (bfm) -- (aud);
+
+  % Configuración 2: analizador, secuencial
+  \node[bloque,below=17mm of aud.south west,anchor=north west,minimum width=23mm] (ant2) {La \emph{misma}\\antena y cable};
+  \node[bloqueext,right=9mm of ant2,minimum width=29mm] (adp) {Adaptador N macho --\\SMA hembra\\(\emph{no confirmado})};
+  \node[bloqueinst,right=9mm of adp,minimum width=36mm] (sa) {\textbf{SIGLENT SSA3032X Plus}\\\textbf{RF INPUT} 50~$\Omega$ (N hembra)\\generador TG \emph{apagado}};
+  \draw[flecha] (ant2) -- (adp);
+  \draw[flecha] (adp) -- (sa);
+
+  \begin{scope}[on background layer]
+    \node[draw=MARule,rounded corners=3pt,fit=(tx)(hrf)(pc)(aud),inner sep=3mm,label={[rotulo,anchor=south west]north west:\textbf{Configuración 1} · recepción y demodulación con el SDR}] (c1) {};
+    \node[draw=MARule,rounded corners=3pt,fit=(ant2)(adp)(sa),inner sep=3mm,label={[rotulo,anchor=south west]north west:\textbf{Configuración 2} · después de la 1: la antena se traslada al analizador (no hay divisor)}] {};
+  \end{scope}
+\end{tikzpicture}

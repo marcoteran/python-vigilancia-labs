@@ -76,7 +76,7 @@ El formato de entrega lo define tu instructor. Tu copia en Drive contiene tu tra
 flowchart LR
     P["Presentación<br/>Python desde cero"] --> A["Laboratorio 01<br/>Python desde cero"]
     A --> B["Laboratorio 02<br/>Python aplicado a<br/>radar y vigilancia"]
-    B -.-> C["Laboratorio SDR<br/>Del espectro RF a la<br/>información aeronáutica"]
+    B -.-> C["Laboratorios SDR<br/>FM y ADS-B/Mode S<br/>con hardware real"]
 ```
 
 Primero se comprende la herramienta y después el fenómeno. La presentación explica cada idea con un diagrama; el Laboratorio 01 la convierte en código que ejecutas y modificas; el Laboratorio 02 la aplica a señales, propagación, antenas, radar y redes de vigilancia. El laboratorio SDR es un complemento opcional con hardware: los notebooks funcionan sin él.
@@ -203,28 +203,26 @@ Cada notebook incluye además una tabla de errores frecuentes de Python y cómo 
 ## Laboratorio SDR
 
 <p>
-  <a href="lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf"><b>Abrir el manual (PDF, 41 páginas)</b></a> ·
-  <a href="lab_SDR_surveillance_LaTeX/">Fuentes LaTeX y flowgraphs</a> ·
-  <a href="lab_SDR_surveillance_LaTeX/README.md">Cómo compilarlo</a>
+  <a href="lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf"><b>Abrir el manual (PDF, 59 páginas)</b></a> ·
+  <a href="lab_SDR_surveillance_LaTeX/guia_instructor_sdr.pdf">Guía del instructor (PDF)</a> ·
+  <a href="lab_SDR_surveillance_LaTeX/">Fuentes, datos y herramientas</a> ·
+  <a href="lab_SDR_surveillance_LaTeX/INFORME_REVISION.md">Informe de revisión</a>
 </p>
 
-Un manual universitario de cinco prácticas con **HackRF One**, **SDRangel**, **GNU Radio Companion** y un analizador **SIGLENT SSA3032X Plus**. Su eje es distinguir niveles de evidencia: ver energía en un waterfall no es lo mismo que demodular, sincronizar, validar una trama o decodificar información, y lo que muestra la pantalla puede venir de bases de datos externas y no de la aeronave.
+Dos laboratorios universitarios **de solo recepción** con **HackRF One**, **SDRangel 7.27.2** y un analizador **SIGLENT SSA3032X Plus**. Su eje es distinguir niveles de evidencia: ver energía en una cascada no es lo mismo que demodular, validar una trama o decodificar información, y lo que muestra la pantalla puede venir de cálculos del receptor o de bases de datos externas y no de la aeronave.
 
-**Requisitos:** los conceptos del Laboratorio 02 (dB, ancho de banda, muestreo, modulación, PSR/SSR/ADS-B), un banco con HackRF One, analizador, atenuadores y antenas, y computadores con Windows 10/11 y Ubuntu 24.04. No es requisito de los notebooks.
+**Requisitos:** los conceptos del Laboratorio 02 (dB, ancho de banda, muestreo, modulación, PSR/SSR/ADS-B), un banco con HackRF One, analizador y antena, y computadores con Windows 10/11 y Ubuntu 24.04. No es requisito de los notebooks.
 
-| # | Sistema | Práctica |
-|---|---|---|
-| 1 | Windows | **SDRangel · recepción FM y AM:** dispositivo frente a canal, offset, ancho de banda, ganancia y audio |
-| 2 | Windows | **SDRangel · transmisión FM conducida:** tono de 1 kHz y micrófono, verificados en el analizador |
-| 3 | Windows | **GNU Radio · transmisor FM conducido:** flowgraph propio, tasas de muestreo y remuestreo 25/6 |
-| 4 | Ubuntu | **Wi-Fi/OFDM y BLE:** inventario SSID/BSSID/canal, waterfall, `gr-ieee802-11`, constelaciones y Wireshark |
-| 5 | Ubuntu | **ADS-B/Mode S con SDRangel:** tabla de aeronaves, mapa, estadísticas, cobertura y datos radiados frente a externos |
+| # | Sistema | Laboratorio | Duración |
+|---|---|---|---|
+| 01 | Windows | **De las ondas de radio al sonido:** recepción FM con SDRangel, espectro y cascada, demodulación, medidas con el SIGLENT y cuatro experimentos controlados | 210 min |
+| 02 | Ubuntu | **Del pulso de 1090 MHz a la aeronave en el mapa:** preámbulo, PPM y paridad por formato, tabla de aeronaves, mapa y CPR, estadísticas; respaldo offline con una grabación real verificada | 225 min |
 
 > [!WARNING]
-> **Seguridad RF.** Las prácticas 2 y 3 transmiten **solo por conexión conducida**: HackRF → atenuador de 30–60 dB → analizador, con RF Amp apagado, ganancia baja y la transmisión detenida antes de cambiar cualquier conexión. Nunca se transmite por antena. La práctica 4 es solo de recepción, con límites explícitos de privacidad.
+> **Solo recepción.** Ninguna actividad transmite. El banco solo dispone del kit «LoRa Antenna Kit», **no calificado** para FM ni para 1090 MHz; el analizador necesita un adaptador N que no está confirmado. La guía del instructor explica cómo calificar el hardware antes de la sesión.
 
 > [!NOTE]
-> El PDF se compiló sin errores y el texto se revisó técnicamente, pero los procedimientos **no** se han ensayado con hardware en esta revisión. Ensaya cada práctica en tu banco antes de la sesión.
+> Los PDF compilan sin errores ni avisos de desbordamiento, y el respaldo ADS-B se verificó en SDRangel 7.27.2 y con dos decodificadores independientes. Los procedimientos **no** se han ensayado con el HackRF, la antena ni el analizador reales: la prueba en seco del instructor es obligatoria. Detalle en el [informe de revisión](lab_SDR_surveillance_LaTeX/INFORME_REVISION.md).
 
 ## Instalación local (opcional)
 
@@ -328,11 +326,12 @@ python-vigilancia-labs/
 │   ├── 01_python_desde_cero.ipynb       # Laboratorio 01 (alumno)
 │   └── 02_calculos_vigilancia.ipynb     # Laboratorio 02 (alumno)
 ├── lab_SDR_surveillance_LaTeX/
-│   ├── laboratorio_sdr_surveillance.pdf # manual SDR compilado
-│   ├── main.tex, laboratorio_sdr_3.tex  # fuentes LaTeX
-│   ├── marco-academic.sty               # estilo del manual
-│   ├── grc/                             # flowgraphs de referencia de GNU Radio
-│   └── README.md                        # compilación y estado
+│   ├── laboratorio_sdr_surveillance.pdf # manual SDR del estudiante (dos laboratorios)
+│   ├── guia_instructor_sdr.pdf          # guía del instructor con claves
+│   ├── main.tex, guia_instructor.tex    # maestros LaTeX; capítulos en contenido/
+│   ├── datos_adsb/                      # grabación 1090 MHz verificada para el respaldo
+│   ├── herramientas/adsb_iq.py          # conversor y verificador Mode S
+│   └── README.md, INFORME_REVISION.md   # compilación, estado y revisión
 ├── instructor/
 │   ├── guia_instructor.md               # conducción de clase, tiempos y errores frecuentes
 │   ├── soluciones_01.md, soluciones_02.md

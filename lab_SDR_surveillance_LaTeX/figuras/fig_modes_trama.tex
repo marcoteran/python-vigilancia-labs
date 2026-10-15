@@ -1,0 +1,24 @@
+% Respuesta Mode S de enlace descendente: preámbulo de 8 us y bloque de datos PPM.
+% Escala exacta: 1 us = 9 mm. Los 8 primeros bits corresponden al byte 0x8D de la
+% trama real 8D4D2023... del conjunto de datos del Laboratorio 02 (DF = 17, CA = 5).
+\begin{tikzpicture}[x=9mm,y=1mm,font=\sffamily\scriptsize]
+  \def\h{11}
+  \draw[flecha] (-0.3,0) -- (16.6,0) node[right,rotulo]{$t$ ($\mu$s)};
+  \foreach \t in {0,1,...,16} \draw[MAMuted] (\t,0) -- (\t,-1.2) node[below]{\t};
+  % preámbulo
+  \foreach \s in {0,1,3.5,4.5} \fill[MAPrimaryDark] (\s,0) rectangle (\s+0.5,\h);
+  \draw[decorate,decoration={brace,amplitude=2mm},MAPrimaryDark] (0,\h+2) -- node[above=2.5mm]{preámbulo: pulsos de 0,5 $\mu$s en 0; 1,0; 3,5 y 4,5 $\mu$s} (8,\h+2);
+  % bits del byte 0x8D = 1000 1101
+  \foreach \b [count=\i from 0] in {1,0,0,0,1,1,0,1} {
+    \pgfmathsetmacro{\t}{8+\i}
+    \ifnum\b=1 \fill[MASecondary] (\t,0) rectangle (\t+0.5,\h); \else \fill[MASecondary] (\t+0.5,0) rectangle (\t+1,\h); \fi
+    \draw[MAMuted,dashed] (\t+0.5,0) -- (\t+0.5,\h+0.5);
+    \node[font=\sffamily\scriptsize\bfseries] at (\t+0.5,-6.2) {\b};
+  }
+  \node[anchor=east] at (7.9,-6.2) {bit:};
+  \draw[decorate,decoration={brace,amplitude=2mm,mirror},MASecondary] (8,-9) -- node[below=2.5mm]{DF $=10001_2=17$} (13,-9);
+  \draw[decorate,decoration={brace,amplitude=2mm,mirror},MASecondary] (13,-9) -- node[below=2.5mm]{CA $=101_2=5$} (16,-9);
+  \draw[decorate,decoration={brace,amplitude=2mm},MASecondary] (8,\h+2) -- node[above=2.5mm,align=center]{datos desde 8 $\mu$s: 1 bit/$\mu$s (PPM)} (16,\h+2);
+  \node[rotulo,anchor=west,align=left] at (0,-22) {PPM: \textbf{1} = pulso en la \emph{primera} mitad del bit; \textbf{0} = pulso en la \emph{segunda} mitad. La línea discontinua marca la mitad.\\
+     Duración total: 8 + 56 = \textbf{64 $\mu$s} (trama corta, 56 bits) u 8 + 112 = \textbf{120 $\mu$s} (trama larga, 112 bits, p.\ ej.\ DF17).};
+\end{tikzpicture}

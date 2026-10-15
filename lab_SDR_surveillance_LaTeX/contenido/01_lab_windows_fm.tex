@@ -1,0 +1,575 @@
+% Laboratorio 01 — Windows: radiodifusión FM con HackRF One, SDRangel y SIGLENT.
+
+\PortadillaLaboratorio{Laboratorio 01 · Windows 10/11 · 210 minutos}{De las ondas de radio al sonido: recepción FM, SDR y análisis de espectro}{Usted recorrerá la cadena completa de un receptor: una onda electromagnética llega a una antena, el HackRF la convierte en muestras I/Q, SDRangel la demodula y el altavoz devuelve audio. Después observará el mismo entorno con un analizador de espectro y explicará qué puede afirmar cada instrumento y qué no.}
+
+\section{Ficha y planificación}
+\label{sec:w-plan}
+
+\subsection{Resultados de aprendizaje}
+
+Al terminar, usted podrá:
+\begin{enumerate}
+  \item identificar los componentes de una estación receptora SDR y la función de cada uno;
+  \item conectar el equipo disponible de forma segura y comprobar la compatibilidad de conectores;
+  \item verificar que Windows reconoce el HackRF One con el controlador correcto;
+  \item configurar un receptor en SDRangel (frecuencia, tasa de muestreo, decimación, ganancias);
+  \item distinguir la frecuencia del dispositivo del desplazamiento del canal demodulador;
+  \item localizar una emisora de FM real en el espectro;
+  \item interpretar el espectro y la cascada (\emph{waterfall});
+  \item configurar el demodulador de FM de radiodifusión;
+  \item recuperar audio inteligible cuando la recepción lo permita;
+  \item evaluar el efecto de la ganancia y del ancho de banda;
+  \item operar el SIGLENT SSA3032X Plus con centro, span, referencia, atenuación, RBW, VBW, detector y marcador;
+  \item explicar la diferencia entre detectar energía RF y recuperar información.
+\end{enumerate}
+
+\subsection{Presupuesto de tiempo}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.53\linewidth}>{\raggedleft\arraybackslash}p{0.10\linewidth}>{\raggedleft\arraybackslash}p{0.14\linewidth}@{}}
+\toprule
+\textbf{Sección} & \textbf{Actividad} & \textbf{Minutos} & \textbf{Acumulado} \\
+\midrule
+\endhead
+\ref{sec:w-diag}, \ref{sec:w-fund} & Diagnóstico, orientación y fundamentos RF & 20 & 20 \\
+\ref{sec:w-equipo}, \ref{sec:w-windows} & Bloques A y B: equipo, conexión y Windows & 30 & 50 \\
+\ref{sec:w-sdrangel} & Bloque C: receptor en SDRangel & 35 & 85 \\
+\ref{sec:w-fm} & Bloque D: recepción y demodulación FM & 40 & 125 \\
+\ref{sec:w-siglent} & Bloque E: análisis con el SIGLENT & 40 & 165 \\
+\ref{sec:w-exp} & Bloque F: cuatro experimentos controlados & 30 & 195 \\
+\ref{sec:w-evid}, \ref{sec:w-final} & Bloque G: evidencias y cuestionario final & 15 & 210 \\
+\bottomrule
+\end{longtable}
+
+\begin{importante}[Lo que no cabe en estos 210 minutos]
+La instalación de SDRangel y de las herramientas HackRF, el controlador USB y la calificación del hardware son \textbf{preparación previa del instructor}. Si al empezar la sesión su puesto no supera la comprobación de la sección~\ref{sec:w-windows}, avise de inmediato: no intente instalar software durante la clase.
+\end{importante}
+
+\subsection{Material del puesto}
+
+\begin{checklist}
+  \item HackRF One y su cable USB (micro-B a USB-A o USB-C, \emph{de datos}).
+  \item Antena B del kit (figura~\ref{fig:kit}) y, si hace falta alcance, el cable C.
+  \item PC con Windows 10/11, SDRangel 7.27.2 instalado y auriculares o altavoces.
+  \item SIGLENT SSA3032X Plus y, \emph{solo si existe}, adaptador N macho -- SMA hembra (o RP-SMA, según la antena).
+  \item Hoja de registro (sección~\ref{sec:w-evid}).
+\end{checklist}
+
+\section{Cuestionario diagnóstico}
+\label{sec:w-diag}
+
+Responda individualmente en 8 minutos, sin consultar. No cuenta para la nota: sirve para que usted y el instructor sepan qué repasar.
+
+\CuestionarioDiagnosticoW
+
+\section{Fundamentos: de la onda al sonido}
+\label{sec:w-fund}
+
+\subsection{Ondas, frecuencia y espectro}
+
+Una emisora de FM produce una \keyterm{onda electromagnética}: campos eléctrico y magnético que oscilan y se propagan a la velocidad de la luz, $c \approx 3\times10^{8}$~m/s. Su \keyterm{frecuencia} $f$ es el número de oscilaciones por segundo y su \keyterm{longitud de onda} es
+\begin{equation}
+\lambda = \frac{c}{f}, \qquad \text{por ejemplo}\quad \lambda_{100\,\mathrm{MHz}} = \frac{3\times10^8}{100\times10^6} = 3~\mathrm{m}.
+\end{equation}
+El \keyterm{espectro radioeléctrico} es el conjunto de frecuencias utilizables, repartido por regulación entre servicios. La radiodifusión FM ocupa 88--108 MHz, con emisoras separadas típicamente 200 kHz en las Américas. A 1090 MHz, en otra parte del espectro, trabajan los transpondedores de las aeronaves (Laboratorio 02).
+
+\subsection{Modulación de frecuencia}
+
+La información (audio) se imprime en la portadora variando su \emph{frecuencia instantánea}:
+\begin{equation}
+f_i(t) = f_c + k_f\, m(t),
+\end{equation}
+donde $f_c$ es la frecuencia de la emisora (por ejemplo 100,9 MHz), $m(t)$ la señal moduladora y $k_f$ la sensibilidad del modulador. La desviación máxima en radiodifusión es $\Delta f = \pm 75$~kHz. Lo que modula no es solo el audio: es la señal \keyterm{múltiplex} (MPX) de la figura~\ref{fig:fm}(a), con el canal mono, un piloto de 19 kHz, la diferencia estéreo y, a veces, datos RDS en 57 kHz. La \keyterm{regla de Carson} estima el ancho ocupado:
+\begin{equation}
+B \approx 2\,(\Delta f + f_m) = 2\,(75 + 53)~\text{kHz} \approx 256~\text{kHz}\quad\text{(estéreo)}.
+\end{equation}
+Por eso la FM de radiodifusión (\emph{wideband FM}) necesita del orden de 200 kHz, mientras que la FM de voz en radios portátiles (\emph{narrowband FM}, NFM) usa desviaciones de unos pocos kHz y canales de 12,5 o 25 kHz. En SDRangel son demoduladores distintos.
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_fm_espectro}}
+\caption{(a) Señal múltiplex que modula a la portadora. (b) Canal de FM en RF: no es una línea, sino una banda de unos 200 kHz alrededor de $f_c$. Esquema, no medida.}
+\label{fig:fm}
+\end{figure}
+
+\subsection{La cadena del receptor SDR}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_cadena_fm}}
+\caption{Configuraciones del Laboratorio 01. El analizador \emph{no} se conecta al HackRF: la antena se traslada de un instrumento al otro.}
+\label{fig:cadenafm}
+\end{figure}
+
+\begin{itemize}
+  \item \keyterm{Antena y cable:} convierten el campo en una tensión en 50~$\Omega$. Una antena poco adecuada entrega menos señal, pero no «crea» otra frecuencia.
+  \item \keyterm{Front end RF} (figura~\ref{fig:frontend}): amplifica, traslada la banda de interés a banda base y filtra. Sus ganancias son ajustables.
+  \item \keyterm{ADC y muestras I/Q:} el HackRF muestrea la señal trasladada con un convertidor de 8 bits y entrega pares $(I, Q)$, la parte real e imaginaria de una señal compleja. Con muestreo complejo a $f_s$ muestras/s se observa una ventana de $f_s$ hertzios centrada en la frecuencia del dispositivo: 2,4 MSa/s permiten ver 2,4 MHz de espectro a la vez.
+  \item \keyterm{DSP en el PC:} SDRangel calcula la FFT (espectro), selecciona un canal, filtra, \keyterm{demodula} (recupera $m(t)$) y entrega audio.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_hackrf_frontend}}
+\caption{Cadena de recepción simplificada del HackRF One con los controles de SDRangel (\gui{RF Amp}, \gui{LNA}, \gui{VGA}, \gui{BBF}, \gui{DC}, \gui{IQ}). Rangos: documentación del plugin \emph{HackRF Input}; límite de entrada: documentación oficial del HackRF One.}
+\label{fig:frontend}
+\end{figure}
+
+\subsection{Espectro, cascada, piso de ruido y ganancia}
+
+El \keyterm{espectro} muestra potencia frente a frecuencia en un instante; la \keyterm{cascada} apila espectros sucesivos y codifica la potencia en color (figura~\ref{fig:waterfall}). El \keyterm{piso de ruido} es el nivel que se ve sin señal: lo fijan el ruido térmico, el ruido del receptor y las interferencias. La ganancia sube a la vez señal y ruido: solo mejora la relación señal/ruido mientras el ruido propio de las etapas posteriores sea relevante. Demasiada ganancia \keyterm{satura} el receptor y genera productos espurios: aparecen «emisoras» donde no las hay.
+
+\begin{figure}[H]
+\centering
+\input{figuras/fig_espectro_waterfall}
+\caption{Dos vistas del mismo flujo I/Q (ilustración esquemática, no captura). Una emisora de FM deja una traza continua; las ráfagas dejan trazos cortos.}
+\label{fig:waterfall}
+\end{figure}
+
+\begin{nota}[Decibelios en dos instrumentos]
+SDRangel muestra niveles \emph{relativos} al fondo de escala digital (dB respecto a una señal de amplitud $\pm1$). El SIGLENT muestra potencia \emph{absoluta} en dBm (decibelios respecto a 1~mW) en su entrada. Las dos cifras no son comparables entre sí sin calibración.
+\end{nota}
+
+\section{Bloque A --- Equipo y conexión segura}
+\label{sec:w-equipo}
+
+\begin{alerta}
+Antes de tocar conectores, relea la sección~\ref{sec:seguridad}. Este laboratorio no transmite: si en SDRangel aparece cualquier elemento con «Output», «Modulator» o «TX», ciérrelo.
+\end{alerta}
+
+\Paso{Identifique los puertos del HackRF One}
+{Carcasa del HackRF.}
+{Tres conectores SMA hembra: el rotulado \textbf{ANTENNA} es la entrada/salida RF; los otros dos son de reloj (\textbf{CLKIN}, \textbf{CLKOUT}). Un conector USB micro-B y dos pulsadores de programación.}
+{Conectar la antena en un puerto de reloj produce un espectro vacío sin ningún mensaje de error.}
+{Usted señala sin dudar el puerto ANTENNA.}
+{Si los rótulos no son legibles, consulte la serigrafía con el instructor antes de conectar.}
+{}
+
+\Paso{Identifique el conector de la antena}
+{Antena B del kit y, si la usará, ambos extremos del cable C.}
+{Mire el centro del conector (figura~\ref{fig:conectores}): \textbf{pin} macizo = SMA macho; \textbf{agujero} = RP-SMA macho.}
+{Un RP-SMA macho enroscado en el HackRF no hace contacto central: no daña, pero deja la antena prácticamente desconectada.}
+{Usted anota en la hoja de registro: «antena: SMA / RP-SMA; cable: SMA / RP-SMA».}
+{El instructor confirma su identificación.}
+{Si es RP-SMA y no hay adaptador, la configuración está \BLOQ\ (tabla~\ref{tab:decision}): pase al respaldo indicado por el instructor.}
+
+\Paso{Conecte la antena al HackRF \emph{antes} del USB}
+{Puerto ANTENNA del HackRF; antena directa o a través del cable C.}
+{Apriete la tuerca SMA a mano hasta notar resistencia; no gire el cuerpo de la antena ni del cable.}
+{Conectar sin alimentación evita descargas sobre una entrada activa; apretar con la tuerca protege el pin.}
+{La antena queda firme y vertical; con el cable C, la antena puede ir junto a una ventana.}
+{Mueva suavemente la antena: el conector no debe tener holgura.}
+{Si la rosca no entra con suavidad, \textbf{no fuerce}: compruebe que no está mezclando SMA con otro tipo.}
+
+\Paso{Conecte el USB}
+{Puerto USB del PC, \emph{directo} (sin concentrador si es posible).}
+{Cable USB de datos en buen estado.}
+{Las muestras I/Q exigen un enlace USB 2.0 de alta velocidad estable; los concentradores y cables solo de carga son causas frecuentes de fallo.}
+{Se encienden LED en el HackRF y Windows emite el sonido de dispositivo conectado.}
+{En el paso siguiente el dispositivo aparece en el Administrador de dispositivos.}
+{Si no se enciende ningún LED, pruebe otro cable y otro puerto; si sigue sin encender, retire el equipo y avise.}
+
+\section{Bloque B --- Windows y el HackRF One}
+\label{sec:w-windows}
+
+En el puesto ya deben estar instalados, por el instructor: SDRangel 7.27.2 (\texttt{sdrangel-7.27.2-win64.exe}, versión oficial publicada el 19-08-2026) y \emph{radioconda}, que la documentación de HackRF recomienda en Windows para obtener la herramienta \texttt{hackrf\_info}. El instalador de SDRangel para Windows no incluye \texttt{hackrf\_info}.
+
+\subsection{¿Qué es WinUSB y cuándo hace falta Zadig?}
+
+Windows necesita un controlador que permita a una aplicación de usuario hablar con el HackRF a través de \texttt{libusb}. Ese controlador es \keyterm{WinUSB}. La herramienta \keyterm{Zadig} (\url{https://zadig.akeo.ie/}) asigna WinUSB a un dispositivo concreto; se usa \emph{solo} si el HackRF no tiene ya un controlador funcional, y requiere permisos de administrador (tarea del instructor).
+
+\Paso{Compruebe el controlador en el Administrador de dispositivos}
+{\tecla{Win}+\tecla{X} $\rightarrow$ \menu{Administrador de dispositivos}.}
+{Busque \textbf{HackRF One} en la categoría de dispositivos de bus serie universal (USB).}
+{Si aparece allí sin advertencias, Windows ya tiene un controlador WinUSB funcional.}
+{Una entrada «HackRF One» sin triángulo amarillo. En \menu{Propiedades $\rightarrow$ Controlador} el proveedor del controlador suele indicar WinUSB.}
+{Desconecte el USB: la entrada desaparece; reconéctelo: reaparece.}
+{Si aparece en \menu{Otros dispositivos} con triángulo amarillo, falta el controlador: avise al instructor (procedimiento Zadig a continuación).}
+
+\begin{alerta}[Zadig: solo con el instructor]
+\begin{enumerate}
+  \item En Zadig, \menu{Options $\rightarrow$ List All Devices} y seleccione \textbf{HackRF One}. Compruebe que el campo \emph{USB ID} muestra \textbf{1D50 6089}: es el identificador del HackRF One. Si muestra otro número, ha seleccionado otro dispositivo (teclado, cámara, disco): \textbf{deténgase}.
+  \item Si el controlador actual (izquierda) ya es \textbf{WinUSB} y el botón ofrece \textbf{Downgrade WCID Driver}, \textbf{no lo pulse}: Windows ya tiene un WinUSB funcional y Zadig propone sustituirlo por otro. Cierre Zadig.
+  \item Solo si no hay controlador: elija \textbf{WinUSB} como destino y pulse \textbf{Install Driver}. Nunca reemplace el controlador de un dispositivo que no sea el HackRF.
+\end{enumerate}
+\end{alerta}
+
+\Comando{hackrf_info}
+{Pedir al HackRF que se identifique. Ábralo en \menu{Inicio $\rightarrow$ radioconda Prompt}. Cierre antes SDRangel: el HackRF solo admite una aplicación a la vez.}
+{Una línea \texttt{Found HackRF}, \texttt{Board ID Number: 2 (HackRF One)}, el número de serie y \texttt{Firmware Version: ... (API:...)}. El formato exacto depende de la versión.}
+{\texttt{No HackRF boards found} o un error de acceso.}
+{Cierre toda aplicación SDR; desconecte y reconecte el USB; repita. Si persiste, vuelva al paso del controlador. Si aparece un aviso de incompatibilidad de firmware o API, anótelo y avise: la actualización de firmware es tarea del instructor.}
+
+\begin{checkpoint}[Puesto listo]
+Anote en la hoja de registro: número de serie (últimos 6 dígitos), versión de firmware y versión de \texttt{hackrf\_info}. Si no hay radioconda, anote «identificado en SDRangel» y compruébelo en el paso~\ref{paso:w-seldisp}.
+\end{checkpoint}
+
+\section{Bloque C --- Receptor en SDRangel}
+\label{sec:w-sdrangel}
+
+\begin{nota}[Interfaz verificada]
+Los nombres de plugins y los valores por defecto citados se comprobaron en SDRangel 7.27.2 para Windows. La disposición exacta de la ventana puede cambiar entre versiones: si un control no está donde se indica, búsquelo por su nombre o pase el ratón sobre los iconos para leer su descripción.
+\end{nota}
+
+\Paso{Abra SDRangel y cree un espacio de trabajo}
+{\menu{Inicio $\rightarrow$ SDRangel}.}
+{Si la barra de herramientas del espacio de trabajo no aparece: \menu{Workspaces $\rightarrow$ New}.}
+{Los dispositivos, canales y \emph{features} se abren dentro de un espacio de trabajo.}
+{Ventana principal con un espacio de trabajo vacío.}
+{Las teclas \tecla{Ctrl}+\tecla{R} (añadir receptor) responden.}
+{Si SDRangel no abre, avise: falta software o el runtime de Visual C++ (preparación del instructor).}
+
+\Paso{Añada el receptor HackRF}
+{\tecla{Ctrl}+\tecla{R}, o el icono de antena receptora (\emph{Create new receiver}) del espacio de trabajo.}
+{En el diálogo \emph{Choose a receiving device...}, elija la entrada de \textbf{HackRF} con su número de serie y pulse \gui{OK}.}
+{Separa el \emph{dispositivo} físico de los \emph{canales} que procesarán su señal.}
+{Una ventana \textbf{HackRF Input} y una ventana de espectro principal.}
+{Los últimos dígitos del número de serie coinciden con los anotados en el bloque~B.}
+{Si la lista solo muestra entradas como \texttt{FileInput}, \texttt{TestSource} o \texttt{RemoteInput}, SDRangel no ve el HackRF: cierre SDRangel, cierre radioconda Prompt, reconecte el USB y repita. Vea la sección~\ref{sec:w-diag2}.}
+\label{paso:w-seldisp}
+
+En la ventana \textbf{HackRF Input} localice, de arriba abajo: el dial de frecuencia (en kHz), el botón de arranque/parada, la corrección LO (ppm), los botones \gui{DC}, \gui{IQ} y \gui{BBF}, las casillas \gui{Bias tee} y \gui{RF amp}, el selector \gui{SR}/\gui{BB}, la tasa de muestreo, la decimación, la posición \gui{Fc}, el filtro de recepción y los deslizadores \gui{LNA} y \gui{VGA}.
+
+\Paso{Fije una configuración inicial segura}
+{Ventana \textbf{HackRF Input}.}
+{\gui{Bias tee} \valor{desactivado}; \gui{RF amp} \valor{desactivado}; selector en \gui{SR}; tasa \valor{2\,400\,000 S/s}; decimación \valor{1}; \gui{Fc} \valor{Cen}; \gui{DC} \valor{activado}; \gui{IQ} \valor{activado}; \gui{BBF} \valor{automático}; \gui{LNA} \valor{16~dB}; \gui{VGA} \valor{16~dB}.}
+{Ganancias moderadas y amplificador RF apagado evitan saturar con emisoras fuertes; \gui{DC} e \gui{IQ} reducen artefactos del receptor de conversión directa; 2,4 MSa/s muestran 2,4 MHz, suficiente para varias emisoras.}
+{Los valores quedan como se indican. (En 7.27.2, LNA 16, VGA 16, 2,4 MSa/s y RF amp/Bias tee apagados son los valores por defecto; \gui{DC} e \gui{IQ} vienen desactivados.)}
+{Revise en voz alta con su compañero cada valor contra esta lista.}
+{Si un control no acepta el valor, anote lo que muestra y continúe con el más cercano.}
+
+\Paso{Sintonice el inicio de la banda y arranque}
+{Dial de frecuencia de \textbf{HackRF Input}; botón de arranque.}
+{\valor{89\,000 kHz} (89 MHz). Pulse el triángulo azul: pasa a cuadrado verde (en marcha). Un cuadrado rojo indica error.}
+{Arrancar con el dispositivo configurado aplica los ajustes y empieza el flujo I/Q.}
+{El espectro muestra un piso de ruido con picos; la cascada se desplaza.}
+{Ver ruido demuestra que llegan muestras (nivel 1 de evidencia), \emph{no} que haya una emisora.}
+{Cuadrado rojo: el HackRF se desconectó u otra aplicación lo usa. Detenga, reconecte el USB y vuelva a arrancar.}
+
+\section{Bloque D --- Recepción y demodulación FM}
+\label{sec:w-fm}
+
+\begin{prediccion}
+Antes de mirar: ¿cuántas emisoras espera ver en 2,4 MHz de banda FM en su ciudad? ¿Tendrán todas la misma altura en el espectro? ¿Por qué?
+\end{prediccion}
+
+\subsection{Encontrar la emisora}
+
+\Paso{Recorra la banda en pasos de 2 MHz}
+{Dial de frecuencia del dispositivo.}
+{89, 91, 93, \ldots, 107 MHz. En cada posición espere unos segundos.}
+{Con 2,4 MHz de ventana, pasos de 2 MHz cubren toda la banda con solape.}
+{Bloques anchos (unos 200 kHz) que sobresalen del piso de ruido, estables en la cascada. Ignore la línea estrecha que aparece \emph{exactamente} en el centro en todas las posiciones: es el pico DC del receptor, no una emisora.}
+{Anote en la tabla~\ref{tab:w-barrido} las frecuencias de las 3--5 emisoras más altas sobre el ruido.}
+{Si no ve ninguna, revise el conector (sección~\ref{sec:w-equipo}), acerque la antena a una ventana y suba \gui{LNA} a 24~dB. Si sigue sin ver nada, vea la sección~\ref{sec:w-diag2}.}
+
+\begin{longtable}{@{}p{0.22\linewidth}p{0.22\linewidth}p{0.48\linewidth}@{}}
+\caption{Barrido de banda (hoja de registro).}\label{tab:w-barrido}\\
+\toprule
+\textbf{Frecuencia (MHz)} & \textbf{Altura sobre ruido (dB, aprox.)} & \textbf{Aspecto en la cascada} \\
+\midrule
+\endfirsthead
+\caption[]{(continuación)}\\
+\toprule
+\textbf{Frecuencia (MHz)} & \textbf{Altura sobre ruido (dB, aprox.)} & \textbf{Aspecto en la cascada} \\
+\midrule
+\endhead
+ & & \\[1.5ex]
+ & & \\[1.5ex]
+ & & \\[1.5ex]
+ & & \\[1.5ex]
+\bottomrule
+\end{longtable}
+
+\begin{nota}[Frecuencia de ejemplo]
+En Bogotá, Caracol Radio emite en 100,9 MHz y se usa aquí como \emph{ejemplo} de lectura. Su emisora de trabajo es la más intensa de \emph{su} tabla~\ref{tab:w-barrido}, sea cual sea.
+\end{nota}
+
+\subsection{Sintonía con desplazamiento: dispositivo frente a canal}
+
+El HackRF, como receptor de conversión directa, produce un pico en el centro exacto del espectro (\keyterm{pico DC}). Para no demodular encima de ese artefacto, se sintoniza el dispositivo un poco por encima de la emisora y se desplaza el canal (figura~\ref{fig:offset}).
+
+\begin{figure}[H]
+\centering
+\resizebox{0.92\linewidth}{!}{\input{figuras/fig_sintonia_offset}}
+\caption{El dial del dispositivo fija el centro de la ventana observada; el desplazamiento $\Delta f$ del canal elige qué parte de esa ventana se demodula.}
+\label{fig:offset}
+\end{figure}
+
+\Paso{Centre la ventana 300 kHz por encima de su emisora}
+{Dial de frecuencia de \textbf{HackRF Input}.}
+{$f_{\mathrm{dispositivo}} = f_{\mathrm{emisora}} + 300$~kHz. Ejemplo: emisora 100,9 MHz $\Rightarrow$ \valor{101\,200 kHz}.}
+{Aleja la emisora del pico DC sin sacarla del filtro de banda base.}
+{La emisora aparece 300 kHz a la izquierda del centro.}
+{Con la escala de frecuencias del espectro, compruebe que el centro del bloque está a 300 kHz del centro de la ventana.}
+{}
+
+\Paso{Añada el demodulador de FM de radiodifusión}
+{Icono de añadir canal en la parte superior de la ventana \textbf{HackRF Input}.}
+{En el diálogo elija \textbf{Broadcast FM Demodulator}, pulse \gui{Apply} y luego \gui{Close}. \textbf{No} elija \emph{NFM Demodulator} (FM estrecha) ni \emph{WFM Demodulator} (FM ancha genérica, sin estéreo ni RDS).}
+{Cada canal es un procesador independiente que toma una porción de la ventana del dispositivo.}
+{Aparece la ventana \textbf{Broadcast FM Demod} y una franja coloreada (el canal) sobre el espectro principal.}
+{La franja tiene unos 180 kHz de ancho.}
+{Si el diálogo no lista el demodulador, la instalación está incompleta: avise.}
+
+\Paso{Configure el canal}
+{Ventana \textbf{Broadcast FM Demod}.}
+{Desplazamiento de frecuencia \valor{$-300$~kHz} (en los diales, $-300\,000$~Hz; sitúe el puntero sobre cada dígito y use la rueda del ratón o las flechas); \gui{RF BW} \valor{180 kHz}; \gui{AF BW} \valor{15 kHz}; de-énfasis \valor{75 $\mu$s}; volumen \valor{2--5}; squelch al valor \emph{mínimo} que permita el control.}
+{El desplazamiento lleva el canal a la emisora. El de-énfasis compensa el pre-énfasis del transmisor: 75 $\mu$s en la Región 2 de la UIT (América), 50 $\mu$s en Europa. SDRangel 7.27.2 trae \textbf{50 $\mu$s por defecto}: cámbielo. El squelch mínimo evita que silencie una señal válida durante la primera prueba.}
+{La franja del canal cubre la emisora; el medidor de nivel del canal se mueve.}
+{El indicador de potencia del canal sube varios dB al centrar el canal sobre la emisora y baja al apartarlo.}
+{Si el canal no cubre la emisora, revise el signo del desplazamiento: debe ser negativo porque la emisora está por debajo del centro.}
+
+\Paso{Escuche y confirme la demodulación}
+{Auriculares o altavoces; ventana \textbf{Broadcast FM Demod}.}
+{Audio sin silenciar; volumen del sistema moderado.}
+{El audio inteligible es la prueba de nivel 2: se recuperó la moduladora.}
+{Programación reconocible (voz o música). Con buena señal, si cambia el botón Mono/Stereo a estéreo, se pone verde cuando el estéreo es efectivo; al activar RDS puede aparecer el nombre de la emisora.}
+{Aparte el canal 200 kHz con el desplazamiento: el audio se convierte en ruido o en otra emisora. Vuelva a $-300$ kHz.}
+{Hay señal pero no hay audio: siga la tabla~\ref{tab:w-diag} (fila «sin audio»).}
+
+\begin{esperado}
+Una emisora de FM se ve como un bloque de unos 200 kHz, no como una línea: la desviación de $\pm75$~kHz y la señal MPX la ensanchan. El RDS y el estéreo \emph{no} son requisitos: exigen más relación señal/ruido que el audio mono.
+\end{esperado}
+
+\begin{longtable}{@{}p{0.40\linewidth}p{0.52\linewidth}@{}}
+\caption{Registro de recepción FM (hoja de registro).}\label{tab:w-registro}\\
+\toprule
+\textbf{Parámetro} & \textbf{Valor observado} \\
+\midrule
+\endfirsthead
+\caption[]{(continuación)}\\
+\toprule
+\textbf{Parámetro} & \textbf{Valor observado} \\
+\midrule
+\endhead
+Frecuencia de la emisora & \\
+Frecuencia del dispositivo / desplazamiento del canal & \\
+Tasa de muestreo / decimación & \\
+RF amp / LNA / VGA & \\
+RF BW / AF BW / de-énfasis & \\
+Audio (inteligible, ruidoso, ausente; mono o estéreo; RDS) & \\
+Aspecto en el espectro (ancho aproximado, altura sobre el ruido) & \\
+Aspecto en la cascada & \\
+\bottomrule
+\end{longtable}
+
+\begin{importante}[Si la antena no permite audio]
+Si después de la sección~\ref{sec:w-diag2} ninguna emisora da audio inteligible, la configuración de antena queda \COND\ no superada. \textbf{No} invente el resultado: registre lo observado (nivel 1, energía sin información), y el instructor le mostrará el ejemplo verificado de su guía. En el informe declare: «audio no obtenido con la antena B; evidencia de demostración del instructor».
+\end{importante}
+
+\section{Bloque E --- Análisis con el SIGLENT SSA3032X Plus}
+\label{sec:w-siglent}
+
+\begin{importante}[Requisito de este bloque]
+Este bloque requiere el adaptador N macho -- SMA hembra (o -- RP-SMA hembra). Si no existe, el instructor hará la parte E como demostración o la aplazará; usted completa igualmente la parte conceptual y el experimento~4 con los datos que se le proporcionen.
+\end{importante}
+
+\subsection{Cómo mide un analizador de barrido}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_analizador_bloques}}
+\caption{Analizador superheterodino de barrido (conceptual). El filtro FI fija la \textbf{RBW}; el filtro de vídeo, la \textbf{VBW}.}
+\label{fig:analizador}
+\end{figure}
+
+\begin{itemize}
+  \item \keyterm{RBW} (\emph{resolution bandwidth}): ancho del filtro que «mira» cada frecuencia. Una RBW menor separa señales cercanas y baja el ruido mostrado (unos 10~dB por cada factor 10), pero alarga el barrido.
+  \item \keyterm{VBW} (\emph{video bandwidth}): filtra la traza después del detector; una VBW menor que la RBW suaviza el ruido sin cambiar la resolución.
+  \item \keyterm{Nivel de referencia} y \keyterm{atenuación}: la referencia es la línea superior de la pantalla. La atenuación protege el mezclador; más atenuación eleva el ruido mostrado. El manual de usuario relaciona ambos: $\text{Ref} \le \text{ATT} - \text{PA} - 20$~dBm.
+  \item \keyterm{Detector}: \emph{Pos Peak} (por defecto) muestra el máximo en cada intervalo; \emph{Sample}, el valor instantáneo; \emph{Average}, el promedio.
+  \item \keyterm{Traza}: \emph{Clear Write} se refresca en cada barrido; \emph{Max Hold} conserva el máximo de muchos barridos.
+\end{itemize}
+
+\begin{nota}[Rótulos del instrumento]
+Las teclas citadas (\gui{Frequency}, \gui{Span}, \gui{Amplitude}, \gui{BW}, \gui{Trace}, \gui{Detect}, \gui{Sweep}, \gui{Trigger}, \gui{Marker}, \gui{Marker Fn}, \gui{Peak}, \gui{Preset}) se comprobaron en el manual de usuario del SSA3000X Plus (UM0703P-E01A). Un firmware distinto puede mover algunas funciones de menú: si no encuentra una, búsquela por su nombre en la tecla indicada.
+\end{nota}
+
+\Paso{Encienda, restablezca y compruebe el TG}
+{Interruptor de encendido; tecla \gui{Preset}; menú \gui{TG} si existe.}
+{Tras el arranque, \gui{Preset}. Si el instrumento tiene generador de seguimiento, compruebe que está \valor{apagado}.}
+{\gui{Preset} parte de un estado conocido. El TG es una \emph{salida}: debe permanecer apagada y su puerto libre.}
+{Barrido de espectro completo con piso de ruido.}
+{En pantalla no aparece ningún indicador de TG activo.}
+{Si el TG no se puede apagar, no conecte nada al puerto TG y avise.}
+
+\Paso{Conecte la antena al analizador}
+{RF INPUT (N hembra) $\rightarrow$ adaptador $\rightarrow$ antena B (o cable C + antena).}
+{Detenga antes el HackRF en SDRangel y desenrosque la antena de su puerto. Toque tierra antes de conectar.}
+{No hay divisor: se usa la \emph{misma} antena de forma secuencial para comparar en igualdad de condiciones.}
+{La antena queda firme en el analizador.}
+{El adaptador corresponde al conector de la antena (SMA o RP-SMA).}
+{Sin adaptador: este paso está \BLOQ.}
+
+\Paso{Vista de la banda completa}
+{\gui{Frequency $\rightarrow$ Center Freq}; \gui{Span}; \gui{Amplitude $\rightarrow$ Ref Level}; \gui{Amplitude $\rightarrow$ Attenuator}; \gui{BW}.}
+{Centro \valor{98 MHz}; span \valor{20 MHz}; referencia \valor{$-20$ dBm}; atenuación \valor{Auto}; preamplificador \valor{apagado}; RBW y VBW en \valor{Auto}.}
+{20 MHz cubren 88--108 MHz. Empezar con el preamplificador apagado evita sobrecargar con emisoras locales intensas.}
+{Varias emisoras como picos sobre el piso de ruido.}
+{Las frecuencias de los picos más altos coinciden con su tabla~\ref{tab:w-barrido}.}
+{Si solo se ve ruido, active el preamplificador (\gui{Amplitude $\rightarrow$ Preamp}) y baje la referencia a $-40$ dBm. Anote el cambio.}
+
+\Paso{Acérquese a su emisora}
+{\gui{Frequency $\rightarrow$ Center Freq}; \gui{Span}; \gui{BW}; \gui{Detect}.}
+{Centro $= f_{\mathrm{emisora}}$; span \valor{1 MHz}; RBW \valor{10 kHz}; VBW \valor{10 kHz}; detector \valor{Pos Peak}.}
+{Con 1 MHz se ve la emisora y sus vecinas; 10 kHz de RBW resuelven la forma del canal de 200 kHz.}
+{Un bloque de unos 200 kHz cuya forma cambia con el audio.}
+{El bloque está centrado (diferencia $< 20$ kHz).}
+{}
+
+\Paso{Acumule la ocupación con Max Hold}
+{\gui{Trace} $\rightarrow$ tipo \valor{Max Hold}.}
+{Durante 30 s.}
+{La forma instantánea varía con la modulación; el máximo acumulado muestra el ancho realmente ocupado.}
+{Una envolvente más ancha y estable que la traza instantánea.}
+{Al volver a \valor{Clear Write} la traza vuelve a fluctuar.}
+{}
+
+\Paso{Mida con marcadores}
+{\gui{Peak} (búsqueda de pico); \gui{Marker Fn $\rightarrow$ N dB BW}.}
+{Marcador al pico; \valor{N = $-26$ dB} sobre la traza Max Hold.}
+{El marcador da frecuencia y nivel del pico; \emph{N dB BW} mide el ancho entre los puntos a $N$~dB por debajo. La medida de ancho ocupado al 99~\% (\emph{Occupied BW}) pertenece al kit opcional AMK: si no está instalado, use N dB BW o dos marcadores delta.}
+{Lectura de frecuencia (MHz), nivel (dBm) y ancho a $-26$ dB (kHz).}
+{El ancho medido es del orden de 150--300 kHz. Si sale de 10 kHz, está midiendo una componente aislada: revise la traza.}
+{Si \emph{N dB BW} no está disponible, coloque dos marcadores delta a $-26$ dB del pico a cada lado y reste sus frecuencias.}
+
+\begin{ejemplo}[Extensión opcional: escuchar en el analizador]
+El SSA3000X Plus tiene una tecla \gui{Demod} para escuchar AM y FM por el conector de auriculares de 3,5 mm (manual UM0703P). Si el tiempo lo permite, con el marcador sobre la emisora active la demodulación FM y escuche. Así comprobará que «recuperar audio» no es exclusivo del SDR; lo que el analizador no ofrece es la cascada continua ni el procesado de canal de SDRangel. No forma parte de la evaluación: la función no se ha probado en la unidad del banco.
+\end{ejemplo}
+
+\begin{longtable}{@{}p{0.40\linewidth}p{0.52\linewidth}@{}}
+\caption{Registro del analizador (hoja de registro).}\label{tab:w-siglent}\\
+\toprule
+\textbf{Parámetro} & \textbf{Valor} \\
+\midrule
+\endfirsthead
+\caption[]{(continuación)}\\
+\toprule
+\textbf{Parámetro} & \textbf{Valor} \\
+\midrule
+\endhead
+Centro / span / RBW / VBW & \\
+Referencia / atenuación / preamplificador & \\
+Detector / tipo de traza & \\
+Frecuencia del pico (marcador) & \\
+Nivel del pico (dBm) & \\
+Ancho a $-26$ dB (kHz) y método & \\
+Nivel del piso de ruido junto a la emisora (dBm) & \\
+\bottomrule
+\end{longtable}
+
+\begin{importante}[Lo que el nivel en dBm significa y lo que no]
+El marcador da la potencia \emph{en la entrada del analizador}, con su RBW, a través de \emph{esta} antena y \emph{este} cable sin calibrar. No es la potencia del transmisor, ni la intensidad de campo, ni es comparable con los dB de SDRangel. Para una medida trazable haría falta conocer la ganancia de la antena, las pérdidas del cable y la calibración del instrumento.
+\end{importante}
+
+\section{Bloque F --- Experimentos controlados}
+\label{sec:w-exp}
+
+Vuelva a la configuración 1 (antena en el HackRF, receptor en marcha). En cada experimento \textbf{escriba primero la predicción}.
+
+\subsection{Experimento 1: sintonía}
+
+\begin{prediccion}
+¿Qué oirá si aparta el canal 50, 100 y 200 kHz de la emisora?
+\end{prediccion}
+Varíe el desplazamiento del canal: $-250$, $-200$ y $-100$~kHz (es decir, 50, 100 y 200 kHz fuera de la emisora). Anote audio y nivel del canal en cada caso y vuelva a $-300$~kHz. \emph{Pista para la interpretación:} con 50 kHz de error, parte de la desviación cae fuera del filtro y aparece distorsión; con 200 kHz el canal ya está en la emisora vecina o en ruido.
+
+\subsection{Experimento 2: ancho de banda del demodulador}
+
+\begin{prediccion}
+¿Qué ocurrirá con \gui{RF BW} = 80 kHz? ¿Y con \gui{AF BW} = 3 kHz?
+\end{prediccion}
+Pruebe \gui{RF BW} = 80, 180 y 250 kHz con \gui{AF BW} = 15 kHz; después \gui{AF BW} = 3, 8 y 15 kHz con \gui{RF BW} = 180 kHz. \emph{Pista:} una RF BW menor que el ancho ocupado recorta las excursiones de frecuencia y distorsiona; la AF BW solo limita el audio ya demodulado: 3 kHz suena «telefónico», pero inteligible.
+
+\subsection{Experimento 3: ganancia}
+
+\begin{prediccion}
+¿Mejorará siempre el audio al subir la ganancia? ¿Qué espera ver en el espectro con ganancia excesiva?
+\end{prediccion}
+
+\begin{longtable}{@{}lllp{0.46\linewidth}@{}}
+\toprule
+\textbf{Condición} & \textbf{LNA} & \textbf{VGA} & \textbf{Observación (piso, emisora, espurios, audio)} \\
+\midrule
+\endhead
+Baja & 8 dB & 8 dB & \\[1.5ex]
+Moderada & 16 dB & 16 dB & \\[1.5ex]
+Alta & 32 dB & 30 dB & \\[1.5ex]
+Excesiva & 40 dB & 40 dB & \\[1.5ex]
+\bottomrule
+\end{longtable}
+
+Cambie \emph{una} condición cada vez y espere 10 s. No active \gui{RF amp} en este experimento. \emph{Señales de saturación:} el piso de ruido sube en toda la ventana, aparecen «emisoras» nuevas donde antes no había nada (productos de intermodulación) y el audio se distorsiona aunque el nivel sea alto. Termine en la condición moderada.
+
+\subsection{Experimento 4: comparación de instrumentos}
+
+Complete la tabla con «sí», «no» o «parcial», y justifique una fila por escrito:
+
+\begin{longtable}{@{}p{0.50\linewidth}p{0.20\linewidth}p{0.20\linewidth}@{}}
+\toprule
+\textbf{Pregunta} & \textbf{SDRangel + HackRF} & \textbf{SIGLENT} \\
+\midrule
+\endhead
+¿Muestra energía en función de la frecuencia? & & \\
+¿Da un nivel absoluto en dBm con exactitud especificada? & & \\
+¿Recupera el audio de la emisora? & & \\
+¿Muestra la evolución temporal (cascada)? & & \\
+¿Permite medir el ancho ocupado con marcadores? & & \\
+¿Ve 20 MHz de banda a la vez? & & \\
+¿Su resultado depende de la antena y el cable? & & \\
+\bottomrule
+\end{longtable}
+
+\section{Bloque G --- Evidencias e informe}
+\label{sec:w-evid}
+
+\begin{entregable}[Laboratorio 01]
+\begin{enumerate}
+  \item \textbf{Conexión:} fotografía del montaje con la antena en el HackRF y nota del tipo de conector identificado.
+  \item \textbf{Identificación:} salida de \texttt{hackrf\_info} (o la ventana de selección de dispositivo de SDRangel con el número de serie).
+  \item \textbf{SDRangel:} captura con \textbf{HackRF Input} y \textbf{Broadcast FM Demod} visibles, con frecuencia, tasa, ganancias, desplazamiento y RF BW legibles.
+  \item \textbf{Espectro y cascada} de la emisora con el canal superpuesto.
+  \item \textbf{Audio:} descripción de lo escuchado (y, si se permite, una grabación de 5 s); o la declaración honesta de que no se obtuvo.
+  \item \textbf{SIGLENT:} captura (\gui{Save} o \gui{Display $\rightarrow$ Screenshot}) con el marcador en la emisora y la traza Max Hold.
+  \item \textbf{Tablas} \ref{tab:w-barrido}, \ref{tab:w-registro}, \ref{tab:w-siglent} y las de los cuatro experimentos.
+  \item \textbf{Interpretación} (máximo una página): ¿qué niveles de evidencia alcanzó y con qué pruebas?; ¿por qué la FM de radiodifusión ocupa unos 200 kHz?; ¿qué limita la comparación de niveles entre instrumentos?
+\end{enumerate}
+\end{entregable}
+
+\section{Bloque H --- Solución de problemas}
+\label{sec:w-diag2}
+
+Cada síntoma tiene una acción de diagnóstico concreta. Aplique las filas en orden y anote qué resolvió el problema.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.35\linewidth}@{}}
+\caption{Diagnóstico del Laboratorio 01.}\label{tab:w-diag}\\
+\toprule
+\textbf{Síntoma} & \textbf{Diagnóstico} & \textbf{Acción} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Síntoma} & \textbf{Diagnóstico} & \textbf{Acción} \\
+\midrule
+\endhead
+HackRF no reconocido & ¿Encienden los LED? ¿Aparece en el Administrador de dispositivos? & Otro cable de datos y otro puerto USB directo; si aparece con triángulo amarillo, controlador (bloque B, con el instructor). \\
+Controlador incorrecto & En Zadig, el USB ID no es 1D50 6089 o el controlador no es WinUSB & No toque otros dispositivos. Instructor: asignar WinUSB solo al 1D50 6089. \\
+Dispositivo en uso & \texttt{hackrf\_info} falla con SDRangel abierto, o SDRangel no lo lista con radioconda Prompt usando el HackRF & Cierre todas las aplicaciones SDR; reconecte el USB; abra solo una. \\
+Botón de arranque en rojo & El dispositivo se desconectó o dio error & Detenga, reconecte el USB y arranque de nuevo; pruebe otro puerto. \\
+No se ve ninguna emisora & ¿Antena en ANTENNA? ¿SMA o RP-SMA? ¿Frecuencia en kHz correcta (89\,000 = 89 MHz)? & Revise conector y puerto; acerque la antena a la ventana; suba \gui{LNA} a 24 dB. \\
+Ruido excesivo, piso alto & ¿Ganancias altas? ¿Hay espurios que cambian con la ganancia? & Vuelva a LNA 16 / VGA 16; RF amp apagado; aleje la antena del PC (fuente de interferencia). \\
+Hay emisora pero no audio & ¿Canal sobre la emisora? ¿Mute? ¿Squelch? ¿Salida de audio? & Desplazamiento correcto; desactive mute; squelch al mínimo; \menu{Preferences $\rightarrow$ Audio}: dispositivo de salida; mezclador de volumen de Windows. \\
+Audio distorsionado o «metálico» & ¿Demodulador equivocado? ¿RF BW pequeña? ¿Desplazamiento con error? & Use \emph{Broadcast FM Demodulator}, RF BW 180 kHz, centre el canal. \\
+Audio con agudos excesivos o apagados & De-énfasis incorrecto & 75 $\mu$s en América; compare con 50 $\mu$s. \\
+Silbido o distorsión fija en el centro & Canal sobre el pico DC & Use la sintonía con desplazamiento (figura~\ref{fig:offset}). \\
+Antena débil o inadecuada & Emisoras apenas sobre el ruido incluso junto a la ventana & Registre la limitación (\COND\ no superada); use el ejemplo del instructor; no invente audio. \\
+SIGLENT sin señal útil & ¿Adaptador correcto? ¿Preamplificador? ¿Referencia muy alta? & Revise SMA/RP-SMA del adaptador; active preamplificador; referencia $-40$ dBm; RBW 100 kHz. \\
+Medidas «imposibles» en el SIGLENT & Lectura en UNCAL, RBW/detector mal elegidos, o comparación con dB de SDRangel & Vuelva a barrido automático; anote RBW y detector; no compare dBm con dB relativos. \\
+\bottomrule
+\end{longtable}
+
+\section{Cuestionario final}
+\label{sec:w-final}
+
+Responda individualmente. Las respuestas y su justificación están en la guía del instructor.
+
+\CuestionarioFinalW

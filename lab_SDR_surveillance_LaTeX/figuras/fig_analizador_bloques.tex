@@ -1,0 +1,16 @@
+% Analizador de espectro de barrido (superheterodino), diagrama conceptual.
+\begin{tikzpicture}[node distance=4mm]
+  \node[bloqueinst,minimum width=14mm] (in) {RF INPUT\\N hembra};
+  \node[bloqueinst,right=of in,minimum width=16mm] (att) {Atenuador\\\textbf{ATT}};
+  \node[bloqueinst,right=of att,minimum width=16mm] (pre) {Preamp.\\(on/off)};
+  \node[bloqueinst,right=of pre,minimum width=14mm] (mix) {Mezclador};
+  \node[bloqueinst,right=of mix,minimum width=17mm] (rbw) {Filtro FI\\\textbf{RBW}};
+  \node[bloqueinst,right=of rbw,minimum width=17mm] (det) {Detector de\\envolvente (log)};
+  \node[bloqueinst,right=of det,minimum width=16mm] (vbw) {Filtro de\\vídeo \textbf{VBW}};
+  \node[bloqueinst,below=9mm of vbw,minimum width=16mm] (tr) {Detector de\\traza + pantalla};
+  \node[bloqueinst,below=9mm of mix,minimum width=22mm] (lo) {Oscilador local\\de barrido};
+  \node[bloqueinst,left=of lo,minimum width=22mm] (ramp) {Rampa de barrido\\(\textbf{Sweep time})};
+  \foreach \a/\b in {in/att,att/pre,pre/mix,mix/rbw,rbw/det,det/vbw,vbw/tr} \draw[flecha] (\a) -- (\b);
+  \draw[flecha] (lo) -- (mix); \draw[flecha] (ramp) -- (lo);
+  \draw[flechadash] (ramp.south) |- ++(0,-5mm) -| node[pos=0.25,below,rotulo]{la misma rampa fija el eje horizontal (frecuencia)} (tr.south);
+\end{tikzpicture}

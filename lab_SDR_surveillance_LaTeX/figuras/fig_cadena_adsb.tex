@@ -1,0 +1,26 @@
+% Laboratorio 02: arquitectura física y lógica de la estación receptora pasiva.
+\begin{tikzpicture}[node distance=5mm and 7mm]
+  \node[bloqueext,minimum width=27mm] (xpdr) {Transpondedor de la\\aeronave (Mode S,\\ADS-B Out 1090ES)};
+  \node[bloque,right=22mm of xpdr,minimum width=18mm] (ant) {Antena\\receptora};
+  \node[bloque,right=of ant,minimum width=21mm] (hrf) {\textbf{HackRF One}\\1090,000 MHz\\(solo RX)};
+  \node[bloque,right=of hrf,minimum width=20mm] (pc) {Ubuntu 24.04\\USB + udev};
+  \node[bloquealt,right=of pc,minimum width=23mm] (in) {SDRangel\\\textbf{HackRF Input}\\I/Q a 4 MSa/s};
+  \draw[flecha,decorate,decoration={snake,amplitude=1.1mm,segment length=3mm,post length=2.5mm}] (xpdr) -- (ant);
+  \node[rotulo] at ($(xpdr.east)!0.5!(ant.west)+(0,6mm)$) {1090 MHz\\ráfagas PPM};
+  \draw[flecha] (ant) -- (hrf);
+  \draw[flecha] (hrf) -- (pc);
+  \draw[flecha] (pc) -- (in);
+
+  \node[bloquealt,below=11mm of in,minimum width=27mm] (dem) {\textbf{ADS-B Demodulator}\\preámbulo, bits, paridad};
+  \node[bloquealt,left=of dem,minimum width=23mm] (msg) {Tramas válidas\\(DF, ICAO, TC)};
+  \node[bloquealt,left=of msg,minimum width=22mm] (tab) {Tabla de\\aeronaves};
+  \node[bloquealt,left=of tab,minimum width=24mm] (map) {Feature \textbf{Map}\\(posición CPR)};
+  \draw[flecha] (in) -- (dem); \draw[flecha] (dem) -- (msg); \draw[flecha] (msg) -- (tab); \draw[flecha] (tab) -- (map);
+
+  \node[bloqueext,below=10mm of map,minimum width=30mm] (pos) {\menu{Preferences} $\rightarrow$ \textbf{My Position}\\(referencia CPR y distancia)};
+  \node[bloqueext,below=10mm of msg,minimum width=30mm,xshift=-6mm] (db) {Bases externas descargadas\\(enriquecen; \emph{no} son RF)};
+  \node[bloqueinst,below=10mm of dem,minimum width=25mm,xshift=8mm] (file) {\textbf{FileInput} (.sdriq)\\respaldo grabado};
+  \draw[flechadash] (pos) -- (map);
+  \draw[flechadash] (db.north) -- (tab.south east);
+  \draw[flechadash] (file.north) -- ([xshift=8mm]dem.south);
+\end{tikzpicture}

@@ -1,0 +1,48 @@
+% Guía del instructor de los dos laboratorios SDR (documento separado).
+% Comparte preámbulo, figuras y banco de preguntas con main.tex; activa las respuestas.
+%
+% Compilación (XeLaTeX, tres pasadas):
+%   xelatex -output-directory=build -jobname=guia_instructor_sdr guia_instructor.tex
+
+\documentclass[11pt,a4paper]{scrartcl}
+\usepackage[palette=signal,mode=manual,body=serif]{marco-academic}
+\input{preambulo_comun}
+\input{contenido/cuestionarios}
+\guiainstructortrue
+
+\MASetup{
+ title={Guía del instructor:\\laboratorios SDR},
+ subtitle={Preparación, prueba en seco, criterios de éxito, respaldo offline, claves de evaluación y limitaciones del Laboratorio 01 (FM, Windows) y del Laboratorio 02 (ADS-B y Mode S, Ubuntu)},
+ author={Marco Teran},
+ institution={Documento para el instructor · no distribuir a estudiantes antes de la evaluación},
+ course={Vigilancia aeronáutica · Instrumentación RF y SDR},
+ code={LAB-SDR-1090 · GUÍA v2.0},
+ version={2.0},
+ date={15 de octubre de 2026},
+ header-left={Guía del instructor · Laboratorios SDR},
+ header-right={Contiene respuestas},
+ cover-note={\textbf{Propósito:} que ninguna sesión fracase por software sin instalar, una antena incompatible o falta de tráfico aéreo, y que la evaluación premie la interpretación honesta de la evidencia.\\[1.5mm]
+  \textbf{Contiene} las claves de los cuatro cuestionarios: no la publique junto al manual del estudiante.}
+}
+
+\hypersetup{
+	pdftitle={Guía del instructor: laboratorios SDR},
+	pdfsubject={Preparación, criterios de éxito, respaldo offline y claves de evaluación},
+	pdfkeywords={SDR, HackRF One, SDRangel, ADS-B, Mode S, FM, SIGLENT, guía del instructor},
+	pdflang={es},
+	bookmarksnumbered=true,
+	bookmarksopen=true
+}
+\AtBeginDocument{\hypersetup{pdftitle={Guía del instructor: laboratorios SDR},
+	pdfsubject={Preparación, criterios de éxito, respaldo offline y claves de evaluación}}}
+
+\begin{document}
+\MAMakeTitle
+
+\tableofcontents
+\clearpage
+
+\IniciarLaboratorio{I}{I}
+\input{contenido/guia_instructor_cuerpo}
+
+\end{document}

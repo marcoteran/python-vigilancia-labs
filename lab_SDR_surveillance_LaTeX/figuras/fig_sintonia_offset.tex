@@ -1,0 +1,23 @@
+% Frecuencia del dispositivo frente a desplazamiento del canal (sintonía con offset).
+\begin{tikzpicture}[x=1mm,y=1mm,font=\sffamily\scriptsize]
+  \fill[MASurfaceAlt] (10,0) rectangle (130,30);
+  \draw[MAMuted] (10,0) rectangle (130,30);
+  \node[rotulo,anchor=south] at (70,31) {ventana observada = tasa de muestreo compleja (2,4 MSa/s $\Rightarrow$ 2,4 MHz)};
+  \draw[flecha] (4,0) -- (138,0) node[right,rotulo]{$f$};
+  \draw[MAMuted] (10,4) -- (130,4);
+  % pico DC en el centro del dispositivo
+  \draw[MADanger,line width=1.4pt] (70,4) -- (70,20);
+  \node[MADanger,align=center,anchor=south] at (70,20.5) {pico DC\\(artefacto)};
+  % emisora a -300 kHz
+  \draw[line width=0.9pt,color=MAPrimaryDark,fill=MAPrimarySoft]
+     plot[smooth] coordinates {(48,4.2) (50,8) (52,13) (55,16) (58,13) (60,8) (62,4.2)};
+  % canal
+  \draw[MASecondary,line width=0.8pt] (48,2) rectangle (62,25);
+  \node[MASecondary,anchor=east,align=right] at (47,20) {canal BFM\\(180 kHz)};
+  % marcas de frecuencia
+  \draw[dashed] (55,0) -- (55,-2) node[below]{$f_{\mathrm{emisora}}$};
+  \draw[dashed] (70,0) -- (70,-2) node[below]{$f_{\mathrm{dispositivo}}$};
+  \draw[<->,MASecondary,line width=0.8pt] (55,-9) -- (70,-9);
+  \node[MASecondary,anchor=north] at (62.5,-10) {$\Delta f = f_{\mathrm{emisora}} - f_{\mathrm{dispositivo}}$ (aquí $-300$ kHz)};
+  \node[rotulo,anchor=west,align=left] at (86,15) {Sintonice el dispositivo \textbf{300 kHz por encima}\\de la emisora y lleve el canal a $-300$ kHz:\\así no demodula sobre el pico DC.};
+\end{tikzpicture}

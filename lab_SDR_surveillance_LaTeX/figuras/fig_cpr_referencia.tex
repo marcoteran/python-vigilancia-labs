@@ -1,0 +1,27 @@
+% Decodificación CPR local: la trama solo fija la posición DENTRO de una zona de
+% latitud; la zona se elige por cercanía a la referencia (My Position).
+% Valores reales medidos con SDRangel 7.27.2 sobre el conjunto de datos del Lab. 02
+% (trama impar, ancho de zona 360/59 = 6,10 grados).
+\begin{tikzpicture}[x=3.6mm,y=1mm,font=\sffamily\scriptsize]
+  \def\dz{6.1017}
+  \node[rotulo,anchor=west] at (0,25) {zonas CPR de latitud (formato impar): el punto azul es la \emph{misma} fracción codificada, repetida en cada zona};
+  % referencia Bogotá y ventana válida
+  \fill[MAWarningSoft] (4.7-3.05,-0.6) rectangle (4.7+3.05,10);
+  \fill[MASuccessSoft] (37.0-3.05,-0.6) rectangle (37.0+3.05,10);
+  \draw[flecha] (-0.5,0) -- (41,0) node[right,rotulo]{latitud (°N)};
+  \foreach \k in {0,...,6} {
+    \pgfmathsetmacro{\z}{\k*\dz}
+    \draw[MAMuted] (\z,-1.5) -- (\z,12);
+    \fill[MAPrimary] (\z+0.488,4) circle (0.55mm);
+  }
+  \foreach \l in {0,10,20,30,40} \node[below] at (\l,-1.6) {\l};
+  \draw[MAWarning,line width=1pt] (4.7,-1) -- (4.7,10);
+  \draw[MADanger,line width=1pt] (6.59,4) circle (1.1mm);
+  \node[MADanger,align=center,anchor=south] at (6.59,13) {decodificado:\\$\approx$ 6,6° \textbf{(falso)}};
+  \draw[MASuccess,line width=1pt] (37.0,-1) -- (37.0,10);
+  \draw[MASuccess,line width=1pt] (6*\dz+0.488,4) circle (1.1mm);
+  \node[MASuccess,align=center,anchor=south] at (37.1,13) {decodificado:\\37,09° (correcto)};
+  \node[MAWarning,align=center,anchor=north] at (4.7,-6) {referencia automática\\$\approx$ 4,7° (Bogotá)};
+  \node[MASuccess,align=center,anchor=north] at (37.0,-6) {referencia\\37,0° (zona de la grabación)};
+  \node[rotulo,anchor=north,align=center] at (20.5,-16) {Banda sombreada: la referencia debe estar a menos de media zona\\($\approx$ 3° $\approx$ 180 NM) de la aeronave. Si no, el decodificador\\elige la zona equivocada \emph{sin} aviso.};
+\end{tikzpicture}

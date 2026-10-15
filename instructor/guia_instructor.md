@@ -106,9 +106,9 @@ Si el frontend no dibuja controles, usa `dibujar_antena(8, 20)` y `dibujar_radar
 
 ## Laboratorio SDR · complemento con hardware
 
-El manual [`lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf`](../lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf) propone cinco prácticas con HackRF One, SDRangel, GNU Radio y un analizador SIGLENT SSA3032X Plus. No es requisito de los notebooks; los notebooks tampoco bastan como preparación para el banco: el alumno necesita además instalar software en Windows y Ubuntu, manejar hardware RF y conocer las reglas de transmisión conducida.
+El manual [`lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf`](../lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf) contiene dos laboratorios **de solo recepción** con HackRF One, SDRangel 7.27.2 y un analizador SIGLENT SSA3032X Plus: FM comercial en Windows (210 min) y ADS-B/Mode S en Ubuntu 24.04 (225 min). No es requisito de los notebooks; los notebooks tampoco bastan como preparación para el banco: el alumno necesita además usar SDRangel y una terminal y manejar hardware RF.
 
-Antes de asignarlo: ensaya cada práctica con tu banco y las versiones de software instaladas, confirma el atenuador y los niveles máximos de entrada del analizador, y verifica la normativa local de radiofrecuencia. La revisión de este repositorio compiló el PDF y revisó el texto; **no** probó los procedimientos con hardware.
+Su guía propia, con preparación, prueba en seco, respaldo offline, claves de los cuatro cuestionarios y rúbrica, es [`guia_instructor_sdr.pdf`](../lab_SDR_surveillance_LaTeX/guia_instructor_sdr.pdf). Antes de asignarlos: califica la antena del kit en el aula real, confirma el adaptador N del analizador y haz la prueba en seco. La revisión del 15 de octubre de 2026 verificó el respaldo ADS-B en SDRangel 7.27.2 (Windows), pero **no** probó los procedimientos con el HackRF, la antena ni el analizador reales.
 
 ### Preguntas de las cápsulas: respuestas de referencia
 

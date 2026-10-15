@@ -39,3 +39,12 @@ Manual SDR: MiKTeX 25.12 (XeTeX 4.16), tres pasadas de XeLaTeX sin errores, sin 
 Python 3.14.6 · Windows 11 Enterprise · mismas versiones de paquetes que el 13 de octubre (numpy 2.5.4, matplotlib 3.11.2, pandas 2.3.3, ipywidgets 8.1.9, nbformat 5.11.1, nbclient 0.11.0, ipykernel 7.4.0).
 
 Se probaron los dos modos: `.\.venv\Scripts\python.exe scripts\verificar.py` (kernels de Jupyter en procesos separados, el mismo modo que GitHub Actions) y `--in-process`. Ambos pasan. Los notebooks publicados se generaron con el modo por defecto, que conserva el orden real de textos y figuras. No se probó Colab ni la interacción con widgets en un navegador.
+
+## Revisión del 15 de octubre de 2026 · laboratorios SDR (edición 2.0)
+
+Windows 11 Enterprise 25H2 · MiKTeX 25.12 (XeTeX 4.16) · Python 3.14.6 con numpy 2.5.4.
+
+- **LaTeX:** manual del estudiante (59 páginas) y guía del instructor (22 páginas), tres pasadas de XeLaTeX cada uno: 0 errores, 0 cajas desbordadas, 0 referencias indefinidas, 0 glifos ausentes. LuaLaTeX compila el manual. Todas las páginas se renderizaron a imagen y se revisaron visualmente.
+- **SDRangel 7.27.2 para Windows** (`sdrangel-7.27.2-win64.exe`, SHA-256 `96e4d6c8…dabf74dc2`), desempaquetado en una carpeta temporal y controlado por su API REST: FileInput aceptó la grabación `.sdriq`; el ADS-B Demodulator decodificó la aeronave 4D2023/AMC421 y registró 143 tramas distintas con paridad válida. La configuración que SDRangel creó en el perfil de usuario se eliminó después.
+- **Decodificadores independientes:** `herramientas/adsb_iq.py` (242 tramas válidas) y pyModeS 3.6.0 (coincidencia 242/242).
+- **No probado:** HackRF One real, antena del kit, SIGLENT SSA3032X Plus, cualquier paso en Ubuntu 24.04 (no había Ubuntu ni WSL disponibles).

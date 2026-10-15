@@ -1,0 +1,4890 @@
+{
+ "archivo": "modes1_dump1090_2MSps_1090MHz.sdriq",
+ "sha256": "d201250f486e5ff14133bc57664c8e5be6c42be3bb989529f29789674ee5f25d",
+ "bytes": 1427504,
+ "cabecera": {
+  "sample_rate": 2000000,
+  "center_frequency": 1090000000,
+  "start_timestamp_ms": 1357390345000,
+  "sample_size": 16,
+  "filler": 0,
+  "header_crc_ok": true
+ },
+ "muestras_complejas": 356868,
+ "duracion_ms": 178.434,
+ "candidatos_preambulo": 430,
+ "tramas_validas": 242,
+ "tramas_por_df": {
+  "0": 10,
+  "4": 4,
+  "5": 9,
+  "11": 68,
+  "17": 132,
+  "20": 13,
+  "21": 6
+ },
+ "tramas_por_regla": {
+  "PI=0": 132,
+  "II/SI=0": 53,
+  "AP=ICAO confirmada": 42,
+  "II/SI=60": 15
+ },
+ "aeronaves": {
+  "4D2023": {
+   "frames": 242,
+   "df": {
+    "17": 132,
+    "11": 68,
+    "4": 4,
+    "5": 9,
+    "0": 10,
+    "20": 13,
+    "21": 6
+   },
+   "tc": {
+    "11": 61,
+    "19": 63,
+    "4": 8
+   },
+   "altitude_ft": 20025,
+   "ground_speed_kt": 371,
+   "track_deg": 158.0,
+   "position": [
+    36.95627,
+    13.85832
+   ],
+   "callsign": "AMC421",
+   "positions": 60,
+   "suspect_positions": 4
+  }
+ },
+ "tramas": [
+  {
+   "sample": 794,
+   "t_us": 397.0,
+   "df": 17,
+   "hex": "8F4D2023587F345E35837E2218B2",
+   "remainder": "000000",
+   "level": 4557.89,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 24275,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 12058,
+    "lon_cpr": 99198
+   }
+  },
+  {
+   "sample": 2552,
+   "t_us": 1276.0,
+   "df": 3,
+   "hex": "1C84787F5FC135",
+   "remainder": "1DCC31",
+   "level": 1673.19
+  },
+  {
+   "sample": 4196,
+   "t_us": 2098.0,
+   "df": 14,
+   "hex": "76618521775A9B",
+   "remainder": "BC8C95",
+   "level": 3214.44
+  },
+  {
+   "sample": 5625,
+   "t_us": 2812.5,
+   "df": 6,
+   "hex": "301A72B2DFDC66",
+   "remainder": "F00920",
+   "level": 1484.16
+  },
+  {
+   "sample": 6421,
+   "t_us": 3210.5,
+   "df": 0,
+   "hex": "0608D314099651",
+   "remainder": "E8B5EB",
+   "level": 368.1
+  },
+  {
+   "sample": 8373,
+   "t_us": 4186.5,
+   "df": 20,
+   "hex": "A41464178A4158626680D6035100",
+   "remainder": "CCB962",
+   "level": 604.06
+  },
+  {
+   "sample": 9389,
+   "t_us": 4694.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 4812.71,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 11523,
+   "t_us": 5761.5,
+   "df": 4,
+   "hex": "20000F1F684A6C",
+   "remainder": "4D2023",
+   "level": 5404.38,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 23375
+  },
+  {
+   "sample": 11683,
+   "t_us": 5841.5,
+   "df": 5,
+   "hex": "280010248C796B",
+   "remainder": "4D2023",
+   "level": 4862.18,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 11979,
+   "t_us": 5989.5,
+   "df": 5,
+   "hex": "280010248C796B",
+   "remainder": "4D2023",
+   "level": 5310.63,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 12138,
+   "t_us": 6069.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 5249.05,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 12340,
+   "t_us": 6170.0,
+   "df": 0,
+   "hex": "0504D6530233B5",
+   "remainder": "0C8C32",
+   "level": 418.62
+  },
+  {
+   "sample": 12800,
+   "t_us": 6400.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 4810.02,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 12929,
+   "t_us": 6464.5,
+   "df": 13,
+   "hex": "6F097534808DE9",
+   "remainder": "7A7FA5",
+   "level": 450.27
+  },
+  {
+   "sample": 13118,
+   "t_us": 6559.0,
+   "df": 3,
+   "hex": "18CA4294722D62",
+   "remainder": "1F4191",
+   "level": 1711.52
+  },
+  {
+   "sample": 18187,
+   "t_us": 9093.5,
+   "df": 12,
+   "hex": "6220A407301B1C",
+   "remainder": "5D7172",
+   "level": 1432.61
+  },
+  {
+   "sample": 24238,
+   "t_us": 12119.0,
+   "df": 17,
+   "hex": "8D4D2023991094AD487C14FC9E3D",
+   "remainder": "000000",
+   "level": 6757.68,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 390,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 24874,
+   "t_us": 12437.0,
+   "df": 20,
+   "hex": "A14C8B00B450041805A846822027",
+   "remainder": "7ED629",
+   "level": 2173.28
+  },
+  {
+   "sample": 27315,
+   "t_us": 13657.5,
+   "df": 8,
+   "hex": "443B0C66868071",
+   "remainder": "7C9785",
+   "level": 2508.61
+  },
+  {
+   "sample": 28343,
+   "t_us": 14171.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 5472.07,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 33987,
+   "t_us": 16993.5,
+   "df": 17,
+   "hex": "8F4D20235877D0BC7D99551E27CA",
+   "remainder": "000000",
+   "level": 4650.29,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22925,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 24126,
+    "lon_cpr": 104789
+   },
+   "position": [
+    31.1044,
+    12.70219
+   ],
+   "position_suspect": true
+  },
+  {
+   "sample": 36107,
+   "t_us": 18053.5,
+   "df": 1,
+   "hex": "08DC6A046E0061",
+   "remainder": "04D63E",
+   "level": 2536.68
+  },
+  {
+   "sample": 36707,
+   "t_us": 18353.5,
+   "df": 5,
+   "hex": "29123D34808E64",
+   "remainder": "D435BC",
+   "level": 2075.46
+  },
+  {
+   "sample": 38111,
+   "t_us": 19055.5,
+   "df": 16,
+   "hex": "84BC06B2400193E09C1A8E133522",
+   "remainder": "1EAE31",
+   "level": 2272.02
+  },
+  {
+   "sample": 38867,
+   "t_us": 19433.5,
+   "df": 17,
+   "hex": "8F4D20235877B0BC01996FF7B3F2",
+   "remainder": "000000",
+   "level": 7868.35,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22875,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 24064,
+    "lon_cpr": 104815
+   },
+   "position": [
+    31.10156,
+    12.70359
+   ],
+   "position_suspect": true
+  },
+  {
+   "sample": 39139,
+   "t_us": 19569.5,
+   "df": 17,
+   "hex": "8F4D2023991093AD287C148ACCDC",
+   "remainder": "000000",
+   "level": 7828.96,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 388,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 41079,
+   "t_us": 20539.5,
+   "df": 8,
+   "hex": "44237203101AA1",
+   "remainder": "5230B9",
+   "level": 2419.69
+  },
+  {
+   "sample": 41474,
+   "t_us": 20737.0,
+   "df": 8,
+   "hex": "452AE891280867",
+   "remainder": "50EC42",
+   "level": 2236.46
+  },
+  {
+   "sample": 41865,
+   "t_us": 20932.5,
+   "df": 20,
+   "hex": "A6C281325332503C8237002830E1",
+   "remainder": "48B1E8",
+   "level": 3273.96
+  },
+  {
+   "sample": 42850,
+   "t_us": 21425.0,
+   "df": 8,
+   "hex": "418CC68830AA46",
+   "remainder": "F15B99",
+   "level": 2729.71
+  },
+  {
+   "sample": 43313,
+   "t_us": 21656.5,
+   "df": 0,
+   "hex": "02E70EBA61A90A",
+   "remainder": "60F462",
+   "level": 8451.58
+  },
+  {
+   "sample": 43474,
+   "t_us": 21737.0,
+   "df": 17,
+   "hex": "8F4D20235877A0BBBF997CDB827B",
+   "remainder": "000000",
+   "level": 16167.12,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22850,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 24031,
+    "lon_cpr": 104828
+   },
+   "position": [
+    31.10005,
+    12.70429
+   ],
+   "position_suspect": true
+  },
+  {
+   "sample": 43746,
+   "t_us": 21873.0,
+   "df": 17,
+   "hex": "8F4D2023991093AD287C13751CF8",
+   "remainder": "000000",
+   "level": 13419.78,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 388,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 44685,
+   "t_us": 22342.5,
+   "df": 17,
+   "hex": "8F4D2023587790BBA5998227C948",
+   "remainder": "000000",
+   "level": 11349.31,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22825,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 24018,
+    "lon_cpr": 104834
+   },
+   "position": [
+    31.09946,
+    12.70461
+   ],
+   "position_suspect": true
+  },
+  {
+   "sample": 44957,
+   "t_us": 22478.5,
+   "df": 17,
+   "hex": "8F4D2023991093AD287C148ACCDC",
+   "remainder": "000000",
+   "level": 10371.31,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 388,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 45296,
+   "t_us": 22648.0,
+   "df": 0,
+   "hex": "018CC1006CA1C7",
+   "remainder": "7F3E83",
+   "level": 4698.54
+  },
+  {
+   "sample": 45752,
+   "t_us": 22876.0,
+   "df": 7,
+   "hex": "3B92406B0A18C8",
+   "remainder": "44145B",
+   "level": 1771.44
+  },
+  {
+   "sample": 46936,
+   "t_us": 23468.0,
+   "df": 1,
+   "hex": "0CDE0002D64C32",
+   "remainder": "265895",
+   "level": 6587.33
+  },
+  {
+   "sample": 47235,
+   "t_us": 23617.5,
+   "df": 1,
+   "hex": "08CE4856CA4250",
+   "remainder": "475837",
+   "level": 6839.6
+  },
+  {
+   "sample": 47977,
+   "t_us": 23988.5,
+   "df": 1,
+   "hex": "0CC98406CB4461",
+   "remainder": "062703",
+   "level": 6610.43
+  },
+  {
+   "sample": 48126,
+   "t_us": 24063.0,
+   "df": 1,
+   "hex": "08CC2483EA0B2D",
+   "remainder": "8D8694",
+   "level": 6823.37
+  },
+  {
+   "sample": 48361,
+   "t_us": 24180.5,
+   "df": 17,
+   "hex": "8F4D202358779451F985EDF9F21E",
+   "remainder": "000000",
+   "level": 14721.36,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22825,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 10492,
+    "lon_cpr": 99821
+   },
+   "position": [
+    37.0986,
+    13.78623
+   ]
+  },
+  {
+   "sample": 48633,
+   "t_us": 24316.5,
+   "df": 17,
+   "hex": "8F4D2023991093AD087C133060D1",
+   "remainder": "000000",
+   "level": 17201.74,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 388,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 48904,
+   "t_us": 24452.0,
+   "df": 0,
+   "hex": "02E60EB9BE4118",
+   "remainder": "4D2023",
+   "level": 9341.43,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22825
+  },
+  {
+   "sample": 49065,
+   "t_us": 24532.5,
+   "df": 0,
+   "hex": "02E60EB9BE4118",
+   "remainder": "4D2023",
+   "level": 10345.02,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22825
+  },
+  {
+   "sample": 49225,
+   "t_us": 24612.5,
+   "df": 0,
+   "hex": "02E60EB841B511",
+   "remainder": "4D2023",
+   "level": 9514.75,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22800
+  },
+  {
+   "sample": 51034,
+   "t_us": 25517.0,
+   "df": 24,
+   "hex": "C45CE165BFB8CDDED8A5EF07D660",
+   "remainder": "3BE3B7",
+   "level": 460.16
+  },
+  {
+   "sample": 52869,
+   "t_us": 26434.5,
+   "df": 4,
+   "hex": "20B65C8B414760",
+   "remainder": "B37081",
+   "level": 3808.0
+  },
+  {
+   "sample": 53053,
+   "t_us": 26526.5,
+   "df": 17,
+   "hex": "8F4D202358777451AB85FC938B46",
+   "remainder": "000000",
+   "level": 15721.48,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22775,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 10453,
+    "lon_cpr": 99836
+   },
+   "position": [
+    37.09678,
+    13.78713
+   ]
+  },
+  {
+   "sample": 53597,
+   "t_us": 26798.5,
+   "df": 19,
+   "hex": "9E4D2022586664D3190C06C9C9C0",
+   "remainder": "D12B35",
+   "level": 7306.34
+  },
+  {
+   "sample": 53870,
+   "t_us": 26935.0,
+   "df": 17,
+   "hex": "8F4D2023991093AD087C14CFB0F5",
+   "remainder": "000000",
+   "level": 9189.73,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 388,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 54340,
+   "t_us": 27170.0,
+   "df": 13,
+   "hex": "6D9240CA827426",
+   "remainder": "8DB5BA",
+   "level": 292.9
+  },
+  {
+   "sample": 55238,
+   "t_us": 27619.0,
+   "df": 27,
+   "hex": "D94B086813E20B2DFDCD250FFE0A",
+   "remainder": "6C57D2",
+   "level": 269.85
+  },
+  {
+   "sample": 56753,
+   "t_us": 28376.5,
+   "df": 19,
+   "hex": "98CC0267247A69011AC3BB228B2C",
+   "remainder": "54EFA7",
+   "level": 5377.92
+  },
+  {
+   "sample": 57098,
+   "t_us": 28549.0,
+   "df": 17,
+   "hex": "8F4D2023991093AD087C133060D1",
+   "remainder": "000000",
+   "level": 15501.86,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 388,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 57514,
+   "t_us": 28757.0,
+   "df": 11,
+   "hex": "5F4D20232DAF3C",
+   "remainder": "00003C",
+   "level": 15117.67,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 57823,
+   "t_us": 28911.5,
+   "df": 11,
+   "hex": "5F4D20232DAF3C",
+   "remainder": "00003C",
+   "level": 14538.05,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 58132,
+   "t_us": 29066.0,
+   "df": 11,
+   "hex": "5F4D20232DAF3C",
+   "remainder": "00003C",
+   "level": 12380.37,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 58440,
+   "t_us": 29220.0,
+   "df": 11,
+   "hex": "5E4D2066692E38",
+   "remainder": "933334",
+   "level": 11979.28
+  },
+  {
+   "sample": 58601,
+   "t_us": 29300.5,
+   "df": 17,
+   "hex": "8F4D2023587750BAC799AE61B181",
+   "remainder": "000000",
+   "level": 6505.88,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22725,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23907,
+    "lon_cpr": 104878
+   },
+   "position": [
+    37.09438,
+    13.78843
+   ]
+  },
+  {
+   "sample": 59291,
+   "t_us": 29645.5,
+   "df": 11,
+   "hex": "5F4D20232DAF3C",
+   "remainder": "00003C",
+   "level": 15296.39,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 59600,
+   "t_us": 29800.0,
+   "df": 11,
+   "hex": "5F4D20232DAF3C",
+   "remainder": "00003C",
+   "level": 15825.85,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 63020,
+   "t_us": 31510.0,
+   "df": 11,
+   "hex": "5F4D20232DAF00",
+   "remainder": "000000",
+   "level": 11276.86,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 64146,
+   "t_us": 32073.0,
+   "df": 17,
+   "hex": "8F4D2023991093AD087C14CFB0F5",
+   "remainder": "000000",
+   "level": 11781.19,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 388,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 64417,
+   "t_us": 32208.5,
+   "df": 11,
+   "hex": "5F4D20232DAF00",
+   "remainder": "000000",
+   "level": 18973.38,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 64579,
+   "t_us": 32289.5,
+   "df": 17,
+   "hex": "8F4D20232004D0F4CB1820000D24",
+   "remainder": "000000",
+   "level": 15243.09,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 4,
+   "callsign": "AMC421"
+  },
+  {
+   "sample": 64820,
+   "t_us": 32410.0,
+   "df": 8,
+   "hex": "40C48F4D202358",
+   "remainder": "D7D583",
+   "level": 436.62
+  },
+  {
+   "sample": 65123,
+   "t_us": 32561.5,
+   "df": 17,
+   "hex": "8F4D2023991093ACE87C133E1D54",
+   "remainder": "000000",
+   "level": 16502.05,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 387,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 66806,
+   "t_us": 33403.0,
+   "df": 1,
+   "hex": "0CC81184AE8078",
+   "remainder": "46DE24",
+   "level": 5144.28
+  },
+  {
+   "sample": 68209,
+   "t_us": 34104.5,
+   "df": 17,
+   "hex": "8F4D202358773450B7862CE80171",
+   "remainder": "000000",
+   "level": 8108.29,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22675,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 10331,
+    "lon_cpr": 99884
+   },
+   "position": [
+    37.0911,
+    13.78999
+   ]
+  },
+  {
+   "sample": 68480,
+   "t_us": 34240.0,
+   "df": 17,
+   "hex": "8F4D2023991093ACE87C14C1CD70",
+   "remainder": "000000",
+   "level": 7781.44,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 387,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 69418,
+   "t_us": 34709.0,
+   "df": 11,
+   "hex": "5F4D20232DAF00",
+   "remainder": "000000",
+   "level": 6313.98,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 69653,
+   "t_us": 34826.5,
+   "df": 17,
+   "hex": "8F4D2023587720BA1799D04DB987",
+   "remainder": "000000",
+   "level": 11801.86,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22650,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23819,
+    "lon_cpr": 104912
+   },
+   "position": [
+    37.09035,
+    13.79041
+   ]
+  },
+  {
+   "sample": 69924,
+   "t_us": 34962.0,
+   "df": 17,
+   "hex": "8F4D20231910932CC878133C3954",
+   "remainder": "41865F",
+   "level": 10722.77
+  },
+  {
+   "sample": 70805,
+   "t_us": 35402.5,
+   "df": 16,
+   "hex": "868181844230A4536E118800B808",
+   "remainder": "2D5D2A",
+   "level": 4544.33
+  },
+  {
+   "sample": 73205,
+   "t_us": 36602.5,
+   "df": 2,
+   "hex": "1243861198C381",
+   "remainder": "CE5D68",
+   "level": 747.12
+  },
+  {
+   "sample": 75193,
+   "t_us": 37596.5,
+   "df": 14,
+   "hex": "763C006C03B589",
+   "remainder": "F8EC1F",
+   "level": 484.15
+  },
+  {
+   "sample": 76001,
+   "t_us": 38000.5,
+   "df": 17,
+   "hex": "8F4D2023587710B9D199DDD3F278",
+   "remainder": "000000",
+   "level": 14827.59,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22625,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23784,
+    "lon_cpr": 104925
+   },
+   "position": [
+    37.08875,
+    13.79117
+   ]
+  },
+  {
+   "sample": 76769,
+   "t_us": 38384.5,
+   "df": 9,
+   "hex": "4CCF8986B309A4",
+   "remainder": "ECFAB7",
+   "level": 6035.56
+  },
+  {
+   "sample": 78843,
+   "t_us": 39421.5,
+   "df": 11,
+   "hex": "5F4D20232DAF00",
+   "remainder": "000000",
+   "level": 14254.41,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 80265,
+   "t_us": 40132.5,
+   "df": 19,
+   "hex": "9E4D206750E60CD06F0E4CC670C6",
+   "remainder": "795E55",
+   "level": 5485.88
+  },
+  {
+   "sample": 80537,
+   "t_us": 40268.5,
+   "df": 17,
+   "hex": "8F4D2023991093ACE87C14C1CD70",
+   "remainder": "000000",
+   "level": 7008.23,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 387,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 81177,
+   "t_us": 40588.5,
+   "df": 9,
+   "hex": "48EA0456CA0550",
+   "remainder": "FED8BF",
+   "level": 4781.63
+  },
+  {
+   "sample": 82745,
+   "t_us": 41372.5,
+   "df": 20,
+   "hex": "A0200EB02004D0F4CB18200BA365",
+   "remainder": "4D2023",
+   "level": 11832.3,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22600
+  },
+  {
+   "sample": 83016,
+   "t_us": 41508.0,
+   "df": 21,
+   "hex": "A8201024FA8103000000004DA3BC",
+   "remainder": "4D2023",
+   "level": 12011.37,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 83289,
+   "t_us": 41644.5,
+   "df": 20,
+   "hex": "A0200EB0000000000000003FC97C",
+   "remainder": "4D2023",
+   "level": 10215.19,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22600
+  },
+  {
+   "sample": 83561,
+   "t_us": 41780.5,
+   "df": 20,
+   "hex": "A0200EB0000000000000003FC97C",
+   "remainder": "4D2023",
+   "level": 11866.22,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22600
+  },
+  {
+   "sample": 83834,
+   "t_us": 41917.0,
+   "df": 20,
+   "hex": "A0200EB0000000000000003FC97C",
+   "remainder": "4D2023",
+   "level": 9592.84,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22600
+  },
+  {
+   "sample": 84181,
+   "t_us": 42090.5,
+   "df": 11,
+   "hex": "5F4D20232DAF00",
+   "remainder": "000000",
+   "level": 9651.39,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 84415,
+   "t_us": 42207.5,
+   "df": 11,
+   "hex": "5F4D20232DAF00",
+   "remainder": "000000",
+   "level": 10535.73,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 84649,
+   "t_us": 42324.5,
+   "df": 11,
+   "hex": "5F4D20232DAF00",
+   "remainder": "000000",
+   "level": 10796.12,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 84957,
+   "t_us": 42478.5,
+   "df": 11,
+   "hex": "5F4D20232DAF00",
+   "remainder": "000000",
+   "level": 5224.75,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 85206,
+   "t_us": 42603.0,
+   "df": 8,
+   "hex": "4708252066B11A",
+   "remainder": "2D6725",
+   "level": 3508.03
+  },
+  {
+   "sample": 86519,
+   "t_us": 43259.5,
+   "df": 17,
+   "hex": "8F4D20235875F44FFF864F904C4E",
+   "remainder": "000000",
+   "level": 9112.11,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22575,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 10239,
+    "lon_cpr": 99919
+   },
+   "position": [
+    37.08682,
+    13.79208
+   ]
+  },
+  {
+   "sample": 86791,
+   "t_us": 43395.5,
+   "df": 17,
+   "hex": "8F4D2023991093ACE87C14C1CD70",
+   "remainder": "000000",
+   "level": 9501.51,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 387,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 87137,
+   "t_us": 43568.5,
+   "df": 17,
+   "hex": "8F4D20235875F0B95799F4278BE2",
+   "remainder": "000000",
+   "level": 7309.17,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22575,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23723,
+    "lon_cpr": 104948
+   },
+   "position": [
+    37.08595,
+    13.79252
+   ]
+  },
+  {
+   "sample": 87409,
+   "t_us": 43704.5,
+   "df": 17,
+   "hex": "8F4D2023991093ACE87C14C1CD70",
+   "remainder": "000000",
+   "level": 7109.5,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 387,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 87682,
+   "t_us": 43841.0,
+   "df": 17,
+   "hex": "8F4D20235875E0B93D99FCADD99F",
+   "remainder": "000000",
+   "level": 14610.86,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22550,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23710,
+    "lon_cpr": 104956
+   },
+   "position": [
+    37.08536,
+    13.79298
+   ]
+  },
+  {
+   "sample": 88226,
+   "t_us": 44113.0,
+   "df": 11,
+   "hex": "5F4D20232DAF00",
+   "remainder": "000000",
+   "level": 16977.47,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 88401,
+   "t_us": 44200.5,
+   "df": 0,
+   "hex": "07020389233001",
+   "remainder": "01FE1F",
+   "level": 5867.73
+  },
+  {
+   "sample": 90066,
+   "t_us": 45033.0,
+   "df": 19,
+   "hex": "9E4920673331932998F8358DA351",
+   "remainder": "8DBF55",
+   "level": 5062.4
+  },
+  {
+   "sample": 92492,
+   "t_us": 46246.0,
+   "df": 6,
+   "hex": "315A40526C00AD",
+   "remainder": "2513F3",
+   "level": 1820.06
+  },
+  {
+   "sample": 93153,
+   "t_us": 46576.5,
+   "df": 17,
+   "hex": "8F4D20232004D0F4CB1820000D24",
+   "remainder": "000000",
+   "level": 7584.04,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 4,
+   "callsign": "AMC421"
+  },
+  {
+   "sample": 93425,
+   "t_us": 46712.5,
+   "df": 11,
+   "hex": "5F4D20622DAE00",
+   "remainder": "FC7669",
+   "level": 5970.65
+  },
+  {
+   "sample": 94397,
+   "t_us": 47198.5,
+   "df": 17,
+   "hex": "8F4D20235875D44F77866E8B8692",
+   "remainder": "000000",
+   "level": 15903.28,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22525,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 10171,
+    "lon_cpr": 99950
+   },
+   "position": [
+    37.08365,
+    13.79393
+   ]
+  },
+  {
+   "sample": 94670,
+   "t_us": 47335.0,
+   "df": 17,
+   "hex": "8F4D2023991093ACC8801497EF66",
+   "remainder": "000000",
+   "level": 16426.3,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 386,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 95833,
+   "t_us": 47916.5,
+   "df": 11,
+   "hex": "58CD1100768065",
+   "remainder": "4C615A",
+   "level": 4944.8
+  },
+  {
+   "sample": 96055,
+   "t_us": 48027.5,
+   "df": 17,
+   "hex": "8F4D20235875C44F598674BC817A",
+   "remainder": "000000",
+   "level": 8638.25,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22500,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 10156,
+    "lon_cpr": 99956
+   },
+   "position": [
+    37.08295,
+    13.79429
+   ]
+  },
+  {
+   "sample": 96327,
+   "t_us": 48163.5,
+   "df": 17,
+   "hex": "8E4D206719119328C9803597CE4C",
+   "remainder": "82DE13",
+   "level": 7528.06
+  },
+  {
+   "sample": 101048,
+   "t_us": 50524.0,
+   "df": 17,
+   "hex": "8F4D20235875B44F29867BC2A7F9",
+   "remainder": "000000",
+   "level": 11289.04,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22475,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 10132,
+    "lon_cpr": 99963
+   },
+   "position": [
+    37.08184,
+    13.79471
+   ]
+  },
+  {
+   "sample": 101320,
+   "t_us": 50660.0,
+   "df": 17,
+   "hex": "8F4D2023991093ACC8801497EF66",
+   "remainder": "000000",
+   "level": 11418.64,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 386,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 101965,
+   "t_us": 50982.5,
+   "df": 1,
+   "hex": "0CCC4006D3CE60",
+   "remainder": "998671",
+   "level": 4511.29
+  },
+  {
+   "sample": 104262,
+   "t_us": 52131.0,
+   "df": 6,
+   "hex": "32900696219983",
+   "remainder": "5D63D9",
+   "level": 410.17
+  },
+  {
+   "sample": 105590,
+   "t_us": 52795.0,
+   "df": 17,
+   "hex": "8F4D20275865B0B07F9A610CA4D6",
+   "remainder": "0AC019",
+   "level": 7829.98
+  },
+  {
+   "sample": 105862,
+   "t_us": 52931.0,
+   "df": 17,
+   "hex": "8F4D2023991093ACC8801497EF66",
+   "remainder": "000000",
+   "level": 9490.84,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 386,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 106295,
+   "t_us": 53147.5,
+   "df": 17,
+   "hex": "8E4D20235865A44CE58E89C5434A",
+   "remainder": "F22496",
+   "level": 14850.45
+  },
+  {
+   "sample": 106568,
+   "t_us": 53284.0,
+   "df": 17,
+   "hex": "8F4D2023991093ACC87C1484B159",
+   "remainder": "000000",
+   "level": 18723.65,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 386,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 106839,
+   "t_us": 53419.5,
+   "df": 0,
+   "hex": "02E60E9A4068BA",
+   "remainder": "4D2023",
+   "level": 17895.68,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22450
+  },
+  {
+   "sample": 106981,
+   "t_us": 53490.5,
+   "df": 27,
+   "hex": "DD6763C0C95DD01D304C75F4D202",
+   "remainder": "2DCC8F",
+   "level": 459.67
+  },
+  {
+   "sample": 107458,
+   "t_us": 53729.0,
+   "df": 11,
+   "hex": "5E492066692E78",
+   "remainder": "A46270",
+   "level": 12028.72
+  },
+  {
+   "sample": 107767,
+   "t_us": 53883.5,
+   "df": 11,
+   "hex": "5F4D20232DAF3C",
+   "remainder": "00003C",
+   "level": 15360.0,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 108075,
+   "t_us": 54037.5,
+   "df": 11,
+   "hex": "5F4D20232DAF3C",
+   "remainder": "00003C",
+   "level": 15367.58,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 108385,
+   "t_us": 54192.5,
+   "df": 11,
+   "hex": "5F4D20232DAF3C",
+   "remainder": "00003C",
+   "level": 13321.84,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 109002,
+   "t_us": 54501.0,
+   "df": 11,
+   "hex": "5F4D20232DAF3C",
+   "remainder": "00003C",
+   "level": 13787.86,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 109311,
+   "t_us": 54655.5,
+   "df": 17,
+   "hex": "8F4D2023587590B83D9A2FFCF986",
+   "remainder": "000000",
+   "level": 11414.05,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22425,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23582,
+    "lon_cpr": 105007
+   },
+   "position": [
+    37.0795,
+    13.79596
+   ]
+  },
+  {
+   "sample": 109583,
+   "t_us": 54791.5,
+   "df": 17,
+   "hex": "8F4D2023991093ACC87C1484B159",
+   "remainder": "000000",
+   "level": 11065.24,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 386,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 109928,
+   "t_us": 54964.0,
+   "df": 11,
+   "hex": "5F4D20232DAF00",
+   "remainder": "000000",
+   "level": 10665.37,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 110164,
+   "t_us": 55082.0,
+   "df": 0,
+   "hex": "02E60E99BF80A8",
+   "remainder": "4D2023",
+   "level": 7607.31,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22425
+  },
+  {
+   "sample": 110325,
+   "t_us": 55162.5,
+   "df": 0,
+   "hex": "02E60E99BF80A8",
+   "remainder": "4D2023",
+   "level": 8937.25,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22425
+  },
+  {
+   "sample": 110782,
+   "t_us": 55391.0,
+   "df": 11,
+   "hex": "588E6026521443",
+   "remainder": "598DEB",
+   "level": 3340.76
+  },
+  {
+   "sample": 111009,
+   "t_us": 55504.5,
+   "df": 12,
+   "hex": "66B080249811CC",
+   "remainder": "9595F8",
+   "level": 364.86
+  },
+  {
+   "sample": 111522,
+   "t_us": 55761.0,
+   "df": 15,
+   "hex": "78CC0486DBC04C",
+   "remainder": "BD5200",
+   "level": 3745.48
+  },
+  {
+   "sample": 111965,
+   "t_us": 55982.5,
+   "df": 17,
+   "hex": "8F4D20235875944EA1869709A985",
+   "remainder": "000000",
+   "level": 8562.21,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22425,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 10064,
+    "lon_cpr": 99991
+   },
+   "position": [
+    37.07867,
+    13.79638
+   ]
+  },
+  {
+   "sample": 112237,
+   "t_us": 56118.5,
+   "df": 17,
+   "hex": "8F4D2023991093ACC8801497EF66",
+   "remainder": "000000",
+   "level": 10167.81,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 386,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 112509,
+   "t_us": 56254.5,
+   "df": 20,
+   "hex": "A0200E999D500031E40000C661EC",
+   "remainder": "4D2023",
+   "level": 10316.85,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22425
+  },
+  {
+   "sample": 113004,
+   "t_us": 56502.0,
+   "df": 21,
+   "hex": "A8201024807705306004C369C73C",
+   "remainder": "4D2023",
+   "level": 8044.78,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 113423,
+   "t_us": 56711.5,
+   "df": 20,
+   "hex": "A0200E99B62A35287E17C2D5EC8F",
+   "remainder": "4D2023",
+   "level": 9710.18,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22425
+  },
+  {
+   "sample": 113768,
+   "t_us": 56884.0,
+   "df": 20,
+   "hex": "A0200E9910010080E60000A90752",
+   "remainder": "4D2023",
+   "level": 8133.94,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22425
+  },
+  {
+   "sample": 115209,
+   "t_us": 57604.5,
+   "df": 23,
+   "hex": "B8CE801376484000DD0763013269",
+   "remainder": "AEDE52",
+   "level": 2428.63
+  },
+  {
+   "sample": 117014,
+   "t_us": 58507.0,
+   "df": 16,
+   "hex": "854CE06893440EDE04478836D802",
+   "remainder": "53DED6",
+   "level": 2644.3
+  },
+  {
+   "sample": 117407,
+   "t_us": 58703.5,
+   "df": 17,
+   "hex": "8D4D2023587580B7F39A3ED2E81E",
+   "remainder": "000000",
+   "level": 6496.41,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22400,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23545,
+    "lon_cpr": 105022
+   },
+   "position": [
+    37.0778,
+    13.79684
+   ]
+  },
+  {
+   "sample": 117990,
+   "t_us": 58995.0,
+   "df": 0,
+   "hex": "002E51596FEE42",
+   "remainder": "0673AA",
+   "level": 2296.85
+  },
+  {
+   "sample": 118184,
+   "t_us": 59092.0,
+   "df": 17,
+   "hex": "8D4D20235875744E5986A6088193",
+   "remainder": "000000",
+   "level": 8068.38,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22375,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 10028,
+    "lon_cpr": 100006
+   },
+   "position": [
+    37.077,
+    13.79728
+   ]
+  },
+  {
+   "sample": 118455,
+   "t_us": 59227.5,
+   "df": 17,
+   "hex": "8D4D2023991093ACA87C14FBD7D2",
+   "remainder": "000000",
+   "level": 8709.9,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 385,
+   "track_deg": 157.7
+  },
+  {
+   "sample": 120058,
+   "t_us": 60029.0,
+   "df": 17,
+   "hex": "8D4D2023587570B7AD9A4DD39061",
+   "remainder": "000000",
+   "level": 9691.38,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22375,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23510,
+    "lon_cpr": 105037
+   },
+   "position": [
+    37.0762,
+    13.79772
+   ]
+  },
+  {
+   "sample": 120329,
+   "t_us": 60164.5,
+   "df": 17,
+   "hex": "8D4D2023991093ACA87C14FBD7D2",
+   "remainder": "000000",
+   "level": 10324.84,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 385,
+   "track_deg": 157.7
+  },
+  {
+   "sample": 120675,
+   "t_us": 60337.5,
+   "df": 17,
+   "hex": "8D4D20232004D0F4CB1820B0EFD4",
+   "remainder": "000000",
+   "level": 10555.18,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 4,
+   "callsign": "AMC421"
+  },
+  {
+   "sample": 121096,
+   "t_us": 60548.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 11316.26,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 121256,
+   "t_us": 60628.0,
+   "df": 0,
+   "hex": "02E60E964020E0",
+   "remainder": "4D2023",
+   "level": 10566.32,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22350
+  },
+  {
+   "sample": 121416,
+   "t_us": 60708.0,
+   "df": 0,
+   "hex": "02E60E964020E0",
+   "remainder": "4D2023",
+   "level": 10817.06,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22350
+  },
+  {
+   "sample": 121576,
+   "t_us": 60788.0,
+   "df": 17,
+   "hex": "8D4D2023587560B77F9A5545BC58",
+   "remainder": "000000",
+   "level": 10704.85,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22350,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23487,
+    "lon_cpr": 105045
+   },
+   "position": [
+    37.07515,
+    13.79819
+   ]
+  },
+  {
+   "sample": 121848,
+   "t_us": 60924.0,
+   "df": 17,
+   "hex": "8D4D202319109328A8F834F39792",
+   "remainder": "59BAEE",
+   "level": 8537.93
+  },
+  {
+   "sample": 123821,
+   "t_us": 61910.5,
+   "df": 17,
+   "hex": "8D4D20235875544DC586B83E9C93",
+   "remainder": "45441D",
+   "level": 8296.39
+  },
+  {
+   "sample": 124092,
+   "t_us": 62046.0,
+   "df": 17,
+   "hex": "8D4D2023991093ACA87C14FBD7D2",
+   "remainder": "000000",
+   "level": 9245.61,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 385,
+   "track_deg": 157.7
+  },
+  {
+   "sample": 126655,
+   "t_us": 63327.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 8556.12,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 126816,
+   "t_us": 63408.0,
+   "df": 17,
+   "hex": "8D4D20235875544DC586C27916F1",
+   "remainder": "000000",
+   "level": 8461.84,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22325,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 9954,
+    "lon_cpr": 100034
+   },
+   "position": [
+    37.07355,
+    13.79895
+   ]
+  },
+  {
+   "sample": 127087,
+   "t_us": 63543.5,
+   "df": 17,
+   "hex": "8D4D2023991092ACA87C14F8DD1C",
+   "remainder": "000000",
+   "level": 8377.82,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 384,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 127360,
+   "t_us": 63680.0,
+   "df": 0,
+   "hex": "02E60E95BFC8F2",
+   "remainder": "4D2023",
+   "level": 8886.9,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22325
+  },
+  {
+   "sample": 128101,
+   "t_us": 64050.5,
+   "df": 17,
+   "hex": "8D4D2023991092ACA87C14F8DD1C",
+   "remainder": "000000",
+   "level": 9733.87,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 384,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 128440,
+   "t_us": 64220.0,
+   "df": 0,
+   "hex": "018CC0C06D9107",
+   "remainder": "748663",
+   "level": 4405.51
+  },
+  {
+   "sample": 130759,
+   "t_us": 65379.5,
+   "df": 11,
+   "hex": "5ECB8716DB0276",
+   "remainder": "0834F4",
+   "level": 5532.69
+  },
+  {
+   "sample": 131246,
+   "t_us": 65623.0,
+   "df": 0,
+   "hex": "043A4C4704B198",
+   "remainder": "8EF731",
+   "level": 1299.21
+  },
+  {
+   "sample": 132217,
+   "t_us": 66108.5,
+   "df": 17,
+   "hex": "8D4D2023991092ACA87C14F8DD1C",
+   "remainder": "000000",
+   "level": 13908.22,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 384,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 133754,
+   "t_us": 66877.0,
+   "df": 12,
+   "hex": "6736880ED209DC",
+   "remainder": "434C57",
+   "level": 503.59
+  },
+  {
+   "sample": 134492,
+   "t_us": 67246.0,
+   "df": 9,
+   "hex": "48CC2B86130069",
+   "remainder": "2E35D8",
+   "level": 6295.56
+  },
+  {
+   "sample": 135205,
+   "t_us": 67602.5,
+   "df": 17,
+   "hex": "8D4D2023991092ACA87C15072915",
+   "remainder": "000000",
+   "level": 11274.25,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 384,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 135555,
+   "t_us": 67777.5,
+   "df": 6,
+   "hex": "32181256019880",
+   "remainder": "25AFDF",
+   "level": 511.62
+  },
+  {
+   "sample": 135923,
+   "t_us": 67961.5,
+   "df": 1,
+   "hex": "0CCC0006930068",
+   "remainder": "A5C06B",
+   "level": 6765.08
+  },
+  {
+   "sample": 136145,
+   "t_us": 68072.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 9181.12,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 137216,
+   "t_us": 68608.0,
+   "df": 18,
+   "hex": "9008D60998CDB0B40CE601CDD344",
+   "remainder": "4C940E",
+   "level": 445.62
+  },
+  {
+   "sample": 137559,
+   "t_us": 68779.5,
+   "df": 5,
+   "hex": "298CC034308A46",
+   "remainder": "0C7912",
+   "level": 5365.4
+  },
+  {
+   "sample": 138276,
+   "t_us": 69138.0,
+   "df": 4,
+   "hex": "22E04CC8B116D3",
+   "remainder": "732D22",
+   "level": 427.22
+  },
+  {
+   "sample": 139197,
+   "t_us": 69598.5,
+   "df": 17,
+   "hex": "8D4D2023587520B69B9A81BA7E17",
+   "remainder": "000000",
+   "level": 14434.93,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22250,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23373,
+    "lon_cpr": 105089
+   },
+   "position": [
+    37.06993,
+    13.80076
+   ]
+  },
+  {
+   "sample": 142040,
+   "t_us": 71020.0,
+   "df": 17,
+   "hex": "8D4D2023587510B67D9A85E2CA51",
+   "remainder": "000000",
+   "level": 8328.43,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22225,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23358,
+    "lon_cpr": 105093
+   },
+   "position": [
+    37.06924,
+    13.80099
+   ]
+  },
+  {
+   "sample": 142311,
+   "t_us": 71155.5,
+   "df": 17,
+   "hex": "8D4D2023991092ACA87C15072915",
+   "remainder": "000000",
+   "level": 9026.31,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 384,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 142656,
+   "t_us": 71328.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 12259.56,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 144222,
+   "t_us": 72111.0,
+   "df": 17,
+   "hex": "8D4D2023587500B6539A8FD52D61",
+   "remainder": "000000",
+   "level": 8767.25,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22200,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23337,
+    "lon_cpr": 105103
+   },
+   "position": [
+    37.06828,
+    13.80157
+   ]
+  },
+  {
+   "sample": 144493,
+   "t_us": 72246.5,
+   "df": 17,
+   "hex": "8D4D2023991092ACA88014EB8323",
+   "remainder": "000000",
+   "level": 9144.06,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 384,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 144765,
+   "t_us": 72382.5,
+   "df": 9,
+   "hex": "4D4D30233A55B6",
+   "remainder": "1F113B",
+   "level": 7097.81
+  },
+  {
+   "sample": 145295,
+   "t_us": 72647.5,
+   "df": 4,
+   "hex": "20000E909EE164",
+   "remainder": "4D2023",
+   "level": 8927.66,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 22200
+  },
+  {
+   "sample": 145455,
+   "t_us": 72727.5,
+   "df": 5,
+   "hex": "280010248C796B",
+   "remainder": "4D2023",
+   "level": 8414.63,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 145607,
+   "t_us": 72803.5,
+   "df": 0,
+   "hex": "0188C1403B22B2",
+   "remainder": "1C6F92",
+   "level": 3066.48
+  },
+  {
+   "sample": 145922,
+   "t_us": 72961.0,
+   "df": 5,
+   "hex": "280010248C796B",
+   "remainder": "4D2023",
+   "level": 7817.63,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 146230,
+   "t_us": 73115.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 8714.19,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 146538,
+   "t_us": 73269.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 7407.61,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 146994,
+   "t_us": 73497.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 8027.31,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 147376,
+   "t_us": 73688.0,
+   "df": 27,
+   "hex": "DCCA880740F64AA034911287A1A1",
+   "remainder": "5D2B75",
+   "level": 3043.48
+  },
+  {
+   "sample": 147745,
+   "t_us": 73872.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 8777.32,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 148348,
+   "t_us": 74174.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 5837.32,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 148797,
+   "t_us": 74398.5,
+   "df": 6,
+   "hex": "314CC14292662C",
+   "remainder": "DD3598",
+   "level": 3244.61
+  },
+  {
+   "sample": 149220,
+   "t_us": 74610.0,
+   "df": 17,
+   "hex": "8D4D2023991092ACA8801514772A",
+   "remainder": "000000",
+   "level": 6307.85,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 384,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 149492,
+   "t_us": 74746.0,
+   "df": 17,
+   "hex": "8D4D20232004D0F4CB1820B0EFD4",
+   "remainder": "000000",
+   "level": 5471.98,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 4,
+   "callsign": "AMC421"
+  },
+  {
+   "sample": 149797,
+   "t_us": 74898.5,
+   "df": 17,
+   "hex": "8D4D20235873F44C9F86FDABDEF4",
+   "remainder": "000000",
+   "level": 5740.53,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22175,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 9807,
+    "lon_cpr": 100093
+   },
+   "position": [
+    37.06671,
+    13.80247
+   ]
+  },
+  {
+   "sample": 151594,
+   "t_us": 75797.0,
+   "df": 17,
+   "hex": "8D4D20235873E0B5E99AA7481C68",
+   "remainder": "000000",
+   "level": 8032.63,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22150,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 23284,
+    "lon_cpr": 105127
+   },
+   "position": [
+    37.06586,
+    13.80298
+   ]
+  },
+  {
+   "sample": 151866,
+   "t_us": 75933.0,
+   "df": 17,
+   "hex": "8D4D2023991092ACA8801514772A",
+   "remainder": "000000",
+   "level": 7529.01,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 384,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 152138,
+   "t_us": 76069.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 6693.25,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 156341,
+   "t_us": 78170.5,
+   "df": 6,
+   "hex": "3148C6CA634740",
+   "remainder": "3613DC",
+   "level": 2000.47
+  },
+  {
+   "sample": 156488,
+   "t_us": 78244.0,
+   "df": 17,
+   "hex": "8D4D20235873844B2F87466EE42F",
+   "remainder": "000000",
+   "level": 4932.86,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 22000,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 9623,
+    "lon_cpr": 100166
+   },
+   "position": [
+    37.05814,
+    13.80683
+   ]
+  },
+  {
+   "sample": 156987,
+   "t_us": 78493.5,
+   "df": 24,
+   "hex": "C4B5B622048091A0908336E45CB0",
+   "remainder": "128ECC",
+   "level": 2395.68
+  },
+  {
+   "sample": 158779,
+   "t_us": 79389.5,
+   "df": 17,
+   "hex": "8D4D20235873744AE58751460A5C",
+   "remainder": "000000",
+   "level": 4627.49,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 21975,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 9586,
+    "lon_cpr": 100177
+   },
+   "position": [
+    37.05642,
+    13.80749
+   ]
+  },
+  {
+   "sample": 159992,
+   "t_us": 79996.0,
+   "df": 21,
+   "hex": "A800102480B70530200CC1BE9F9E",
+   "remainder": "4D2023",
+   "level": 4355.38,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 161188,
+   "t_us": 80594.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 4844.61,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 163712,
+   "t_us": 81856.0,
+   "df": 17,
+   "hex": "8D4D2023991091AC888014ABE058",
+   "remainder": "000000",
+   "level": 6423.48,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 383,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 166037,
+   "t_us": 83018.5,
+   "df": 16,
+   "hex": "81ECE02811A9A40464009A1E9963",
+   "remainder": "D3EB09",
+   "level": 2288.5
+  },
+  {
+   "sample": 167767,
+   "t_us": 83883.5,
+   "df": 2,
+   "hex": "1144A626B00360",
+   "remainder": "7B02FE",
+   "level": 1420.18
+  },
+  {
+   "sample": 167990,
+   "t_us": 83995.0,
+   "df": 0,
+   "hex": "045EE565BFB94F",
+   "remainder": "75C29F",
+   "level": 468.54
+  },
+  {
+   "sample": 168523,
+   "t_us": 84261.5,
+   "df": 31,
+   "hex": "F81A06330A826D18B8900C121181",
+   "remainder": "B37442",
+   "level": 2247.21
+  },
+  {
+   "sample": 168792,
+   "t_us": 84396.0,
+   "df": 6,
+   "hex": "37018B23918144",
+   "remainder": "154BCE",
+   "level": 2700.56
+  },
+  {
+   "sample": 169505,
+   "t_us": 84752.5,
+   "df": 23,
+   "hex": "BCC901018A2B2DFDC85AA596484D",
+   "remainder": "A8CAB3",
+   "level": 2791.19
+  },
+  {
+   "sample": 169878,
+   "t_us": 84939.0,
+   "df": 11,
+   "hex": "5D4D20237A559A",
+   "remainder": "00003C",
+   "level": 5277.84,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 170185,
+   "t_us": 85092.5,
+   "df": 11,
+   "hex": "5D4D20237A559A",
+   "remainder": "00003C",
+   "level": 5868.69,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 170469,
+   "t_us": 85234.5,
+   "df": 11,
+   "hex": "5D4D20237A559A",
+   "remainder": "00003C",
+   "level": 6495.93,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 171063,
+   "t_us": 85531.5,
+   "df": 11,
+   "hex": "5D4D20237A559A",
+   "remainder": "00003C",
+   "level": 6067.49,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 171894,
+   "t_us": 85947.0,
+   "df": 6,
+   "hex": "37088DE0762849",
+   "remainder": "4ED438",
+   "level": 2555.28
+  },
+  {
+   "sample": 172467,
+   "t_us": 86233.5,
+   "df": 11,
+   "hex": "5D4D20237A559A",
+   "remainder": "00003C",
+   "level": 6314.51,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 172692,
+   "t_us": 86346.0,
+   "df": 0,
+   "hex": "0158A181936324",
+   "remainder": "B02B59",
+   "level": 2009.87
+  },
+  {
+   "sample": 172840,
+   "t_us": 86420.0,
+   "df": 11,
+   "hex": "5D4D20237A559A",
+   "remainder": "00003C",
+   "level": 6562.12,
+   "valid": "II/SI=60",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 173015,
+   "t_us": 86507.5,
+   "df": 4,
+   "hex": "25A04F9CACB7F7",
+   "remainder": "26CBE3",
+   "level": 2675.16
+  },
+  {
+   "sample": 173339,
+   "t_us": 86669.5,
+   "df": 19,
+   "hex": "995960671331B1A9998035A9CAB4",
+   "remainder": "D85DE0",
+   "level": 5838.44
+  },
+  {
+   "sample": 174029,
+   "t_us": 87014.5,
+   "df": 17,
+   "hex": "8D4D2063191090AC998034A8CA96",
+   "remainder": "A7D4E0",
+   "level": 5408.44
+  },
+  {
+   "sample": 175352,
+   "t_us": 87676.0,
+   "df": 18,
+   "hex": "90108E89C6E1005AC23608955064",
+   "remainder": "E1D0E8",
+   "level": 689.41
+  },
+  {
+   "sample": 176199,
+   "t_us": 88099.5,
+   "df": 16,
+   "hex": "817C06762352D689B0122E033990",
+   "remainder": "8E5E7E",
+   "level": 2469.29
+  },
+  {
+   "sample": 177914,
+   "t_us": 88957.0,
+   "df": 17,
+   "hex": "8D4D2023991090AC888014A8EA96",
+   "remainder": "000000",
+   "level": 8469.69,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 383,
+   "track_deg": 158.1
+  },
+  {
+   "sample": 178347,
+   "t_us": 89173.5,
+   "df": 4,
+   "hex": "20000E30982614",
+   "remainder": "4D2023",
+   "level": 6949.98,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 21800
+  },
+  {
+   "sample": 178507,
+   "t_us": 89253.5,
+   "df": 5,
+   "hex": "280010248C796B",
+   "remainder": "4D2023",
+   "level": 6968.47,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 178666,
+   "t_us": 89333.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 7326.25,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 178826,
+   "t_us": 89413.0,
+   "df": 5,
+   "hex": "280010248C796B",
+   "remainder": "4D2023",
+   "level": 7780.73,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 178985,
+   "t_us": 89492.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 7302.2,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 179145,
+   "t_us": 89572.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 7992.21,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 180951,
+   "t_us": 90475.5,
+   "df": 23,
+   "hex": "B81046B30C00C02998430C1D04E8",
+   "remainder": "BD4CDB",
+   "level": 6101.61
+  },
+  {
+   "sample": 181386,
+   "t_us": 90693.0,
+   "df": 5,
+   "hex": "2D0321E430B4E0",
+   "remainder": "B78D5D",
+   "level": 269.85
+  },
+  {
+   "sample": 181839,
+   "t_us": 90919.5,
+   "df": 9,
+   "hex": "48E81044AF225B",
+   "remainder": "5845F5",
+   "level": 4019.72
+  },
+  {
+   "sample": 183672,
+   "t_us": 91836.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 10837.55,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 185888,
+   "t_us": 92944.0,
+   "df": 0,
+   "hex": "06382A4621AC93",
+   "remainder": "7EAD0C",
+   "level": 2375.98
+  },
+  {
+   "sample": 186143,
+   "t_us": 93071.5,
+   "df": 17,
+   "hex": "8D4D20235871D448F787B3DC3687",
+   "remainder": "000000",
+   "level": 8728.37,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 21725,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 9339,
+    "lon_cpr": 100275
+   },
+   "position": [
+    37.04492,
+    13.81334
+   ]
+  },
+  {
+   "sample": 186652,
+   "t_us": 93326.0,
+   "df": 27,
+   "hex": "DDB6C0DB4001B2A698C86A69011A",
+   "remainder": "FCB491",
+   "level": 3799.55
+  },
+  {
+   "sample": 188753,
+   "t_us": 94376.5,
+   "df": 0,
+   "hex": "019AAC74A119D0",
+   "remainder": "453AA7",
+   "level": 2751.59
+  },
+  {
+   "sample": 188969,
+   "t_us": 94484.5,
+   "df": 17,
+   "hex": "8D4D20235871C448C387C0BEB940",
+   "remainder": "000000",
+   "level": 6395.79,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 21700,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 9313,
+    "lon_cpr": 100288
+   },
+   "position": [
+    37.04371,
+    13.81411
+   ]
+  },
+  {
+   "sample": 189241,
+   "t_us": 94620.5,
+   "df": 17,
+   "hex": "8D4D2023991090AC6880148D6A40",
+   "remainder": "000000",
+   "level": 6092.57,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 382,
+   "track_deg": 158.0
+  },
+  {
+   "sample": 190473,
+   "t_us": 95236.5,
+   "df": 17,
+   "hex": "8D4D20232004D0F4CB1820B0EFD4",
+   "remainder": "000000",
+   "level": 5027.79,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 4,
+   "callsign": "AMC421"
+  },
+  {
+   "sample": 190713,
+   "t_us": 95356.5,
+   "df": 16,
+   "hex": "8096FEEC38E05901CD1B576DB1C2",
+   "remainder": "EE4513",
+   "level": 1201.64
+  },
+  {
+   "sample": 191136,
+   "t_us": 95568.0,
+   "df": 17,
+   "hex": "8D4D20235871B4487F87CFF99030",
+   "remainder": "000000",
+   "level": 5533.89,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 21675,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 9279,
+    "lon_cpr": 100303
+   },
+   "position": [
+    37.04213,
+    13.81501
+   ]
+  },
+  {
+   "sample": 191679,
+   "t_us": 95839.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 5599.66,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 191897,
+   "t_us": 95948.5,
+   "df": 24,
+   "hex": "C188E40E68D4D2023587190B18D9",
+   "remainder": "892668",
+   "level": 2204.41
+  },
+  {
+   "sample": 192241,
+   "t_us": 96120.5,
+   "df": 17,
+   "hex": "8D4D202399108FAC687C14BFFA85",
+   "remainder": "000000",
+   "level": 6300.23,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 381,
+   "track_deg": 158.1
+  },
+  {
+   "sample": 198247,
+   "t_us": 99123.5,
+   "df": 27,
+   "hex": "D85B9100199400CC26A435938D10",
+   "remainder": "A769CA",
+   "level": 868.45
+  },
+  {
+   "sample": 198603,
+   "t_us": 99301.5,
+   "df": 8,
+   "hex": "4017A689223D94",
+   "remainder": "3A977C",
+   "level": 334.21
+  },
+  {
+   "sample": 198770,
+   "t_us": 99385.0,
+   "df": 9,
+   "hex": "4D65B8311B54B3",
+   "remainder": "9C4EF8",
+   "level": 3768.23
+  },
+  {
+   "sample": 198960,
+   "t_us": 99480.0,
+   "df": 17,
+   "hex": "8D4D2023587144471F88120DB861",
+   "remainder": "000000",
+   "level": 4634.15,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 21500,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 9103,
+    "lon_cpr": 100370
+   },
+   "position": [
+    37.03393,
+    13.81901
+   ]
+  },
+  {
+   "sample": 199231,
+   "t_us": 99615.5,
+   "df": 17,
+   "hex": "8D4D202399108FAC488014E9D893",
+   "remainder": "000000",
+   "level": 4783.01,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 380,
+   "track_deg": 158.1
+  },
+  {
+   "sample": 199986,
+   "t_us": 99993.0,
+   "df": 21,
+   "hex": "A80010248017072FFFFCC1E82DB8",
+   "remainder": "4D2023",
+   "level": 5106.1,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 200603,
+   "t_us": 100301.5,
+   "df": 12,
+   "hex": "6740004C24A426",
+   "remainder": "013B1F",
+   "level": 425.03
+  },
+  {
+   "sample": 201349,
+   "t_us": 100674.5,
+   "df": 26,
+   "hex": "D2803A0DA384344E50263E09B187",
+   "remainder": "7C63A5",
+   "level": 1460.18
+  },
+  {
+   "sample": 203221,
+   "t_us": 101610.5,
+   "df": 1,
+   "hex": "0889A00668C674",
+   "remainder": "86DA01",
+   "level": 2564.96
+  },
+  {
+   "sample": 203589,
+   "t_us": 101794.5,
+   "df": 5,
+   "hex": "28CA1600541260",
+   "remainder": "A569DB",
+   "level": 2881.73
+  },
+  {
+   "sample": 203957,
+   "t_us": 101978.5,
+   "df": 19,
+   "hex": "9D49206650E361A06D338CB335B3",
+   "remainder": "09702E",
+   "level": 5942.24
+  },
+  {
+   "sample": 204228,
+   "t_us": 102114.0,
+   "df": 17,
+   "hex": "8D4D202399108FAC487C14FA86AC",
+   "remainder": "000000",
+   "level": 7143.45,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 380,
+   "track_deg": 158.1
+  },
+  {
+   "sample": 204713,
+   "t_us": 102356.5,
+   "df": 9,
+   "hex": "48C90C0780E67D",
+   "remainder": "6BC0C9",
+   "level": 2745.35
+  },
+  {
+   "sample": 204901,
+   "t_us": 102450.5,
+   "df": 2,
+   "hex": "11653126005390",
+   "remainder": "B012C2",
+   "level": 1644.17
+  },
+  {
+   "sample": 205996,
+   "t_us": 102998.0,
+   "df": 18,
+   "hex": "90B008C4A205E856358225904D21",
+   "remainder": "02DC40",
+   "level": 570.4
+  },
+  {
+   "sample": 210976,
+   "t_us": 105488.0,
+   "df": 25,
+   "hex": "CD8CADBE0751A78106968CC84169",
+   "remainder": "762C82",
+   "level": 2072.61
+  },
+  {
+   "sample": 211569,
+   "t_us": 105784.5,
+   "df": 3,
+   "hex": "1CC940A686E651",
+   "remainder": "4F255E",
+   "level": 2662.41
+  },
+  {
+   "sample": 212084,
+   "t_us": 106042.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 6609.83,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 212386,
+   "t_us": 106193.0,
+   "df": 17,
+   "hex": "8D4D2023587124468B882C84CBE2",
+   "remainder": "000000",
+   "level": 7386.04,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 21450,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 9029,
+    "lon_cpr": 100396
+   },
+   "position": [
+    37.03049,
+    13.82056
+   ]
+  },
+  {
+   "sample": 212658,
+   "t_us": 106329.0,
+   "df": 17,
+   "hex": "8D4D202399108FAC487C14FA86AC",
+   "remainder": "000000",
+   "level": 7458.34,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 380,
+   "track_deg": 158.1
+  },
+  {
+   "sample": 217164,
+   "t_us": 108582.0,
+   "df": 28,
+   "hex": "E12B2DFDC66EF6F53F783EBAE4FF",
+   "remainder": "07D317",
+   "level": 2159.69
+  },
+  {
+   "sample": 220292,
+   "t_us": 110146.0,
+   "df": 9,
+   "hex": "4B4EC850C25807",
+   "remainder": "DF4D86",
+   "level": 1551.58
+  },
+  {
+   "sample": 221136,
+   "t_us": 110568.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 5731.52,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 221411,
+   "t_us": 110705.5,
+   "df": 4,
+   "hex": "27789DCB268B27",
+   "remainder": "ADFFD8",
+   "level": 1114.7
+  },
+  {
+   "sample": 221737,
+   "t_us": 110868.5,
+   "df": 17,
+   "hex": "8D4D2023586F30ACDD9C70541A0F",
+   "remainder": "000000",
+   "level": 6634.73,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 21075,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 22126,
+    "lon_cpr": 105584
+   },
+   "position": [
+    37.01285,
+    13.82968
+   ]
+  },
+  {
+   "sample": 222008,
+   "t_us": 111004.0,
+   "df": 17,
+   "hex": "8D4D202399108FA8087C14707EFE",
+   "remainder": "AFF54C",
+   "level": 6221.49
+  },
+  {
+   "sample": 222415,
+   "t_us": 111207.5,
+   "df": 9,
+   "hex": "48CD1036D90A4C",
+   "remainder": "532A9D",
+   "level": 2801.36
+  },
+  {
+   "sample": 223444,
+   "t_us": 111722.0,
+   "df": 3,
+   "hex": "188900A3741869",
+   "remainder": "1B9255",
+   "level": 2472.56
+  },
+  {
+   "sample": 226503,
+   "t_us": 113251.5,
+   "df": 21,
+   "hex": "A80010248077072F7FFCBF13B03E",
+   "remainder": "4D2023",
+   "level": 7884.32,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 226849,
+   "t_us": 113424.5,
+   "df": 20,
+   "hex": "A0000DB2B65A37277E1FC25DE2A0",
+   "remainder": "4D2023",
+   "level": 7204.96,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 21050
+  },
+  {
+   "sample": 227417,
+   "t_us": 113708.5,
+   "df": 3,
+   "hex": "1ECA4442761070",
+   "remainder": "C31F3C",
+   "level": 2690.17
+  },
+  {
+   "sample": 229407,
+   "t_us": 114703.5,
+   "df": 17,
+   "hex": "8D4D2023586F20AC8B9C81E5B3EA",
+   "remainder": "001000",
+   "level": 6380.54
+  },
+  {
+   "sample": 230026,
+   "t_us": 115013.0,
+   "df": 17,
+   "hex": "8D4D20232004D0F4CB1820B0EFD4",
+   "remainder": "000000",
+   "level": 7196.77,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 4,
+   "callsign": "AMC421"
+  },
+  {
+   "sample": 230446,
+   "t_us": 115223.0,
+   "df": 0,
+   "hex": "02E60DB1AC27F4",
+   "remainder": "4D2023",
+   "level": 7072.54,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 21025
+  },
+  {
+   "sample": 230764,
+   "t_us": 115382.0,
+   "df": 17,
+   "hex": "8D4D2023586F00AC419C8E6EAC17",
+   "remainder": "000000",
+   "level": 7265.09,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 21000,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 22048,
+    "lon_cpr": 105614
+   },
+   "position": [
+    37.00928,
+    13.83144
+   ]
+  },
+  {
+   "sample": 231035,
+   "t_us": 115517.5,
+   "df": 17,
+   "hex": "8D4D202399108FAC087C14707EFE",
+   "remainder": "000000",
+   "level": 6400.97,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 379,
+   "track_deg": 158.0
+  },
+  {
+   "sample": 231307,
+   "t_us": 115653.5,
+   "df": 11,
+   "hex": "594D20237A55A6",
+   "remainder": "AFF54C",
+   "level": 4638.22
+  },
+  {
+   "sample": 231888,
+   "t_us": 115944.0,
+   "df": 5,
+   "hex": "280010248C796B",
+   "remainder": "4D2023",
+   "level": 7260.9,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 232208,
+   "t_us": 116104.0,
+   "df": 5,
+   "hex": "280010248C796B",
+   "remainder": "4D2023",
+   "level": 6965.31,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 232441,
+   "t_us": 116220.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 7197.74,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 234035,
+   "t_us": 117017.5,
+   "df": 12,
+   "hex": "624130C33B9D1A",
+   "remainder": "B1E4FC",
+   "level": 1869.79
+  },
+  {
+   "sample": 234169,
+   "t_us": 117084.5,
+   "df": 17,
+   "hex": "8D4D2023586DF0ABFB9C99B935C8",
+   "remainder": "000000",
+   "level": 7283.72,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20975,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 22013,
+    "lon_cpr": 105625
+   },
+   "position": [
+    37.00768,
+    13.83208
+   ]
+  },
+  {
+   "sample": 234441,
+   "t_us": 117220.5,
+   "df": 17,
+   "hex": "8D4D202399108FAC087C14707EFE",
+   "remainder": "000000",
+   "level": 7527.09,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 379,
+   "track_deg": 158.0
+  },
+  {
+   "sample": 234717,
+   "t_us": 117358.5,
+   "df": 4,
+   "hex": "23342218219908",
+   "remainder": "505E22",
+   "level": 375.53
+  },
+  {
+   "sample": 235875,
+   "t_us": 117937.5,
+   "df": 1,
+   "hex": "0CC8100475186A",
+   "remainder": "944D76",
+   "level": 3036.28
+  },
+  {
+   "sample": 236680,
+   "t_us": 118340.0,
+   "df": 11,
+   "hex": "5980E4920769C6",
+   "remainder": "A26F09",
+   "level": 2408.58
+  },
+  {
+   "sample": 237945,
+   "t_us": 118972.5,
+   "df": 13,
+   "hex": "6A20049D031921",
+   "remainder": "0EB39C",
+   "level": 408.95
+  },
+  {
+   "sample": 240522,
+   "t_us": 120261.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 7747.36,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 241349,
+   "t_us": 120674.5,
+   "df": 17,
+   "hex": "8D4D2023586DE0ABB39CA8931613",
+   "remainder": "000000",
+   "level": 10732.55,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20950,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21977,
+    "lon_cpr": 105640
+   },
+   "position": [
+    37.00603,
+    13.83296
+   ]
+  },
+  {
+   "sample": 241621,
+   "t_us": 120810.5,
+   "df": 17,
+   "hex": "8D4D202399108FAC087C14707EFE",
+   "remainder": "000000",
+   "level": 9766.16,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 379,
+   "track_deg": 158.0
+  },
+  {
+   "sample": 242560,
+   "t_us": 121280.0,
+   "df": 9,
+   "hex": "4CC81003908470",
+   "remainder": "7139FF",
+   "level": 4059.39
+  },
+  {
+   "sample": 242885,
+   "t_us": 121442.5,
+   "df": 13,
+   "hex": "6D05C866B106E4",
+   "remainder": "27590C",
+   "level": 2889.91
+  },
+  {
+   "sample": 243733,
+   "t_us": 121866.5,
+   "df": 8,
+   "hex": "41ACD00052A666",
+   "remainder": "15A83C",
+   "level": 3259.68
+  },
+  {
+   "sample": 244070,
+   "t_us": 122035.0,
+   "df": 17,
+   "hex": "8D4D2023586DC44225890EC0E540",
+   "remainder": "000000",
+   "level": 10428.66,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20900,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 8466,
+    "lon_cpr": 100622
+   },
+   "position": [
+    37.00428,
+    13.83406
+   ]
+  },
+  {
+   "sample": 244343,
+   "t_us": 122171.5,
+   "df": 17,
+   "hex": "8D4D202399108FABE87C14860C91",
+   "remainder": "000000",
+   "level": 11017.77,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 378,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 245905,
+   "t_us": 122952.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 9592.92,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 246140,
+   "t_us": 123070.0,
+   "df": 17,
+   "hex": "8D4D2023586DB441DD891CB93E18",
+   "remainder": "000000",
+   "level": 9458.36,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20875,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 8430,
+    "lon_cpr": 100636
+   },
+   "position": [
+    37.0026,
+    13.83489
+   ]
+  },
+  {
+   "sample": 246412,
+   "t_us": 123206.0,
+   "df": 17,
+   "hex": "8D4D202399108FABE87C14860C91",
+   "remainder": "000000",
+   "level": 10162.72,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 378,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 247053,
+   "t_us": 123526.5,
+   "df": 11,
+   "hex": "58CE11064E5044",
+   "remainder": "62E995",
+   "level": 2824.31
+  },
+  {
+   "sample": 249787,
+   "t_us": 124893.5,
+   "df": 6,
+   "hex": "330424340919C3",
+   "remainder": "7A8B11",
+   "level": 802.2
+  },
+  {
+   "sample": 249931,
+   "t_us": 124965.5,
+   "df": 24,
+   "hex": "C56DB0315C6CB0AACFCCD26670CC",
+   "remainder": "A31FB2",
+   "level": 6431.01
+  },
+  {
+   "sample": 250203,
+   "t_us": 125101.5,
+   "df": 17,
+   "hex": "8D4D202399108FABE87C14860C91",
+   "remainder": "000000",
+   "level": 8613.57,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 378,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 250475,
+   "t_us": 125237.5,
+   "df": 18,
+   "hex": "90C9012345E675952368826082CC",
+   "remainder": "F84235",
+   "level": 2526.28
+  },
+  {
+   "sample": 252023,
+   "t_us": 126011.5,
+   "df": 11,
+   "hex": "594D20627255A6",
+   "remainder": "5B8225",
+   "level": 6777.6
+  },
+  {
+   "sample": 252554,
+   "t_us": 126277.0,
+   "df": 17,
+   "hex": "8C8E10B48E195A20190523151132",
+   "remainder": "EC491D",
+   "level": 3202.38
+  },
+  {
+   "sample": 252849,
+   "t_us": 126424.5,
+   "df": 17,
+   "hex": "8D4D2023586D90AA979CE05A73C1",
+   "remainder": "000000",
+   "level": 8079.36,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20825,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21835,
+    "lon_cpr": 105696
+   },
+   "position": [
+    36.99953,
+    13.83623
+   ]
+  },
+  {
+   "sample": 253120,
+   "t_us": 126560.0,
+   "df": 17,
+   "hex": "8D4D202399108FABE87814BE3A91",
+   "remainder": "000000",
+   "level": 7201.2,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 378,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 253605,
+   "t_us": 126802.5,
+   "df": 7,
+   "hex": "3A9049B36C35E0",
+   "remainder": "681836",
+   "level": 865.61
+  },
+  {
+   "sample": 256461,
+   "t_us": 128230.5,
+   "df": 17,
+   "hex": "8B1843063036B20249A2B792E48E",
+   "remainder": "6D2EB1",
+   "level": 1723.94
+  },
+  {
+   "sample": 257282,
+   "t_us": 128641.0,
+   "df": 25,
+   "hex": "CD4D2023586D74410F89455BE921",
+   "remainder": "1C9AF5",
+   "level": 6087.25
+  },
+  {
+   "sample": 257553,
+   "t_us": 128776.5,
+   "df": 17,
+   "hex": "8D4D202399108FABE87814BE3A91",
+   "remainder": "000000",
+   "level": 7724.07,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 378,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 260461,
+   "t_us": 130230.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 9400.77,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 261243,
+   "t_us": 130621.5,
+   "df": 17,
+   "hex": "8D4D2023586D60AA039D03471653",
+   "remainder": "000000",
+   "level": 8766.56,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20750,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21761,
+    "lon_cpr": 105731
+   },
+   "position": [
+    36.99614,
+    13.83827
+   ]
+  },
+  {
+   "sample": 261515,
+   "t_us": 130757.5,
+   "df": 17,
+   "hex": "8D4D202399108FABC87414B31CB8",
+   "remainder": "000000",
+   "level": 7269.51,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 377,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 262081,
+   "t_us": 131040.5,
+   "df": 29,
+   "hex": "E8CD1847D066403A347093120881",
+   "remainder": "9CF917",
+   "level": 4026.85
+  },
+  {
+   "sample": 263356,
+   "t_us": 131678.0,
+   "df": 3,
+   "hex": "1801274988BD88",
+   "remainder": "72DDFF",
+   "level": 1172.97
+  },
+  {
+   "sample": 263560,
+   "t_us": 131780.0,
+   "df": 3,
+   "hex": "1AE80C868B1841",
+   "remainder": "C76F6E",
+   "level": 4132.04
+  },
+  {
+   "sample": 265647,
+   "t_us": 132823.5,
+   "df": 17,
+   "hex": "8D4D20232004D0F4CB1820B0EFD4",
+   "remainder": "000000",
+   "level": 7832.8,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 4,
+   "callsign": "AMC421"
+  },
+  {
+   "sample": 266067,
+   "t_us": 133033.5,
+   "df": 11,
+   "hex": "5CC8442322C460",
+   "remainder": "D91766",
+   "level": 2882.89
+  },
+  {
+   "sample": 266281,
+   "t_us": 133140.5,
+   "df": 5,
+   "hex": "29C8C00926DC64",
+   "remainder": "591B5D",
+   "level": 2870.37
+  },
+  {
+   "sample": 267206,
+   "t_us": 133603.0,
+   "df": 8,
+   "hex": "437AC9A636F530",
+   "remainder": "2F1A78",
+   "level": 2079.36
+  },
+  {
+   "sample": 268909,
+   "t_us": 134454.5,
+   "df": 17,
+   "hex": "8D4D202399108FABC87414B31CB8",
+   "remainder": "000000",
+   "level": 7895.68,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 377,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 270547,
+   "t_us": 135273.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 6973.29,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 272318,
+   "t_us": 136159.0,
+   "df": 17,
+   "hex": "8D4D2023586D40A96F9D1BCCAFA5",
+   "remainder": "000000",
+   "level": 8127.66,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20700,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21687,
+    "lon_cpr": 105755
+   },
+   "position": [
+    36.99275,
+    13.83968
+   ]
+  },
+  {
+   "sample": 272589,
+   "t_us": 136294.5,
+   "df": 17,
+   "hex": "8D4D202399108FABC87414B31CB8",
+   "remainder": "000000",
+   "level": 7002.26,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 377,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 273785,
+   "t_us": 136892.5,
+   "df": 4,
+   "hex": "22B2DFDC84AA65",
+   "remainder": "01831E",
+   "level": 315.94
+  },
+  {
+   "sample": 274313,
+   "t_us": 137156.5,
+   "df": 27,
+   "hex": "DEA2B2DFDC85AA5960068AD86904",
+   "remainder": "00B2B4",
+   "level": 1317.53
+  },
+  {
+   "sample": 274777,
+   "t_us": 137388.5,
+   "df": 17,
+   "hex": "8D4D2023586D30A9359D297C62BE",
+   "remainder": "000000",
+   "level": 8571.78,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20675,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21658,
+    "lon_cpr": 105769
+   },
+   "position": [
+    36.99142,
+    13.84049
+   ]
+  },
+  {
+   "sample": 275049,
+   "t_us": 137524.5,
+   "df": 19,
+   "hex": "9959606733319CAB98E435A034E4",
+   "remainder": "F77F4C",
+   "level": 6947.29
+  },
+  {
+   "sample": 276082,
+   "t_us": 138041.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 9229.79,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 277156,
+   "t_us": 138578.0,
+   "df": 4,
+   "hex": "2305412673B824",
+   "remainder": "C63CC4",
+   "level": 2359.78
+  },
+  {
+   "sample": 277632,
+   "t_us": 138816.0,
+   "df": 17,
+   "hex": "8AF04404B207B3A540E4B19C2233",
+   "remainder": "91E3F8",
+   "level": 2133.84
+  },
+  {
+   "sample": 277991,
+   "t_us": 138995.5,
+   "df": 17,
+   "hex": "8B84C9124AE987469BD87235098E",
+   "remainder": "517982",
+   "level": 2851.55
+  },
+  {
+   "sample": 279478,
+   "t_us": 139739.0,
+   "df": 17,
+   "hex": "88CC8317A846504A26D2578415EA",
+   "remainder": "202E26",
+   "level": 4741.02
+  },
+  {
+   "sample": 280069,
+   "t_us": 140034.5,
+   "df": 17,
+   "hex": "8D4D2023586D143FB3898AB06FA9",
+   "remainder": "000000",
+   "level": 10742.63,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20625,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 8153,
+    "lon_cpr": 100746
+   },
+   "position": [
+    36.98971,
+    13.84146
+   ]
+  },
+  {
+   "sample": 280341,
+   "t_us": 140170.5,
+   "df": 17,
+   "hex": "8D4D202399108EABC87014882076",
+   "remainder": "000000",
+   "level": 11812.92,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 376,
+   "track_deg": 158.0
+  },
+  {
+   "sample": 281059,
+   "t_us": 140529.5,
+   "df": 11,
+   "hex": "5949206672552C",
+   "remainder": "6CEB9D",
+   "level": 9748.42
+  },
+  {
+   "sample": 281220,
+   "t_us": 140610.0,
+   "df": 20,
+   "hex": "A0000D912004D0F4CB1820CC1BB2",
+   "remainder": "4D2023",
+   "level": 12917.23,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 20625
+  },
+  {
+   "sample": 281765,
+   "t_us": 140882.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 12610.86,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 281925,
+   "t_us": 140962.5,
+   "df": 20,
+   "hex": "A0000D9100000000000000F871AB",
+   "remainder": "4D2023",
+   "level": 12478.57,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 20625
+  },
+  {
+   "sample": 282270,
+   "t_us": 141135.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 12619.01,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 282398,
+   "t_us": 141199.0,
+   "df": 14,
+   "hex": "76926D8204198C",
+   "remainder": "13E8DA",
+   "level": 805.85
+  },
+  {
+   "sample": 282579,
+   "t_us": 141289.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 12077.85,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 282889,
+   "t_us": 141444.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 10999.26,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 283704,
+   "t_us": 141852.0,
+   "df": 21,
+   "hex": "A80010248057052F3FFCBF3B2B29",
+   "remainder": "4D2023",
+   "level": 12661.36,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 284123,
+   "t_us": 142061.5,
+   "df": 20,
+   "hex": "A0000D91B65A39273E47C88EA82D",
+   "remainder": "4D2023",
+   "level": 12522.17,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 20625
+  },
+  {
+   "sample": 285815,
+   "t_us": 142907.5,
+   "df": 17,
+   "hex": "8CCE60044FD67D86BE1B23108913",
+   "remainder": "6A134A",
+   "level": 4558.79
+  },
+  {
+   "sample": 286305,
+   "t_us": 143152.5,
+   "df": 5,
+   "hex": "2A49B610B4B4C1",
+   "remainder": "29F947",
+   "level": 1069.13
+  },
+  {
+   "sample": 289086,
+   "t_us": 144543.0,
+   "df": 17,
+   "hex": "8D4D2023586D00A8AF9D42B9FA54",
+   "remainder": "000000",
+   "level": 9911.22,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20600,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21591,
+    "lon_cpr": 105794
+   },
+   "position": [
+    36.98836,
+    13.84196
+   ]
+  },
+  {
+   "sample": 289359,
+   "t_us": 144679.5,
+   "df": 17,
+   "hex": "8D4D202399108EABA8701447A40D",
+   "remainder": "000000",
+   "level": 9933.12,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 375,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 289853,
+   "t_us": 144926.5,
+   "df": 1,
+   "hex": "0CCD9886CA5A70",
+   "remainder": "9FECD6",
+   "level": 4023.1
+  },
+  {
+   "sample": 290437,
+   "t_us": 145218.5,
+   "df": 28,
+   "hex": "E188F80044E98655414A6331131B",
+   "remainder": "8F3C08",
+   "level": 3523.04
+  },
+  {
+   "sample": 290781,
+   "t_us": 145390.5,
+   "df": 14,
+   "hex": "7064AD86490950",
+   "remainder": "F76AAC",
+   "level": 2300.52
+  },
+  {
+   "sample": 292149,
+   "t_us": 146074.5,
+   "df": 6,
+   "hex": "32186132493480",
+   "remainder": "DF7BA2",
+   "level": 436.88
+  },
+  {
+   "sample": 292417,
+   "t_us": 146208.5,
+   "df": 9,
+   "hex": "4BE4CCD0435046",
+   "remainder": "BB0709",
+   "level": 416.85
+  },
+  {
+   "sample": 292638,
+   "t_us": 146319.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 7164.99,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 294245,
+   "t_us": 147122.5,
+   "df": 17,
+   "hex": "8D4D2023586BF43F2589A1B23E62",
+   "remainder": "000000",
+   "level": 6438.12,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20575,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 8082,
+    "lon_cpr": 100769
+   },
+   "position": [
+    36.9864,
+    13.84283
+   ]
+  },
+  {
+   "sample": 296569,
+   "t_us": 148284.5,
+   "df": 17,
+   "hex": "8D4D202399108EABA8701447A40D",
+   "remainder": "000000",
+   "level": 6654.91,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 375,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 296840,
+   "t_us": 148420.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 6018.73,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 298177,
+   "t_us": 149088.5,
+   "df": 17,
+   "hex": "8D4D2023586BD43E9B89C0354B32",
+   "remainder": "000000",
+   "level": 7139.58,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20525,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 8013,
+    "lon_cpr": 100800
+   },
+   "position": [
+    36.98319,
+    13.84468
+   ]
+  },
+  {
+   "sample": 298449,
+   "t_us": 149224.5,
+   "df": 17,
+   "hex": "8D4D202399108EABA8701447A40D",
+   "remainder": "000000",
+   "level": 7767.95,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 375,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 300378,
+   "t_us": 150189.0,
+   "df": 1,
+   "hex": "08E86636D25841",
+   "remainder": "5E8050",
+   "level": 3245.99
+  },
+  {
+   "sample": 300550,
+   "t_us": 150275.0,
+   "df": 26,
+   "hex": "D210395C660A0391326810119271",
+   "remainder": "E27383",
+   "level": 2948.99
+  },
+  {
+   "sample": 300894,
+   "t_us": 150447.0,
+   "df": 1,
+   "hex": "08CD900748C46D",
+   "remainder": "3A194E",
+   "level": 3223.68
+  },
+  {
+   "sample": 302260,
+   "t_us": 151130.0,
+   "df": 27,
+   "hex": "DF4769D62171EF62361A24DA7300",
+   "remainder": "D5ECE0",
+   "level": 2031.79
+  },
+  {
+   "sample": 303046,
+   "t_us": 151523.0,
+   "df": 12,
+   "hex": "624782A22B2A03",
+   "remainder": "4B8B97",
+   "level": 2598.74
+  },
+  {
+   "sample": 304066,
+   "t_us": 152033.0,
+   "df": 17,
+   "hex": "8D4D2023586BC43E5989CA7EDFD8",
+   "remainder": "000000",
+   "level": 8485.8,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20500,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 7980,
+    "lon_cpr": 100810
+   },
+   "position": [
+    36.98166,
+    13.84528
+   ]
+  },
+  {
+   "sample": 304338,
+   "t_us": 152169.0,
+   "df": 17,
+   "hex": "8D4D202399108EAB88701402D824",
+   "remainder": "000000",
+   "level": 8057.72,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 375,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 304858,
+   "t_us": 152429.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 8089.64,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 306789,
+   "t_us": 153394.5,
+   "df": 17,
+   "hex": "8D4D2023586BA0A7419D8A8C3A56",
+   "remainder": "000000",
+   "level": 7585.67,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20450,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21408,
+    "lon_cpr": 105866
+   },
+   "position": [
+    36.97998,
+    13.84616
+   ]
+  },
+  {
+   "sample": 307061,
+   "t_us": 153530.5,
+   "df": 17,
+   "hex": "8D4D202399108EAB88701402D824",
+   "remainder": "000000",
+   "level": 7472.37,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 375,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 308530,
+   "t_us": 154265.0,
+   "df": 17,
+   "hex": "8D4D20232004D0F4CB1820B0EFD4",
+   "remainder": "000000",
+   "level": 6192.58,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 4,
+   "callsign": "AMC421"
+  },
+  {
+   "sample": 308875,
+   "t_us": 154437.5,
+   "df": 17,
+   "hex": "8D4D2023586B943DBB89ECCF0A84",
+   "remainder": "000000",
+   "level": 6046.11,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20425,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 7901,
+    "lon_cpr": 100844
+   },
+   "position": [
+    36.97798,
+    13.84731
+   ]
+  },
+  {
+   "sample": 309147,
+   "t_us": 154573.5,
+   "df": 17,
+   "hex": "8D4D202399108EAB88701402D824",
+   "remainder": "000000",
+   "level": 6122.71,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 375,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 309526,
+   "t_us": 154763.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 5073.76,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 310654,
+   "t_us": 155327.0,
+   "df": 1,
+   "hex": "0D84C6BB006163",
+   "remainder": "A128A4",
+   "level": 1594.56
+  },
+  {
+   "sample": 312362,
+   "t_us": 156181.0,
+   "df": 27,
+   "hex": "D806D6851715A4BD70C898879669",
+   "remainder": "5ED00B",
+   "level": 1056.28
+  },
+  {
+   "sample": 313739,
+   "t_us": 156869.5,
+   "df": 4,
+   "hex": "23A411E4222324",
+   "remainder": "ADC2A8",
+   "level": 450.73
+  },
+  {
+   "sample": 314524,
+   "t_us": 157262.0,
+   "df": 17,
+   "hex": "8D4D2023586B70A6639DB58F1EE7",
+   "remainder": "000000",
+   "level": 4826.66,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20375,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21297,
+    "lon_cpr": 105909
+   },
+   "position": [
+    36.9749,
+    13.84868
+   ]
+  },
+  {
+   "sample": 315124,
+   "t_us": 157562.0,
+   "df": 11,
+   "hex": "594D20637A55A4",
+   "remainder": "AC762E",
+   "level": 4075.75
+  },
+  {
+   "sample": 316466,
+   "t_us": 158233.0,
+   "df": 25,
+   "hex": "C9A4067604EDB0F64DAC0C088440",
+   "remainder": "BC0F79",
+   "level": 886.6
+  },
+  {
+   "sample": 317372,
+   "t_us": 158686.0,
+   "df": 8,
+   "hex": "42859B75A0A16E",
+   "remainder": "5E3E04",
+   "level": 2031.42
+  },
+  {
+   "sample": 317950,
+   "t_us": 158975.0,
+   "df": 17,
+   "hex": "8D4D202399108EAB6870142758F2",
+   "remainder": "000000",
+   "level": 4633.33,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 374,
+   "track_deg": 157.8
+  },
+  {
+   "sample": 318281,
+   "t_us": 159140.5,
+   "df": 17,
+   "hex": "8D4D2023586B543CB98A1FAF2586",
+   "remainder": "000000",
+   "level": 6198.81,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20325,
+   "cpr": {
+    "format": "impar",
+    "lat_cpr": 7772,
+    "lon_cpr": 100895
+   },
+   "position": [
+    36.97197,
+    13.85036
+   ]
+  },
+  {
+   "sample": 318553,
+   "t_us": 159276.5,
+   "df": 17,
+   "hex": "8D4D202399108DAB6870142247A0",
+   "remainder": "000000",
+   "level": 5678.17,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 373,
+   "track_deg": 158.0
+  },
+  {
+   "sample": 319270,
+   "t_us": 159635.0,
+   "df": 8,
+   "hex": "40926DD7034959",
+   "remainder": "2FB716",
+   "level": 1025.4
+  },
+  {
+   "sample": 320693,
+   "t_us": 160346.5,
+   "df": 9,
+   "hex": "48CC98C9151690",
+   "remainder": "E19AA4",
+   "level": 831.39
+  },
+  {
+   "sample": 320931,
+   "t_us": 160465.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 6089.12,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 321495,
+   "t_us": 160747.5,
+   "df": 17,
+   "hex": "8D4D2023586B30A5A99DDF267240",
+   "remainder": "000000",
+   "level": 7639.26,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20275,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21204,
+    "lon_cpr": 105951
+   },
+   "position": [
+    36.97064,
+    13.85113
+   ]
+  },
+  {
+   "sample": 321767,
+   "t_us": 160883.5,
+   "df": 17,
+   "hex": "8D4D202399108DAB6870142247A0",
+   "remainder": "000000",
+   "level": 7473.56,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 373,
+   "track_deg": 158.0
+  },
+  {
+   "sample": 322072,
+   "t_us": 161036.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 6910.33,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 322232,
+   "t_us": 161116.0,
+   "df": 4,
+   "hex": "20000D3375D886",
+   "remainder": "4D2023",
+   "level": 7196.22,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 20275
+  },
+  {
+   "sample": 322392,
+   "t_us": 161196.0,
+   "df": 5,
+   "hex": "280010248C796B",
+   "remainder": "4D2023",
+   "level": 7552.16,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 322551,
+   "t_us": 161275.5,
+   "df": 5,
+   "hex": "2800306498F34A",
+   "remainder": "646D6B",
+   "level": 6038.39
+  },
+  {
+   "sample": 322785,
+   "t_us": 161392.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 7619.42,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 323198,
+   "t_us": 161599.0,
+   "df": 9,
+   "hex": "4925AB7F320A20",
+   "remainder": "6104D4",
+   "level": 2178.52
+  },
+  {
+   "sample": 323462,
+   "t_us": 161731.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 6601.51,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 324258,
+   "t_us": 162129.0,
+   "df": 17,
+   "hex": "88230E4700415BC83B903C223234",
+   "remainder": "8D5A6E",
+   "level": 3559.21
+  },
+  {
+   "sample": 325568,
+   "t_us": 162784.0,
+   "df": 3,
+   "hex": "1E8A434284D26C",
+   "remainder": "9105F2",
+   "level": 2386.6
+  },
+  {
+   "sample": 326934,
+   "t_us": 163467.0,
+   "df": 6,
+   "hex": "341C0DAB630D06",
+   "remainder": "C8E8AC",
+   "level": 1714.11
+  },
+  {
+   "sample": 327327,
+   "t_us": 163663.5,
+   "df": 17,
+   "hex": "8D4D202399108DAB687014224FA0",
+   "remainder": "000800",
+   "level": 6972.17
+  },
+  {
+   "sample": 328247,
+   "t_us": 164123.5,
+   "df": 19,
+   "hex": "9ACE411572249B6D2A184E1319C1",
+   "remainder": "3314FA",
+   "level": 3034.08
+  },
+  {
+   "sample": 330051,
+   "t_us": 165025.5,
+   "df": 20,
+   "hex": "A0000D319D500031E40000E5AA3B",
+   "remainder": "4D2023",
+   "level": 9777.62,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 20225
+  },
+  {
+   "sample": 330743,
+   "t_us": 165371.5,
+   "df": 20,
+   "hex": "A0000D31B65A3726FE47C99F4174",
+   "remainder": "4D2023",
+   "level": 9574.7,
+   "valid": "AP=ICAO confirmada",
+   "icao": "4D2023",
+   "altitude_ft": 20225
+  },
+  {
+   "sample": 331841,
+   "t_us": 165920.5,
+   "df": 21,
+   "hex": "AC93682D4C2D0A6630F5AE936D90",
+   "remainder": "D41D48",
+   "level": 474.53
+  },
+  {
+   "sample": 333237,
+   "t_us": 166618.5,
+   "df": 17,
+   "hex": "8D4D2023586B10A5199DF6CB52C1",
+   "remainder": "000000",
+   "level": 8411.14,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20225,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21132,
+    "lon_cpr": 105974
+   },
+   "position": [
+    36.96735,
+    13.85247
+   ]
+  },
+  {
+   "sample": 333508,
+   "t_us": 166754.0,
+   "df": 17,
+   "hex": "8D4D202399108DAB487014673B89",
+   "remainder": "000000",
+   "level": 8537.04,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 372,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 334370,
+   "t_us": 167185.0,
+   "df": 17,
+   "hex": "888AED66D04B50A834CA522879AB",
+   "remainder": "FC022B",
+   "level": 3385.69
+  },
+  {
+   "sample": 335347,
+   "t_us": 167673.5,
+   "df": 3,
+   "hex": "1988D29CBA49B7",
+   "remainder": "74308F",
+   "level": 3329.96
+  },
+  {
+   "sample": 338008,
+   "t_us": 169004.0,
+   "df": 17,
+   "hex": "8D4D2023586B00A4D79E08E5420A",
+   "remainder": "000000",
+   "level": 8043.74,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20200,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21099,
+    "lon_cpr": 105992
+   },
+   "position": [
+    36.96584,
+    13.85353
+   ]
+  },
+  {
+   "sample": 338281,
+   "t_us": 169140.5,
+   "df": 17,
+   "hex": "8D4D202399108DAB487014673B89",
+   "remainder": "000000",
+   "level": 9302.98,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 372,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 339136,
+   "t_us": 169568.0,
+   "df": 10,
+   "hex": "5584E6946DA4B6",
+   "remainder": "EC278D",
+   "level": 2999.77
+  },
+  {
+   "sample": 339883,
+   "t_us": 169941.5,
+   "df": 25,
+   "hex": "C8CB2D06D25A4809B9508983A993",
+   "remainder": "117E1F",
+   "level": 4009.08
+  },
+  {
+   "sample": 340985,
+   "t_us": 170492.5,
+   "df": 6,
+   "hex": "34924D050485E4",
+   "remainder": "7D244E",
+   "level": 686.98
+  },
+  {
+   "sample": 341746,
+   "t_us": 170873.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 7076.5,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 342124,
+   "t_us": 171062.0,
+   "df": 17,
+   "hex": "8D4D20235869F0A48F9E14209946",
+   "remainder": "000000",
+   "level": 6737.44,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20175,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 21063,
+    "lon_cpr": 106004
+   },
+   "position": [
+    36.96419,
+    13.85423
+   ]
+  },
+  {
+   "sample": 342396,
+   "t_us": 171198.0,
+   "df": 17,
+   "hex": "8D4D202399108DAB487014673B89",
+   "remainder": "000000",
+   "level": 6425.91,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 372,
+   "track_deg": 157.9
+  },
+  {
+   "sample": 344612,
+   "t_us": 172306.0,
+   "df": 9,
+   "hex": "4C9A6DBDE8E146",
+   "remainder": "A7787B",
+   "level": 2480.3
+  },
+  {
+   "sample": 347562,
+   "t_us": 173781.0,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 4429.1,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  },
+  {
+   "sample": 348629,
+   "t_us": 174314.5,
+   "df": 17,
+   "hex": "8D4D20235869A0A3839E47A40C39",
+   "remainder": "000000",
+   "level": 5039.74,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20050,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 20929,
+    "lon_cpr": 106055
+   },
+   "position": [
+    36.95805,
+    13.85721
+   ]
+  },
+  {
+   "sample": 348900,
+   "t_us": 174450.0,
+   "df": 17,
+   "hex": "8D4D202399108CAB287014ABB53C",
+   "remainder": "000000",
+   "level": 5153.74,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 371,
+   "track_deg": 158.0
+  },
+  {
+   "sample": 350674,
+   "t_us": 175337.0,
+   "df": 2,
+   "hex": "114F6228DA4934",
+   "remainder": "D46C16",
+   "level": 1551.98
+  },
+  {
+   "sample": 353337,
+   "t_us": 176668.5,
+   "df": 17,
+   "hex": "8D4D2023586990A3359E5A546080",
+   "remainder": "000000",
+   "level": 7431.11,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 11,
+   "altitude_ft": 20025,
+   "cpr": {
+    "format": "par",
+    "lat_cpr": 20890,
+    "lon_cpr": 106074
+   },
+   "position": [
+    36.95627,
+    13.85832
+   ]
+  },
+  {
+   "sample": 353609,
+   "t_us": 176804.5,
+   "df": 17,
+   "hex": "8D4D202399108CAB287014ABB53C",
+   "remainder": "000000",
+   "level": 7276.12,
+   "valid": "PI=0",
+   "icao": "4D2023",
+   "tc": 19,
+   "ground_speed_kt": 371,
+   "track_deg": 158.0
+  },
+  {
+   "sample": 355379,
+   "t_us": 177689.5,
+   "df": 11,
+   "hex": "5D4D20237A55A6",
+   "remainder": "000000",
+   "level": 8388.38,
+   "valid": "II/SI=0",
+   "icao": "4D2023"
+  }
+ ]
+}

@@ -1,0 +1,31 @@
+% (a) Barrido de frecuencia frente a ráfagas de 1090 MHz; (b) span cero con disparo de vídeo.
+% Esquema conceptual: proporciones ilustrativas, no una medida.
+\begin{tikzpicture}[x=1mm,y=1mm,font=\sffamily\scriptsize]
+  \begin{scope}
+    \node[anchor=west,font=\sffamily\scriptsize\bfseries] at (0,47) {(a) Barrido (span 10 MHz, RBW 1 MHz)};
+    \draw[flecha] (0,0) -- (72,0);
+    \node[rotulo,anchor=north east] at (72,-1) {tiempo};
+    \draw[flecha] (0,0) -- (0,38);
+    \node[rotulo,anchor=south west] at (1,39) {frecuencia del OL};
+    \fill[MASecondarySoft] (0,16) rectangle (70,20);
+    \node[rotulo,anchor=west] at (1,22.2) {1090 MHz $\pm$ RBW/2};
+    \draw[MAPrimaryDark,line width=0.9pt] (2,2) -- (66,34);
+    \fill[MAWarning] (30,16) rectangle (31.4,20);
+    \foreach \x in {8,14,47,55,61} \fill[MASecondary] (\x,16.6) rectangle (\x+0.9,19.4);
+    \draw[flechadash] (46,30) node[above,rotulo,align=center]{solo esta ventana\\observa 1090 MHz} -- (31,20.5);
+    \node[rotulo,anchor=north west,align=left] at (0,-6) {Las ráfagas (barras oscuras) caen casi siempre fuera de la\\breve ventana en que el OL pasa por 1090 MHz.};
+  \end{scope}
+  \begin{scope}[xshift=84mm]
+    \node[anchor=west,font=\sffamily\scriptsize\bfseries] at (0,47) {(b) Span cero en 1090 MHz, disparo de vídeo};
+    \draw[flecha] (0,0) -- (72,0);
+    \node[rotulo,anchor=north east] at (72,-1) {tiempo};
+    \draw[flecha] (0,0) -- (0,38);
+    \node[rotulo,anchor=south west] at (1,39) {envolvente (dB)};
+    \draw[MAMuted] (0,6) -- (70,6);
+    \draw[MAWarning,dashed] (0,14) -- (70,14);
+    \node[MAWarning,anchor=south east] at (70,14.3) {nivel de disparo};
+    \draw[MAPrimaryDark,line width=0.8pt] (0,6.5) -- (8,6.2) -- (9,25) -- (10,21) -- (11,26) -- (13,22) -- (16,26) -- (20,23) -- (26,25) -- (32,22) -- (38,26) -- (44,23) -- (49,25) -- (50,6.5) -- (70,6.2);
+    \draw[<->,MAInk] (9,30) -- node[above]{$\approx$ 120 $\mu$s (trama larga)} (50,30);
+    \node[rotulo,anchor=north west,align=left] at (0,-6) {Se ve la \emph{envolvente} de una trama completa; los pulsos\\de 0,5 $\mu$s y los bits no se resuelven (RBW máx.\ 1 MHz).};
+  \end{scope}
+\end{tikzpicture}

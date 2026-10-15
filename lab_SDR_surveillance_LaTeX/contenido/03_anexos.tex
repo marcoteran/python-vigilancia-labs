@@ -1,0 +1,91 @@
+% Anexos: referencias, glosario y reproducibilidad del conjunto de datos.
+
+\PortadillaLaboratorio{Anexos}{Referencias, glosario y reproducibilidad}{Fuentes primarias consultadas, vocabulario común de los dos laboratorios y el procedimiento exacto con que se preparó y verificó la grabación de respaldo.}
+
+\section{Referencias técnicas}
+\label{sec:referencias}
+
+Todas consultadas el 15 de octubre de 2026. Ante una discrepancia, prevalece la documentación de la versión instalada.
+
+\begin{itemize}[itemsep=0.45em]
+  \item \textbf{HackRF One, documentación oficial}. \url{https://hackrf.readthedocs.io/en/latest/hackrf_one.html}\\
+    \emph{Uso:} Rango 1 MHz--6 GHz; 2--20 MSa/s; ADC de 8 bits; semidúplex; máximo $-5$ dBm en RX; alimentación de antena 3,0--3,3 V, 50 mA; conectores SMA y USB micro-B.
+  \item \textbf{Instalación del software HackRF}. \url{https://hackrf.readthedocs.io/en/latest/installing_hackrf_software.html}\\
+    \emph{Uso:} radioconda en Windows; \texttt{apt-get install hackrf} en Debian/Ubuntu.
+  \item \textbf{Releases de HackRF}. \url{https://github.com/greatscottgadgets/hackrf/releases}\\
+    \emph{Uso:} Versión actual de las herramientas: v2026.01.3.
+  \item \textbf{Paquetes de Ubuntu 24.04}. \url{https://packages.ubuntu.com/noble/hackrf}\\
+    \emph{Uso:} \texttt{hackrf} 2023.01.1-9build1 (universe); regla \texttt{60-libhackrf0.rules}; \texttt{libuhd} disponible: 4.6.0.
+  \item \textbf{SDRangel, releases}. \url{https://github.com/f4exb/sdrangel/releases}\\
+    \emph{Uso:} v7.27.2 (19-08-2026): instaladores Windows, snap, flatpak y \texttt{.deb}; metadatos del \texttt{.deb} de 24.04.
+  \item \textbf{SDRangel en la Snap Store}. \url{https://snapcraft.io/sdrangel}\\
+    \emph{Uso:} Instalación y conexión \texttt{raw-usb}.
+  \item \textbf{SDRangel, guía rápida}. \url{https://github.com/f4exb/sdrangel/wiki/Quick-start}\\
+    \emph{Uso:} Flujo de la interfaz (espacio de trabajo, añadir dispositivo y canal) y reglas udev.
+  \item \textbf{SDRangel, interfaz principal}. \url{https://github.com/f4exb/sdrangel/blob/master/sdrgui/readme.md}\\
+    \emph{Uso:} Atajos (\tecla{Ctrl}+\tecla{R}, \tecla{Ctrl}+\tecla{E}); \menu{Preferences $\rightarrow$ My Position} y \menu{Audio}.
+  \item \textbf{Plugin HackRF Input}. \url{https://github.com/f4exb/sdrangel/blob/master/plugins/samplesource/hackrfinput/readme.md}\\
+    \emph{Uso:} Controles, rangos de LNA (0--40 dB, pasos de 8) y VGA (0--62 dB, pasos de 2), decimación, \gui{Fc}.
+  \item \textbf{Plugin Broadcast FM Demodulator}. \url{https://github.com/f4exb/sdrangel/blob/master/plugins/channelrx/demodbfm/readme.md}\\
+    \emph{Uso:} RF BW (80--250 kHz), AF BW, de-énfasis 50/75 $\mu$s, RDS.
+  \item \textbf{Plugin ADS-B Demodulator}. \url{https://github.com/f4exb/sdrangel/blob/master/plugins/channelrx/demodadsb/readme.md}\\
+    \emph{Uso:} Tasas 2--12 MSa/s, umbral de correlación 5--7 dB, botón S, estadísticas, columnas, CSV.
+  \item \textbf{Plugin Map}. \url{https://github.com/f4exb/sdrangel/blob/master/plugins/feature/map/readme.md}\\
+    \emph{Uso:} Mapas 2D/3D, mosaicos por Internet, posición de la estación.
+  \item \textbf{Plugin FileInput}. \url{https://github.com/f4exb/sdrangel/blob/master/plugins/samplesource/fileinput/readme.md}\\
+    \emph{Uso:} Formato \texttt{.sdriq} (cabecera de 32 bytes, CRC-32).
+  \item \textbf{Código fuente de SDRangel}. \url{https://github.com/f4exb/sdrangel}\\
+    \emph{Uso:} Valores por defecto (\texttt{hackrfinputsettings.cpp}, \texttt{bfmdemodsettings.cpp}); estructura de cabecera \texttt{.sdriq}; actualización automática de posición.
+  \item \textbf{SIGLENT SSA3000X Plus, hoja de datos DS0703P (E04B)}.\\
+    \emph{Uso:} Rangos, RBW 1 Hz--1 MHz, VBW 1 Hz--3 MHz, disparo Free/Video/External, entrada N 50 $\Omega$, límites de entrada, opciones TG y AMK.
+  \item \textbf{SIGLENT SSA3000X Plus, manual de usuario UM0703P-E01A} (y serie SSA3000X, UM0703X-E02A).\\
+    \emph{Uso:} Teclas de función, tipos de traza y detector, N dB BW, \gui{Demod}, span cero, disparo de vídeo, tiempo de barrido mínimo de 900 $\mu$s.
+  \item \textbf{Zadig}. \url{https://zadig.akeo.ie/}\\
+    \emph{Uso:} Asignación de WinUSB en Windows.
+  \item \textbf{dump1090}. \url{https://github.com/antirez/dump1090}\\
+    \emph{Uso:} Origen y licencia BSD-3 de la grabación; formato de 8 bits a 2 MSa/s; opción \texttt{--snip}.
+  \item \textbf{pyModeS}. \url{https://github.com/junzis/pyModeS}\\
+    \emph{Uso:} Decodificador independiente usado en la verificación (v3.6.0).
+\end{itemize}
+
+\section{Glosario}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.70\linewidth}@{}}
+\toprule
+\textbf{Término} & \textbf{Significado en este manual} \\
+\midrule
+\endhead
+ADS-B & Vigilancia dependiente automática por radiodifusión: la aeronave difunde datos propios sin ser interrogada. \\
+AP / PI & Paridad superpuesta con la dirección (AP) o con el identificador de interrogador (PI) en Mode S. \\
+CPR & Codificación compacta de la posición: transmite la posición dentro de una zona; necesita un par de tramas o una referencia. \\
+dB, dBm & Cociente logarítmico; dBm es potencia absoluta referida a 1 mW. \\
+Decimación & Reducción de la tasa de muestreo tras filtrar; reduce la ventana observada. \\
+DF, TC & \emph{Downlink Format} (tipo de trama Mode S) y \emph{Type Code} (tipo de mensaje ADS-B dentro de una DF17/18). \\
+Desplazamiento ($\Delta f$) & Diferencia entre la frecuencia del canal y la del dispositivo en SDRangel. \\
+I/Q & Muestras en fase y en cuadratura: representación compleja de la señal en banda base. \\
+ICAO (dirección) & Identificador único de 24 bits del transpondedor. \\
+Max Hold & Traza que conserva el máximo de muchos barridos. \\
+Pico DC & Artefacto en el centro del espectro de un receptor de conversión directa. \\
+PPM & Modulación por posición de pulso: el valor del bit depende de la mitad en que cae el pulso. \\
+RBW, VBW & Ancho de banda de resolución y de vídeo del analizador. \\
+RP-SMA & Variante de SMA con el género del contacto central invertido. \\
+Span cero & Modo del analizador en el que el eje horizontal es tiempo a una frecuencia fija. \\
+WinUSB & Controlador genérico de Windows que permite a aplicaciones de usuario usar el HackRF. \\
+\bottomrule
+\end{longtable}
+
+\section{Reproducibilidad de la grabación de respaldo}
+\label{sec:reproducibilidad}
+
+Desde la carpeta \texttt{lab\_SDR\_surveillance\_LaTeX}, con Python 3 y \texttt{numpy}:
+
+\begin{lstlisting}
+curl -L -o modes1.bin https://raw.githubusercontent.com/antirez/dump1090/master/testfiles/modes1.bin
+sha256sum modes1.bin
+#   3a33e16025da8669149c780075950b4e908ca036ea21f9583c113f60d5fb3094
+python3 herramientas/adsb_iq.py convertir modes1.bin datos_adsb/modes1_dump1090_2MSps_1090MHz.sdriq --t0 1357390345000
+#   ... SHA-256 d201250f486e5ff14133bc57664c8e5be6c42be3bb989529f29789674ee5f25d
+python3 herramientas/adsb_iq.py verificar datos_adsb/modes1_dump1090_2MSps_1090MHz.sdriq --json informe.json
+\end{lstlisting}
+
+La marca \texttt{--t0} es la fecha en que el archivo se añadió al repositorio de dump1090 (05-01-2013 12:52:25 UTC), cota superior de la fecha de grabación; solo afecta a la hora que muestra \textbf{FileInput}. Los resultados de la verificación están en \texttt{datos\_adsb/verificacion\_modes1.json} y las tramas registradas por SDRangel 7.27.2, en \texttt{datos\_adsb/sdrangel\_7.27.2\_tramas\_unicas.csv}.

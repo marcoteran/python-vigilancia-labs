@@ -1,0 +1,17 @@
+% Escalera de evidencia: cada nivel exige los anteriores, pero ninguno los sustituye.
+\begin{tikzpicture}[x=1mm,y=1mm,font=\sffamily\scriptsize]
+  \foreach \n/\t/\d/\c [count=\i from 0] in {
+     1/{Energía RF}/{hay actividad en una frecuencia (espectro, cascada, SIGLENT)}/MAMuted,
+     2/{Demodulación}/{se recupera la moduladora: audio FM o envolvente de pulsos}/MAPrimary,
+     3/{Sincronización}/{el receptor reconoce la estructura (preámbulo Mode S)}/MAPrimary,
+     4/{Trama válida}/{los bits superan la paridad propia de su formato (DF)}/MASecondary,
+     5/{Información transmitida}/{campos: ICAO, indicativo, altitud, velocidad}/MASecondary,
+     6/{Información derivada}/{cálculos del receptor: posición CPR, distancia, estadísticas}/MATertiary,
+     7/{Información externa}/{bases o servicios: modelo, matrícula, ruta (no es RF)}/MAWarning} {
+    \fill[\c!18] (\i*6,\i*7) rectangle (\i*6+118,\i*7+6);
+    \draw[\c] (\i*6,\i*7) rectangle (\i*6+118,\i*7+6);
+    \node[anchor=west,font=\sffamily\scriptsize\bfseries,text=\c!80!black] at (\i*6+1.5,\i*7+3) {\n.\ \t};
+    \node[anchor=west] at (\i*6+41,\i*7+3) {\d};
+  }
+  \draw[flecha] (-4,0) -- (-4,49) node[above,rotulo,align=center]{más\\exigente};
+\end{tikzpicture}

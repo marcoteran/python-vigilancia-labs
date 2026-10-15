@@ -1,0 +1,179 @@
+% Banco único de preguntas. \Pregunta{enunciado}{A}{B}{C}{D}{letra}{justificación}.
+% El manual del estudiante no imprime la letra ni la justificación (\ifguiainstructor).
+% Cada cuestionario reinicia la numeración.
+
+% ---------------------------------------------------------------------------
+\newcommand{\CuestionarioDiagnosticoW}{%
+\setcounter{pregunta}{0}%
+\Pregunta{¿Cuál es la longitud de onda aproximada de una señal de 100 MHz?}
+{30 cm.}{3 m.}{30 m.}{300 m.}
+{B}{$\lambda = c/f = 3\times10^8/10^8 = 3$ m. Las demás confunden un factor 10.}
+
+\Pregunta{Un nivel de 0 dBm corresponde a:}
+{0 W.}{1 W.}{1 mW.}{1 $\mu$W.}
+{C}{dBm es potencia referida a 1 mW: $10\log_{10}(P/1\,\mathrm{mW})$; 0 dBm es 1 mW. 0 W sería $-\infty$ dBm.}
+
+\Pregunta{Si la potencia aumenta 3 dB, la potencia lineal:}
+{Se duplica aproximadamente.}{Aumenta en 3 mW.}{Se triplica.}{Aumenta un 3~\%.}
+{A}{$10^{0{,}3}\approx 2$. Los decibelios expresan cocientes, no sumas de potencia absoluta.}
+
+\Pregunta{En una señal FM, la información se transporta en:}
+{La amplitud de la portadora.}{La polarización de la onda.}{La posición de pulsos en el tiempo.}{La frecuencia instantánea de la portadora.}
+{D}{$f_i(t) = f_c + k_f m(t)$. La amplitud es la de AM; la posición de pulsos es la PPM del Laboratorio 02.}
+
+\Pregunta{El ancho de banda de una señal es:}
+{El intervalo de frecuencias que ocupa.}{Su frecuencia central.}{Su amplitud máxima.}{Su velocidad de propagación.}
+{A}{Una emisora de FM centrada en 100,9 MHz ocupa unos 200 kHz alrededor de ese centro: centro y ancho son conceptos distintos.}
+
+\Pregunta{Con muestreo complejo (I/Q), ¿qué tasa mínima permite observar 2,4 MHz de espectro a la vez?}
+{1,2 MSa/s.}{2,4 MSa/s.}{4,8 MSa/s.}{24 MSa/s.}
+{B}{Con muestras complejas la ventana observable es igual a la tasa de muestreo (de $-f_s/2$ a $+f_s/2$ alrededor del centro). El criterio $2B$ se aplica al muestreo real.}
+
+\Pregunta{En su modo normal, un analizador de espectro muestra:}
+{Fase frente a frecuencia.}{Audio demodulado.}{Amplitud frente a tiempo únicamente.}{Potencia frente a frecuencia.}
+{D}{Es su función básica. Solo en span cero muestra amplitud frente a tiempo.}
+
+\Pregunta{Una antena especificada para 868 MHz se conecta a un receptor sintonizado en 100 MHz. Lo correcto es afirmar que:}
+{No puede recibir nada en ningún caso.}{Rinde igual que en 868 MHz.}{Puede recibir señales intensas, pero su rendimiento a 100 MHz no está especificado.}{Convierte la señal de 100 MHz a 868 MHz.}
+{C}{Fuera de banda la antena sigue captando campo, con eficiencia desconocida y normalmente baja. Una antena no cambia la frecuencia de la señal.}
+}
+
+% ---------------------------------------------------------------------------
+\newcommand{\CuestionarioFinalW}{%
+\setcounter{pregunta}{0}%
+\Pregunta{¿Por qué el demodulador de FM de radiodifusión usa unos 180--200 kHz y el de FM estrecha unos 12,5 kHz?}
+{Porque la radiodifusión usa más potencia.}{Porque la radiodifusión tiene mayor desviación ($\pm$75 kHz) y una banda base más ancha (MPX hasta unos 57 kHz).}{Porque 100 MHz es una frecuencia más alta que la de las radios portátiles.}{Porque el HackRF exige ese ancho mínimo.}
+{B}{Carson: $B\approx 2(\Delta f + f_m)$. La potencia y la frecuencia portadora no determinan el ancho ocupado; el HackRF no impone el ancho del canal.}
+
+\Pregunta{El dispositivo está en 101,2 MHz y la emisora en 100,9 MHz. El desplazamiento del canal debe ser:}
+{+300 kHz.}{0 Hz.}{$-300$ kHz.}{$-101{,}2$ MHz.}
+{C}{$\Delta f = f_{\mathrm{emisora}} - f_{\mathrm{dispositivo}} = 100{,}9 - 101{,}2 = -0{,}3$ MHz.}
+
+\Pregunta{¿Para qué se sintoniza el dispositivo 300 kHz por encima de la emisora?}
+{Para no demodular sobre el pico DC del centro del espectro.}{Para aumentar la potencia recibida.}{Porque la normativa lo exige.}{Para reducir la tasa de muestreo necesaria.}
+{A}{El receptor de conversión directa genera un artefacto en el centro; el desplazamiento aleja la emisora sin perderla. No cambia la potencia ni la tasa.}
+
+\Pregunta{Con una tasa de 2,4 MSa/s y decimación 1, SDRangel muestra a la vez:}
+{1,2 MHz de espectro.}{4,8 MHz de espectro.}{Toda la banda de 88--108 MHz.}{2,4 MHz de espectro.}
+{D}{Muestreo complejo: ventana igual a la tasa. Por eso se recorre la banda en pasos de 2 MHz.}
+
+\Pregunta{Al pasar LNA/VGA de 16/16 a 40/40 dB con emisoras locales intensas, lo más probable es que:}
+{La relación señal/ruido mejore siempre.}{Suban señal y ruido y aparezcan espurios por saturación.}{Aumente la potencia que transmite la emisora.}{Se estreche el ancho de banda de la emisora.}
+{B}{La ganancia amplifica todo; con señales fuertes el receptor se satura y crea productos de intermodulación. La ganancia del receptor no altera el transmisor.}
+
+\Pregunta{¿Por qué se mantiene \gui{RF amp} apagado al empezar?}
+{Porque añade 14 dB delante de todo y facilita la saturación y el riesgo con señales intensas.}{Porque solo sirve para transmitir.}{Porque cambia la frecuencia del dispositivo.}{Porque desactiva el filtro BBF.}
+{A}{Es la primera etapa de ganancia: con él activo, una señal fuerte satura antes el receptor. La documentación del HackRF advierte además que activar el amplificador por error con señales intensas puede causar daño permanente. También se usa en recepción.}
+
+\Pregunta{¿Qué aporta la cascada que no aporta el espectro instantáneo?}
+{Mayor resolución en frecuencia.}{El nivel absoluto en dBm.}{La evolución temporal de cada frecuencia, con la potencia codificada en color.}{El audio demodulado.}
+{C}{La cascada apila espectros en el tiempo: distingue emisiones continuas de intermitentes. No da dBm absolutos ni audio.}
+
+\Pregunta{En el analizador, sin señal en la pantalla, se pasa la RBW de 100 kHz a 10 kHz. ¿Qué ocurre con el piso de ruido mostrado y con el tiempo de barrido automático?}
+{El piso baja unos 10 dB y el barrido se alarga.}{El piso sube unos 10 dB y el barrido se acorta.}{El piso no cambia y el span se multiplica por 10.}{El piso baja 1 dB y el barrido no cambia.}
+{A}{La potencia de ruido que atraviesa el filtro es proporcional a la RBW: $10\log_{10}(100/10) = 10$ dB menos. Un filtro más estrecho tarda más en responder, por eso el barrido automático se alarga. La RBW no cambia el span.}
+
+\Pregunta{Una VBW menor que la RBW sirve para:}
+{Aumentar la resolución en frecuencia.}{Proteger la entrada del analizador.}{Cambiar la frecuencia central.}{Suavizar la traza (promediado de vídeo) sin cambiar la resolución.}
+{D}{La VBW filtra después del detector; la resolución la fija la RBW. La protección de entrada la da la atenuación.}
+
+\Pregunta{El SIGLENT marca $-45$ dBm en la emisora y SDRangel muestra el pico a $-20$ dB. Lo correcto es:}
+{El HackRF es 25 dB más sensible.}{El analizador está averiado.}{Las cifras no son comparables: SDRangel usa dB relativos al fondo de escala digital y el SIGLENT dBm absolutos en su entrada.}{Basta sumar 25 dB a SDRangel para calibrarlo.}
+{C}{Distintas referencias, ganancias y RBW. Una única comparación no calibra nada.}
+
+\Pregunta{¿Qué observación demuestra que se recuperó información (nivel 2) y no solo energía?}
+{Un pico en el analizador.}{Una traza continua en la cascada.}{Un aumento de la potencia del canal.}{Audio inteligible a la salida del demodulador.}
+{D}{Picos, trazas y potencia son nivel 1: existe energía. Solo la moduladora recuperada demuestra demodulación.}
+
+\Pregunta{En Colombia, el demodulador quedó con de-énfasis de 50 $\mu$s en lugar de 75 $\mu$s. Lo esperable es:}
+{Que no haya audio.}{Que la frecuencia de la emisora se desplace.}{Que el audio suene con los agudos realzados, porque la compensación del pre-énfasis es incompleta.}{Que se pierda la señal piloto de 19 kHz.}
+{C}{El transmisor realza los agudos con 75 $\mu$s; deshacerlo con 50 $\mu$s los atenúa menos de lo necesario. El audio existe y la portadora no cambia.}
+}
+
+% ---------------------------------------------------------------------------
+\newcommand{\CuestionarioDiagnosticoU}{%
+\setcounter{pregunta}{0}%
+\Pregunta{En el radar secundario, las interrogaciones y las respuestas usan:}
+{1090 MHz para interrogar y 1030 MHz para responder.}{978 MHz en ambos sentidos.}{1030 MHz para interrogar y 1090 MHz para responder.}{1575 MHz en ambos sentidos.}
+{C}{Enlace ascendente 1030 MHz, descendente 1090 MHz. 978 MHz es UAT; 1575 MHz es GPS L1.}
+
+\Pregunta{La diferencia esencial entre radar primario y secundario es que el primario:}
+{Detecta el eco reflejado sin necesidad de equipo a bordo.}{Necesita un transpondedor en la aeronave.}{Solo funciona con ADS-B.}{Transmite la identificación de la aeronave.}
+{A}{El primario es no cooperativo; el secundario depende del transpondedor e identifica.}
+
+\Pregunta{¿Cuántas direcciones distintas permite una dirección ICAO de 24 bits?}
+{24.}{4096.}{Unos 1000 millones.}{Unos 16,8 millones.}
+{D}{$2^{24} = 16\,777\,216$. 4096 son los códigos del modo A ($2^{12}$).}
+
+\Pregunta{A 1 Mbit/s, cada bit dura:}
+{1 ms.}{1 $\mu$s.}{1 ns.}{0,5 s.}
+{B}{$T = 1/R = 10^{-6}$ s.}
+
+\Pregunta{El byte hexadecimal \texttt{8D} en binario es:}
+{\texttt{10001101}.}{\texttt{10011000}.}{\texttt{11010001}.}{\texttt{10001011}.}
+{A}{8 = \texttt{1000}, D = \texttt{1101}.}
+
+\Pregunta{Una comprobación de paridad o CRC en un mensaje digital sirve para:}
+{Cifrar el contenido.}{Detectar (y a veces corregir) errores de transmisión.}{Comprimir el mensaje.}{Aumentar el alcance de la señal.}
+{B}{Es redundancia calculada sobre los datos; no oculta ni comprime nada.}
+
+\Pregunta{La multilateración (MLAT) necesita:}
+{Un único receptor con buena antena.}{Que la aeronave transmita su posición GNSS.}{Varios receptores sincronizados que midan diferencias de tiempo de llegada.}{Un radar primario.}
+{C}{La posición sale de diferencias de tiempo entre receptores; un solo receptor no basta.}
+
+\Pregunta{En Ubuntu, \texttt{sudo} antes de una orden:}
+{La ejecuta con privilegios de administrador.}{La ejecuta en segundo plano.}{Instala el programa.}{Muestra la ayuda de la orden.}
+{A}{Por eso no se usa para programas gráficos como SDRangel.}
+}
+
+% ---------------------------------------------------------------------------
+\newcommand{\CuestionarioFinalU}{%
+\setcounter{pregunta}{0}%
+\Pregunta{¿Por qué observar energía en 1090 MHz no demuestra todavía una trama Mode S válida?}
+{Porque la energía puede ser ruido u otros emisores, y solo la paridad coherente con el formato valida los bits.}{Porque el HackRF no recibe en 1090 MHz.}{Porque las tramas válidas no producen energía visible.}{Porque solo el SIGLENT puede validar tramas.}
+{A}{Energía es nivel 1; la trama válida es nivel 4. El analizador no decodifica.}
+
+\Pregunta{Los pulsos del preámbulo Mode S comienzan en:}
+{0; 0,5; 1,0 y 1,5 $\mu$s.}{0; 2; 4 y 6 $\mu$s.}{0; 1,0; 3,5 y 4,5 $\mu$s.}{0; 8; 16 y 24 $\mu$s.}
+{C}{Cuatro pulsos de 0,5 $\mu$s en 0; 1,0; 3,5 y 4,5 $\mu$s; los datos empiezan en 8 $\mu$s.}
+
+\Pregunta{En la PPM de Mode S, un bit «1» se representa con:}
+{Un pulso en la segunda mitad del intervalo de 1 $\mu$s.}{Un pulso en la primera mitad del intervalo de 1 $\mu$s.}{Ausencia de pulso.}{Dos pulsos en el intervalo.}
+{B}{«1» = pulso en la primera mitad; «0» = en la segunda. Siempre hay un pulso por bit.}
+
+\Pregunta{Una DF17 se valida sola y una DF4 no. ¿Por qué?}
+{La DF4 no lleva paridad.}{La DF17 se transmite con más potencia.}{La DF4 usa otro polinomio.}{En la DF17 el resto de la paridad debe ser cero; en la DF4 el resto es la dirección ICAO, que hay que conocer de antemano.}
+{D}{Mismo polinomio, distinta superposición: PI frente a AP. Una AP «válida» con una dirección desconocida puede ser ruido.}
+
+\Pregunta{Una trama DF17 con \emph{Type Code} 4 transporta:}
+{La identificación (indicativo) de la aeronave.}{La posición en vuelo.}{La velocidad.}{El código de modo A.}
+{A}{TC 1--4: identificación; 9--18: posición en vuelo con altitud barométrica; 19: velocidad.}
+
+\Pregunta{Una aeronave aparece en la tabla con altitud, pero no en el mapa. La causa más probable es:}
+{El demodulador está mal sintonizado.}{Aún no hay un par par/impar reciente ni una referencia que permita calcular la posición CPR.}{La aeronave no tiene dirección ICAO.}{El mapa solo muestra aeronaves con indicativo.}
+{B}{La posición es información derivada; exige mensajes de posición suficientes y una referencia adecuada.}
+
+\Pregunta{La referencia del receptor está en unos 4,7°N y la aeronave real en 37,1°N. Con decodificación CPR local, el resultado será:}
+{Correcto, porque la trama incluye la latitud completa.}{Un error de configuración de SDRangel.}{Una posición falsa en la zona de latitud más cercana a la referencia, sin aviso.}{Imposible de calcular: el mapa queda vacío.}
+{C}{La trama codifica la posición dentro de una zona de unos 6°; la decodificación local elige la zona más cercana a la referencia. Así ocurrió en la verificación del respaldo (bloque H del Laboratorio 02).}
+
+\Pregunta{En el respaldo offline, ¿por qué el número de tramas por segundo no describe el tráfico real?}
+{Porque SDRangel no cuenta tramas en archivos.}{Porque el archivo está a 2 MSa/s.}{Porque las tramas de la grabación no son válidas.}{Porque el archivo comprime el tiempo (silencios eliminados) y se reproduce en bucle.}
+{D}{Las tramas son válidas, pero su ritmo en el archivo no es el del aire.}
+
+\Pregunta{¿Por qué el demodulador ADS-B exige al menos 2 MSa/s?}
+{Porque los chips de 0,5 $\mu$s necesitan al menos una muestra por medio bit.}{Porque 1090 MHz dividido entre 2 da 545 MHz.}{Porque es la tasa mínima de cualquier HackRF.}{Porque el mapa necesita esa tasa.}
+{A}{2 Mchip/s $\Rightarrow$ 2 MSa/s como mínimo; 4 MSa/s da dos muestras por chip.}
+
+\Pregunta{El modelo y la matrícula que muestra la tabla provienen de:}
+{Los mensajes DF17 de identificación.}{El cálculo CPR.}{Una base de datos externa descargada (nivel 7).}{La señal de 1030 MHz.}
+{C}{La aeronave transmite dirección e indicativo, no su modelo ni su matrícula.}
+
+\Pregunta{Bajar el umbral de correlación de 7 dB a 3 dB produce:}
+{Menos tramas y menos carga de CPU.}{Más intentos de decodificación, más tramas inválidas y más carga de CPU.}{Mayor alcance físico de la antena.}{Ningún cambio.}
+{B}{Así lo indica la documentación del plugin: más tramas recuperadas a costa de más errores.}
+
+\Pregunta{¿Por qué un barrido normal del analizador rara vez muestra mensajes de 1090 MHz?}
+{Porque el analizador no cubre 1090 MHz.}{Porque las ráfagas duran microsegundos y el oscilador local solo pasa por 1090 MHz una pequeña fracción de cada barrido.}{Porque ADS-B se transmite en polarización horizontal.}{Porque la RBW mínima es demasiado ancha.}
+{B}{El SSA3032X Plus llega a 3,2 GHz. El problema es temporal: por eso se usan Max Hold o span cero con disparo de vídeo.}
+}

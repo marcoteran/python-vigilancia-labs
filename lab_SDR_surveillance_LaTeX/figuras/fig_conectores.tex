@@ -1,0 +1,32 @@
+% Identificación de conectores: vista frontal esquemática (no a escala).
+% Pin = círculo relleno; receptáculo = anillo hueco.
+\begin{tikzpicture}[
+  cuerpo/.style={draw=MAInk,line width=0.8pt,fill=white},
+  rosca/.style={draw=MAMuted,line width=0.5pt,dash pattern=on 1.2pt off 1pt},
+  pin/.style={fill=MAInk},
+  hueco/.style={draw=MAInk,line width=0.9pt,fill=white},
+  tit/.style={font=\sffamily\scriptsize\bfseries,color=MAInk,align=center},
+  sub/.style={font=\sffamily\scriptsize,color=MAMuted,align=center}]
+  \def\conector#1#2#3#4#5{% #1 x, #2 nombre, #3 detalle, #4 tipo centro (pin|hueco), #5 rosca (ext|int)
+    \begin{scope}[shift={(#1,0)}]
+      \ifthenelse{\equal{#5}{ext}}{\draw[cuerpo] (0,0) circle (6.5mm); \draw[rosca] (0,0) circle (5.6mm);}
+                                  {\draw[cuerpo] (0,0) circle (6.5mm); \draw[rosca] (0,0) circle (7.3mm);}
+      \draw[draw=MAMuted,fill=MASurfaceAlt] (0,0) circle (3.3mm);
+      \ifthenelse{\equal{#4}{pin}}{\fill[pin] (0,0) circle (0.75mm);}{\draw[hueco] (0,0) circle (0.9mm);}
+      \node[tit] at (0,-11mm) {#2};
+      \node[sub] at (0,-16.5mm) {#3};
+    \end{scope}}
+  \conector{0}{SMA hembra}{HackRF ANTENNA\\pin: receptáculo}{hueco}{ext}
+  \conector{3.15}{SMA macho}{tuerca + \textbf{pin}\\compatible con el HackRF}{pin}{int}
+  \conector{6.3}{RP-SMA macho}{tuerca + \textbf{receptáculo}\\\textcolor{MADanger}{sin contacto central}}{hueco}{int}
+  \conector{9.45}{RP-SMA hembra}{rosca exterior + pin\\(típico de Wi-Fi/LoRa)}{pin}{ext}
+  \begin{scope}[shift={(12.75,0)}]
+    \draw[cuerpo] (0,0) circle (8mm); \draw[rosca] (0,0) circle (7mm);
+    \draw[draw=MAMuted,fill=MASurfaceAlt] (0,0) circle (4.2mm);
+    \draw[hueco] (0,0) circle (1.1mm);
+    \node[tit] at (0,-11mm) {N hembra};
+    \node[sub] at (0,-16.5mm) {SIGLENT RF INPUT\\requiere adaptador};
+  \end{scope}
+  \node[sub,anchor=west,align=left] at (-0.8,-23mm) {Rosca exterior: anillo punteado interior al cuerpo. Tuerca (rosca interior): anillo punteado exterior.\\
+    Regla práctica: mire el centro del conector del accesorio. \textbf{Pin} macizo $\Rightarrow$ SMA macho (sirve). \textbf{Agujero} $\Rightarrow$ RP-SMA macho (no sirve sin adaptador).};
+\end{tikzpicture}

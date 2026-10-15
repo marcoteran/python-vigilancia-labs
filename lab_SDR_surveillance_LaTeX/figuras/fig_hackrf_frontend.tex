@@ -1,0 +1,17 @@
+% Cadena de recepción simplificada del HackRF One y sus controles en SDRangel.
+\begin{tikzpicture}[node distance=4mm]
+  \node[bloqueext,minimum width=14mm] (ant) {Antena};
+  \node[bloque,right=of ant,minimum width=17mm,fill=MADangerSoft,draw=MADanger] (port) {Puerto RF\\\textbf{máx.\ $-5$ dBm}};
+  \node[bloque,right=of port,minimum width=17mm] (amp) {Amp.\ RF\\\textbf{RF Amp}\\0 / 14 dB};
+  \node[bloque,right=of amp,minimum width=17mm] (mix) {Conversión\\de frecuencia\\(mezcladores)};
+  \node[bloque,right=of mix,minimum width=17mm] (lna) {\textbf{LNA} (IF)\\0--40 dB\\pasos de 8};
+  \node[bloque,right=of lna,minimum width=19mm] (vga) {\textbf{VGA} banda\\base 0--62 dB\\pasos de 2};
+  \node[bloque,right=of vga,minimum width=13mm] (bbf) {Filtro\\\textbf{BBF}};
+  \foreach \a/\b in {ant/port,port/amp,amp/mix,mix/lna,lna/vga,vga/bbf} \draw[flecha] (\a) -- (\b);
+  \node[rotulo,below=3mm of port,align=center] {\textbf{Bias tee}\\(DC en el conector):\\\textcolor{MADanger}{siempre}\\\textcolor{MADanger}{desactivado}};
+  \draw[decorate,decoration={brace,amplitude=2mm},MAMuted] ([yshift=2mm]amp.north west) -- node[above=2.5mm,rotulo]{ganancia repartida entre etapas: más ganancia \emph{no} crea señal} ([yshift=2mm]vga.north east);
+  \node[bloque,below=10mm of bbf,minimum width=13mm] (adc) {ADC I/Q\\8 bits};
+  \node[bloque,left=of adc,minimum width=19mm] (usb) {USB 2.0\\2--20 MSa/s};
+  \node[bloquealt,left=of usb,minimum width=34mm] (sdr) {SDRangel: \textbf{DC}, \textbf{IQ},\\decimación, FFT, canal};
+  \draw[flecha] (bbf) -- (adc); \draw[flecha] (adc) -- (usb); \draw[flecha] (usb) -- (sdr);
+\end{tikzpicture}

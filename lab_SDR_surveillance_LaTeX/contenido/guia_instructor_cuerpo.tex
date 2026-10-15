@@ -1,0 +1,354 @@
+% Cuerpo de la guía del instructor. Las secciones siguen la numeración I.x.
+
+\section{Resumen operativo}
+
+\begin{resumenejecutivo}
+\begin{itemize}
+  \item \textbf{Dos laboratorios de solo recepción}: Lab.\ 01 (Windows, FM, 210 min) y Lab.\ 02 (Ubuntu 24.04, ADS-B/Mode S, 225 min). Ninguna actividad transmite.
+  \item \textbf{Riesgo principal}: la antena disponible (kit «LoRa Antenna Kit», Seeed 109990225) \emph{no está calificada} para 88--108 MHz ni para 1090 MHz y su conector puede ser RP-SMA. Califíquela en el banco real antes de la sesión (sección~\ref{sec:i-antena}).
+  \item \textbf{Riesgo secundario}: el analizador tiene entrada N; sin un adaptador N -- SMA (o -- RP-SMA) el bloque E del Lab.\ 01 y el bloque J del Lab.\ 02 quedan bloqueados.
+  \item \textbf{Respaldo del Lab.\ 02}: grabación real verificada incluida en el repositorio; probada en SDRangel 7.27.2 para Windows. Requiere fijar temporalmente \gui{My Position} cerca de 37,0°N, 14,0°E.
+  \item \textbf{Respaldo del Lab.\ 01}: un ejemplo grabado por usted durante la prueba en seco (sección~\ref{sec:i-respaldofm}).
+  \item \textbf{Estado}: documentación revisada; \textbf{ningún paso con hardware real se ha ejecutado}. La prueba en seco de la sección~\ref{sec:i-seco} es obligatoria.
+\end{itemize}
+\end{resumenejecutivo}
+
+\section{Requisitos del curso y del estudiante}
+
+\begin{itemize}
+  \item \textbf{Conceptuales:} frecuencia y longitud de onda; dB y dBm; ancho de banda; muestreo; AM/FM; radar primario y secundario; binario y hexadecimal. Los cuestionarios diagnósticos (claves en la sección~\ref{sec:i-claves}) detectan carencias: si más de un tercio del grupo falla las preguntas 1--3 del diagnóstico del Lab.\ 01, dedique 10 minutos a dB y longitud de onda antes del bloque A.
+  \item \textbf{Prácticos:} copiar órdenes con exactitud, abrir una terminal, capturar pantalla. No se asume experiencia con SDR ni con Linux.
+  \item \textbf{Organización:} grupos de 2 por banco. Con un solo SIGLENT para varios grupos, rote el bloque E (Lab.\ 01) mientras otros grupos hacen el bloque F, y el bloque J (Lab.\ 02) mientras otros hacen el bloque I.
+\end{itemize}
+
+\section{Tiempo total}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.50\linewidth}>{\raggedleft\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}@{}}
+\toprule
+\textbf{Actividad} & \textbf{Tiempo} & \textbf{Quién} \\
+\midrule
+\endhead
+Instalación de software por puesto (primera vez) & 30--45 min & Instructor o TI \\
+Calificación de antena y conectores (una vez por lugar) & 45--60 min & Instructor \\
+Prueba en seco Lab.\ 01 + grabación del respaldo FM & 60 min & Instructor \\
+Prueba en seco Lab.\ 02 en vivo + respaldo offline & 75 min & Instructor \\
+Comprobación rápida el día de la sesión, por puesto & 10 min & Instructor o monitor \\
+Laboratorio 01 & 210 min & Estudiantes \\
+Laboratorio 02 & 225 min & Estudiantes \\
+\bottomrule
+\end{longtable}
+
+\section{Lista de preparación del hardware}
+
+\begin{checklist}
+  \item HackRF One: carcasa sin daños; los tres SMA (ANTENNA, CLKIN, CLKOUT) con rosca limpia; cable USB \emph{de datos} probado.
+  \item Antena B: identifique el conector \emph{mirando el centro} (pin = SMA macho; agujero = RP-SMA macho). Registre el resultado en la tabla~\ref{tab:i-antena}.
+  \item Cable C: identifique ambos extremos y mida su longitud; anote el tipo de cable si está impreso en la cubierta.
+  \item Antena E (cuadrada): identifique modelo y conector antes de permitir su uso. Si es una antena activa (GNSS), retírela del banco: necesitaría alimentación y está filtrada para otra banda.
+  \item Pigtail D (U.FL): retírelo del puesto del estudiante.
+  \item Adaptador N macho -- SMA hembra (o -- RP-SMA hembra) para el SIGLENT: \textbf{confirmar existencia}. Si no existe: decida si el bloque E se hace como demostración, se aplaza, o se adquiere el adaptador.
+  \item SIGLENT: \gui{Preset} funciona; TG apagado (si está instalado); fecha de la última calibración anotada.
+  \item Ubicación: identifique en cada aula la ventana con mejor vista del cielo y un recorrido de cable seguro.
+  \item Distancia a radares secundarios y DME: el HackRF no tiene preselección. A menos de unos pocos kilómetros de un SSR (1030 MHz), el pico recibido puede acercarse al límite de $-5$ dBm (estimación de orden de magnitud en la sección de seguridad del manual). En ese caso prohíba \gui{RF amp}, no instale la antena en exterior apuntando al radar y, si dispone de él en el futuro, use un atenuador o un filtro de 1090 MHz calificado.
+\end{checklist}
+
+\section{Verificación del software en Windows}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.56\linewidth}@{}}
+\toprule
+\textbf{Componente} & \textbf{Comprobación} \\
+\midrule
+\endhead
+SDRangel 7.27.2 & Instalador oficial \texttt{sdrangel-7.27.2-win64.exe} de \url{https://github.com/f4exb/sdrangel/releases}. SHA-256 del archivo descargado el 15-10-2026: \texttt{96e4d6c83ad554a7 8173310f78302162 fd52463d6a890da5 8211021dabf74dc2}. El paquete incluye \texttt{vc\_redist.x64.exe}. \\
+Herramientas HackRF & radioconda (\url{https://github.com/radioconda/radioconda-installer}), recomendado por la documentación de HackRF. El instalador de SDRangel \emph{no} incluye \texttt{hackrf\_info}. \\
+Controlador & Administrador de dispositivos: «HackRF One» sin advertencias. Zadig solo si falta (USB ID 1D50 6089; no degradar un WinUSB existente). \\
+Detección en SDRangel & \tecla{Ctrl}+\tecla{R}: aparece una entrada HackRF con número de serie. Sin HackRF conectado, la lista solo muestra dispositivos virtuales (FileInput, TestSource, RemoteInput\ldots). \\
+Audio & \menu{Preferences $\rightarrow$ Audio}: salida válida; el demodulador usa «System default device». \\
+Posición & \menu{Preferences $\rightarrow$ My Position}: en la verificación, SDRangel tomó automáticamente la ubicación del servicio de ubicación de Windows y la actualizaba cada segundo. Decida la política del aula (sección~\ref{sec:i-privacidad}). \\
+\bottomrule
+\end{longtable}
+
+\section{Verificación del software en Ubuntu 24.04}
+
+\begin{enumerate}
+  \item \texttt{sudo apt update \&\& sudo apt install hackrf} (paquete 2023.01.1-9build1, universo). Confirme \texttt{/usr/lib/udev/rules.d/60-libhackrf0.rules}.
+  \item Con el HackRF conectado, \texttt{hackrf\_info} \emph{sin} \texttt{sudo} debe encontrarlo. Si exige \texttt{sudo}, lea la regla: si asigna el grupo \texttt{plugdev}, añada a los usuarios al grupo y reinicie sesión.
+  \item \texttt{sudo snap install sdrangel} y \texttt{sudo snap connect sdrangel:raw-usb}. Compruebe con \texttt{snap connections sdrangel}.
+  \item \textbf{No} use el \texttt{.deb} de 24.04 de la release 7.27.2: declara \texttt{libuhd4.10.0}, ausente en los repositorios estándar de 24.04 (verificado en los metadatos del paquete y en packages.ubuntu.com el 15-10-2026).
+  \item Copie la grabación de respaldo al \emph{directorio personal} de cada usuario (por ejemplo \texttt{\textasciitilde/datos\_adsb/}). Un snap confinado accede normalmente al directorio personal; otras rutas (\texttt{/media}, \texttt{/tmp}, discos externos) pueden requerir conexiones adicionales. Confírmelo abriendo el archivo con \textbf{FileInput} en la prueba en seco.
+  \item Arranque SDRangel como usuario normal, añada el HackRF y compruebe que arranca (cuadrado verde).
+\end{enumerate}
+
+\section{Calificación de la antena}
+\label{sec:i-antena}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.40\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}@{}}
+\caption{Registro de calificación por lugar (complételo y archívelo con la guía).}\label{tab:i-antena}\\
+\toprule
+\textbf{Prueba} & \textbf{Criterio de PASS} & \textbf{Resultado / fecha} \\
+\midrule
+\endfirsthead
+\caption[]{(continuación)}\\
+\toprule
+\textbf{Prueba} & \textbf{Criterio de PASS} & \textbf{Resultado / fecha} \\
+\midrule
+\endhead
+Conector antena B & Pin central (SMA macho) o adaptador disponible & \\
+Conectores cable C & Coherentes con antena y HackRF & \\
+FM, antena B, interior & $\ge 1$ emisora con audio inteligible y estable & \\
+FM, antena B, ventana & $\ge 3$ emisoras con audio inteligible & \\
+1090 MHz, antena B, ventana & $\ge 50$ tramas válidas y $\ge 1$ aeronave con posición en 10 min, en horario de clase & \\
+SIGLENT + adaptador & Emisora FM visible con preamplificador apagado & \\
+SIGLENT, span cero 1090 & Al menos una ráfaga capturada en 5 min (opcional) & \\
+\bottomrule
+\end{longtable}
+
+\begin{importante}[Cómo decidir]
+Una sola prueba con tráfico favorable no califica la antena para todas las sesiones: el tráfico a 1090 MHz cambia con la hora y el día. Repita la prueba 1090 a la hora real de la clase. Si el criterio no se cumple en dos días distintos, planifique el Lab.\ 02 con el bloque K como \emph{camino principal} y la recepción en vivo como exploración.
+\end{importante}
+
+\subsection*{Condiciones mínimas para una estación en vivo de 1090 MHz que funcione de verdad}
+
+\begin{enumerate}
+  \item Antena especificada para 1085--1095 MHz (o una $\lambda/4$ de 6,9 cm con plano de tierra), vertical, 50~$\Omega$, conector compatible.
+  \item Ubicación con línea de vista: exterior o ventana sin película metalizada; idealmente sin edificios altos en los sectores de las aerovías.
+  \item Cable corto o de bajas pérdidas; pérdida total $< 3$ dB a 1090 MHz.
+  \item Tráfico: aeronaves equipadas con ADS-B Out dentro del horizonte radioeléctrico durante la sesión.
+  \item Receptor: HackRF a 4 MSa/s, RF amp apagado, LNA/VGA moderados; CPU que procese la tasa sin pérdidas.
+  \item \gui{My Position} correcta (dentro de $\approx$ 180 NM para decodificación local).
+\end{enumerate}
+
+\section{SIGLENT SSA3032X Plus: precauciones}
+
+\begin{itemize}
+  \item Límites (hoja de datos DS0703P): RF INPUT N hembra 50~$\Omega$; potencia media máxima 30 dBm durante 3 min con $f_c \ge 10$ MHz, atenuación $> 20$ dB y preamplificador apagado; daño a 33 dBm; DC máximo $\pm 50$ V. El manual de usuario relaciona referencia y atenuación: $\text{Ref} \le \text{ATT} - \text{PA} - 20$ dBm.
+  \item Con antena pasiva los niveles son muy inferiores a esos límites; el riesgo real es la descarga electrostática en el pin central y la sobrecarga con preamplificador en lugares con emisores cercanos.
+  \item El TG (opcional) es una \emph{salida}: apagado y sin conectar.
+  \item Los rótulos de teclas, \gui{Marker Fn $\rightarrow$ N dB BW}, \gui{Demod} y el tiempo de barrido mínimo (900~$\mu$s) se tomaron del manual de usuario del SSA3000X Plus (UM0703P-E01A). Confirme en su unidad el firmware, la opción AMK (\emph{Occupied BW}, \emph{Spectrum Monitor}) y el \textbf{tiempo de barrido mínimo real en span cero}. Anote los resultados en la tabla~\ref{tab:i-noverif}.
+\end{itemize}
+
+\section{HackRF: compatibilidad y firmware}
+
+\begin{itemize}
+  \item Con \texttt{hackrf\_info} anote la versión de firmware y la del software (\emph{host}). Versiones oficiales actuales: herramientas v2026.01.3 (enero de 2026); Ubuntu 24.04 empaqueta 2023.01.1.
+  \item Si \texttt{hackrf\_info} o SDRangel advierten de incompatibilidad entre firmware y biblioteca, siga el procedimiento oficial de actualización de firmware de la documentación de HackRF, con la versión de firmware que corresponde a las herramientas instaladas. Hágalo fuera de clase: una actualización interrumpida deja la placa en modo DFU.
+  \item No es necesario actualizar si el dispositivo se identifica y recibe correctamente en ambos sistemas.
+\end{itemize}
+
+\section{Versiones probadas o recomendadas}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.42\linewidth}@{}}
+\toprule
+\textbf{Componente} & \textbf{Versión} & \textbf{Estado de verificación (15-10-2026)} \\
+\midrule
+\endhead
+SDRangel (Windows) & 7.27.2 & \textbf{Ejecutado}: FileInput + ADS-B Demodulator con la grabación; nombres de plugins y valores por defecto leídos por la API. Sin HackRF físico. \\
+SDRangel (Ubuntu) & 7.27.2 (snap) & Documentado (Snap Store). No ejecutado. \\
+Herramientas HackRF & 2026.01.3 (Windows, radioconda); 2023.01.1 (Ubuntu) & Documentado. No ejecutado. \\
+Windows & 10/11 & Verificación de software en Windows 11 25H2. \\
+Ubuntu & 24.04 LTS & Documentado. No ejecutado. \\
+Python (verificador) & 3.12+ con numpy & Ejecutado (Python 3.14, numpy 2.5). \\
+pyModeS (comprobación cruzada) & 3.6.0 & Ejecutado. \\
+\bottomrule
+\end{longtable}
+
+\section{Prueba en seco}
+\label{sec:i-seco}
+
+Hágala en el aula real, a la hora de la clase, siguiendo el manual del estudiante \emph{tal como está escrito}. Anote cada desviación.
+
+\begin{enumerate}
+  \item \textbf{Lab.\ 01:} pasos W1--W14. Criterio: audio inteligible de al menos una emisora con la antena B. Mida con el SIGLENT (pasos W15--W20) si hay adaptador. Grabe el respaldo FM (sección~\ref{sec:i-respaldofm}).
+  \item \textbf{Lab.\ 02 en vivo:} pasos U1--U9 durante 10 minutos. Anote tramas, aeronaves y aeronaves con posición.
+  \item \textbf{Lab.\ 02 respaldo:} pasos U12--U16 con la grabación (sección~\ref{sec:i-offline}).
+  \item \textbf{Bloque J:} intente el span cero con disparo de vídeo y anote el tiempo de barrido mínimo.
+  \item Actualice las tablas~\ref{tab:i-antena} y \ref{tab:i-noverif}. Si algún paso del manual no coincide con su versión, corrija el manual antes de la sesión.
+\end{enumerate}
+
+\section{Criterios mínimos de éxito}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.40\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}@{}}
+\toprule
+\textbf{Laboratorio} & \textbf{Éxito mínimo (aprobado)} & \textbf{Éxito completo} \\
+\midrule
+\endhead
+01 & HackRF identificado; receptor configurado según W8; emisora localizada en espectro y cascada; demodulador correcto con desplazamiento y de-énfasis correctos; audio \emph{o} limitación documentada con el respaldo; experimento 4 razonado. & Audio en vivo; medidas con el SIGLENT (marcador y $-26$ dB); cuatro experimentos con predicción y explicación. \\
+02 & Ubuntu y HackRF verificados; demodulador configurado; tabla y mapa obtenidos en vivo \emph{o} con la grabación (etiquetados); trama decodificada a mano; origen de cada campo clasificado. & Recepción en vivo con tramas válidas; experimento A--B--A; span cero en el SIGLENT; comparación vivo/grabación. \\
+\bottomrule
+\end{longtable}
+
+\begin{importante}[Lo que nunca debe premiarse]
+Una tabla «completa» con datos que el grupo no pudo haber observado, capturas de servicios web presentadas como propias, o niveles en dBm comparados sin matices con dB de SDRangel. La honestidad sobre una recepción fallida vale más que un resultado inventado.
+\end{importante}
+
+\section{Problemas frecuentes y recuperación}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.62\linewidth}@{}}
+\toprule
+\textbf{Problema} & \textbf{Recuperación} \\
+\midrule
+\endhead
+Antena RP-SMA sin adaptador & Lab.\ 01: respaldo FM. Lab.\ 02: bloque K como camino principal. Solicite el adaptador RP-SMA hembra -- SMA macho. \\
+Ninguna trama en 10 min & Mejor ventana; cable C; LNA 24--32. Si no, bloque K. No baje el umbral por debajo de 5 dB para «conseguir» filas. \\
+Aeronave en Colombia con la grabación & Esperado: \gui{My Position} sigue en el aula. Desactive \gui{Auto-update position} y fije 37,0 / 14,0. Úselo para enseñar CPR (figura~\ref{fig:i-cpr}). \\
+FileInput no abre el archivo (Ubuntu) & Archivo fuera del directorio personal (confinamiento snap) o archivo alterado: cópielo a \texttt{\textasciitilde/} y verifique el SHA-256. \\
+Audio ausente con señal & Desplazamiento con signo equivocado, mute, squelch o dispositivo de audio. \\
+HackRF «ocupado» & Otro programa abierto (radioconda Prompt con \texttt{hackrf\_info}, otra instancia de SDRangel). \\
+Saturación con RF amp & Apagarlo; volver a LNA 16 / VGA 16. Aproveche para mostrar los espurios. \\
+SDRangel lento & Mapa 2D, cerrar ventanas, no activar \emph{Display All Flight Paths}. \\
+\bottomrule
+\end{longtable}
+
+\section{Preparación del respaldo ADS-B}
+\label{sec:i-offline}
+
+\begin{enumerate}
+  \item Verifique la integridad: {\ttfamily sha256sum \nolinkurl{datos_adsb/modes1_dump1090_2MSps_1090MHz.sdriq}} debe dar\\{\ttfamily\small\nolinkurl{d201250f486e5ff14133bc57664c8e5be6c42be3bb989529f29789674ee5f25d}}.
+  \item Opcional: \texttt{python3 herramientas/adsb\_iq.py verificar \ldots} debe informar 430 preámbulos candidatos, 242 tramas válidas y 1 dirección ICAO.
+  \item En SDRangel: FileInput, abrir el archivo, bucle activado, aceleración 1; ADS-B Demodulator con desplazamiento 0, \gui{SR} 2M, umbral 7 dB, \gui{S} activado.
+  \item \gui{My Position} = 37,0 / 14,0 \emph{con la casilla \gui{Auto-update position} desactivada} (viene activada por defecto; rótulo tomado del código fuente de SDRangel). En la verificación con la API, la ubicación de Windows sobrescribía cada segundo la posición fijada; con la casilla activada, la aeronave aparece en una posición falsa cerca del aula.
+  \item Resultado verificado: fila \texttt{4d2023}, AMC421, 20\,025--24\,275 ft, 371--390 kt, posiciones 36,96--37,10°N, 13,79--13,86°E. El registro CSV de 20 s contenía 23\,847 líneas (unas 89 vueltas del bucle), 143 tramas distintas.
+  \item Restaure \gui{My Position}.
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_cpr_referencia}}
+\caption{Resultado medido durante la verificación (también en el manual del estudiante, figura 13).}
+\label{fig:i-cpr}
+\end{figure}
+
+\subsection*{Cómo evitar que una sesión fracase por falta de ADS-B en vivo}
+\begin{itemize}
+  \item Decida antes de clase, con la tabla~\ref{tab:i-antena}, si el camino principal es en vivo o grabado.
+  \item Tenga la grabación copiada y probada en \emph{cada} puesto.
+  \item Aplique la regla del minuto 85 del manual sin excepciones: más espera rara vez produce tráfico.
+  \item Si un solo puesto recibe, proyecte su pantalla: el resto del grupo trabaja con la grabación y compara.
+\end{itemize}
+
+\section{Respaldo del Laboratorio 01: ejemplo FM verificado}
+\label{sec:i-respaldofm}
+
+No se incluye una grabación FM en el repositorio (el contenido de una emisora tiene derechos de autor y el tamaño sería grande). Prepárela usted en la prueba en seco:
+\begin{enumerate}
+  \item Con la recepción de W14 funcionando, añada al mismo dispositivo un canal \textbf{File Sink} (presente en SDRangel 7.27.2) centrado en la emisora, con ancho suficiente para el canal de 200 kHz (por ejemplo 384 kS/s o más). Grabe 20--30 s a un archivo \texttt{.sdriq}.
+  \item Reprodúzcalo con \textbf{FileInput} y un \textbf{Broadcast FM Demodulator}; confirme audio inteligible.
+  \item Guarde además una captura del espectro y la cascada y una nota con fecha, hora, lugar y antena.
+  \item En clase, el respaldo se presenta \emph{etiquetado como grabación del instructor}. Bórrelo tras el curso si su política de derechos de autor lo exige.
+\end{enumerate}
+\textbf{Estado:} el canal File Sink está presente en 7.27.2 (verificado por la API), pero este procedimiento de grabación \emph{no} se ejecutó en la revisión.
+
+\section{Privacidad y uso de datos}
+\label{sec:i-privacidad}
+
+\begin{itemize}
+  \item SDRangel rellena \gui{My Position} con la ubicación del sistema; el botón de GPS puede consultar un servicio de geolocalización por IP. Las capturas publicadas no deben mostrar las coordenadas del receptor.
+  \item El botón \gui{Feed} del demodulador enviaría tramas a agregadores externos: manténgalo desactivado salvo autorización institucional.
+  \item La grabación de respaldo contiene datos públicos radiodifundidos en 2013 por una aeronave real; se usa con fines educativos bajo la licencia BSD-3 de dump1090.
+\end{itemize}
+
+\section{Claves de los cuestionarios}
+\label{sec:i-claves}
+
+\subsection{Laboratorio 01 --- diagnóstico}
+\CuestionarioDiagnosticoW
+\subsection{Laboratorio 01 --- final}
+\CuestionarioFinalW
+\subsection{Laboratorio 02 --- diagnóstico}
+\CuestionarioDiagnosticoU
+\subsection{Laboratorio 02 --- final}
+\CuestionarioFinalU
+
+\subsection{Ejercicios durante los laboratorios}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}p{0.66\linewidth}@{}}
+\toprule
+\textbf{Ejercicio} & \textbf{Respuesta esperada} \\
+\midrule
+\endhead
+Lab.\ 01, predicción del barrido & Varias emisoras de alturas distintas: potencia del transmisor, distancia, obstáculos y respuesta de la antena difieren. \\
+Exp.\ 1, sintonía & 50 kHz: distorsión (parte de la desviación fuera del filtro); 100 kHz: muy degradado; 200 kHz: emisora vecina o ruido. \\
+Exp.\ 2, ancho de banda & RF BW 80 kHz: distorsión por recorte de la desviación; 250 kHz: más ruido y posible interferencia adyacente. AF BW 3 kHz: audio «telefónico» pero inteligible. \\
+Exp.\ 3, ganancia & Baja: emisora apenas sobre el ruido; moderada: mejor compromiso; alta/excesiva: piso más alto, espurios, distorsión. \\
+Exp.\ 4, comparación & Espectro: ambos sí. dBm absoluto con exactitud especificada: SIGLENT sí (con su calibración), SDRangel no. Audio: SDRangel sí; el SIGLENT también puede escuchar FM con \gui{Demod} y auriculares, aunque sin el procesado de canal de SDRangel: acepte «sí» o «parcial» si se justifica. Cascada: SDRangel sí; SIGLENT parcial (función \emph{Spectrum Monitor} del kit opcional AMK, si está instalado). Ancho con marcadores: SIGLENT sí; SDRangel parcial. 20 MHz: el SIGLENT los recorre en cada barrido, pero no simultáneamente; el HackRF los vería a la vez a 20 MSa/s, no con los 2,4 MSa/s usados. Dependen de antena y cable: ambos sí. \\
+Lab.\ 02, trama a mano & \texttt{8D} = \texttt{10001101}: DF 17, CA 5. ICAO \texttt{4D2023}. ME \texttt{20}: TC 4, categoría 0. Caracteres: 1, 13, 3, 52, 50, 49, 32, 32 $\Rightarrow$ «AMC421». Mensaje de identificación: no contiene posición; además una sola trama de posición no basta sin par o referencia. \\
+Lab.\ 02, predicción de antena & No hay respuesta única; se valora que el estudiante priorice la ubicación (línea de vista) y reconozca la incertidumbre de la antena. \\
+A--B--A & Se valora el razonamiento: si A' difiere de A más que B de A, el efecto de la ganancia no está demostrado. \\
+\bottomrule
+\end{longtable}
+
+\section{Rúbrica}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedleft\arraybackslash}p{0.07\linewidth}>{\raggedright\arraybackslash}p{0.58\linewidth}@{}}
+\toprule
+\textbf{Criterio} & \textbf{Pts.} & \textbf{Nivel excelente} \\
+\midrule
+\endhead
+\multicolumn{3}{@{}l}{\textbf{Laboratorio 01} (100 puntos)} \\
+Seguridad y conexión & 10 & Conector identificado; orden de conexión correcto; sin transmisión. \\
+Configuración del receptor & 20 & Parámetros justificados; dispositivo frente a canal bien explicado. \\
+Recepción FM & 20 & Audio o limitación honesta; tablas completas. \\
+Analizador & 20 & RBW/VBW/detector justificados; marcador y $-26$ dB correctos. \\
+Experimentos & 20 & Predicción escrita, observación y explicación física. \\
+Interpretación & 10 & Niveles de evidencia correctos; límites de la comparación de niveles. \\
+\multicolumn{3}{@{}l}{\textbf{Laboratorio 02} (100 puntos)} \\
+Preparación de Ubuntu & 10 & Órdenes, salidas y permisos documentados. \\
+Receptor y demodulador & 15 & Parámetros y su justificación. \\
+Tramas y validación & 20 & Trama decodificada a mano; reglas de paridad por DF. \\
+Tabla y mapa & 20 & Origen de cada campo (RF, derivado, externo); CPR explicado. \\
+Experimento y SIGLENT & 20 & A--B--A razonado; limitación del barrido explicada. \\
+Informe y honestidad & 15 & Evidencia EN VIVO / GRABACIÓN etiquetada; conclusiones ligadas a datos. \\
+\bottomrule
+\end{longtable}
+
+\section{Ejemplos de evidencia esperada}
+
+\begin{itemize}
+  \item \textbf{Respaldo ADS-B} (datos reales de la verificación): primeras líneas del CSV registrado por SDRangel 7.27.2:
+\begin{lstlisting}
+Date,Time,Data,Correlation
+Thu Oct 15 2026,15:15:31,8f4d2023587710b9d199ddd3f278,14.9045
+Thu Oct 15 2026,15:15:31,5f4d20232daf00,18.7047
+Thu Oct 15 2026,15:15:31,8f4d2023991093ace87c14c1cd70,40.1905
+\end{lstlisting}
+  Fecha y hora son las de la reproducción, no las de la grabación. Lista completa de tramas distintas: \texttt{datos\_adsb/sdrangel\_7.27.2\_tramas\_unicas.csv}.
+  \item \textbf{FileInput}: 2000 kS/s, 1\,090\,000 kHz, duración 00:00:00.178, inicio 2013-01-05.
+  \item \textbf{FM en vivo}: no hay ejemplo verificado; use el que grabe en la prueba en seco.
+\end{itemize}
+
+\section{Limitaciones científicas}
+
+\begin{itemize}
+  \item Ningún nivel medido es trazable: antena y cable no están calibrados; el HackRF no es un instrumento de medida.
+  \item La calificación de antena es empírica y local: vale para un lugar, una hora y un tráfico.
+  \item La grabación tiene el tiempo comprimido (eliminación de silencios, inferida) y se reproduce en bucle: no permite estudiar tasas, alcance ni seguimiento temporal.
+  \item El span cero del SIGLENT muestra envolventes, no bits; no valida tramas.
+  \item El verificador del repositorio es deliberadamente simple (sin corrección de errores): encuentra menos tramas que SDRangel (126 comunes; SDRangel 17 DF17 adicionales; el verificador 1 DF21 que SDRangel no registró).
+\end{itemize}
+
+\section{Tareas no verificadas experimentalmente}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.48\linewidth}>{\raggedright\arraybackslash}p{0.44\linewidth}@{}}
+\caption{Pendiente de validación en el banco. Complete la columna derecha en la prueba en seco.}\label{tab:i-noverif}\\
+\toprule
+\textbf{Tarea} & \textbf{Resultado del instructor} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Tarea} & \textbf{Resultado del instructor} \\
+\midrule
+\endhead
+Detección del HackRF real en Windows y Ubuntu & \\
+\texttt{hackrf\_info} (radioconda y Ubuntu) & \\
+Recepción FM en vivo con la antena B & \\
+Ajustes del Broadcast FM Demodulator con un HackRF real & \\
+Medidas con el SIGLENT (adaptador, rótulos, N dB BW) & \\
+Tiempo de barrido mínimo en span cero & \\
+Instalación snap y permiso \texttt{raw-usb} en Ubuntu 24.04 & \\
+Regla udev de \texttt{libhackrf0} (grupo o \texttt{uaccess}) & \\
+Recepción ADS-B en vivo con la antena B & \\
+Desactivar \gui{Auto-update position} en la interfaz (verificado en el código fuente, no pulsado en la GUI) & \\
+FileInput en el snap de Ubuntu (acceso al archivo) & \\
+Grabación FM con File Sink & \\
+\bottomrule
+\end{longtable}

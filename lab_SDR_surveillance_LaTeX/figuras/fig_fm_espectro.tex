@@ -1,0 +1,31 @@
+% (a) Señal múltiplex (MPX) que modula en frecuencia a la portadora.
+% (b) Canal de radiodifusión FM visto en RF: portadora, desviación y ancho ocupado.
+\begin{tikzpicture}[x=1mm,y=1mm,font=\sffamily\scriptsize]
+  % ---------- (a) MPX ----------
+  \begin{scope}
+    \draw[flecha] (0,0) -- (74,0) node[right,rotulo]{$f$ (kHz)};
+    \draw[flecha] (0,0) -- (0,24) node[above,rotulo]{amplitud};
+    \fill[MAPrimarySoft,draw=MAPrimaryDark] (0.5,0) -- (0.5,17) -- (15,17) -- (15,0) -- cycle;
+    \node[align=center] at (7.75,9) {L+R\\(mono)};
+    \draw[MATertiary,line width=1.2pt] (19,0) -- (19,11) node[above,color=MATertiary]{piloto 19};
+    \fill[MASecondarySoft,draw=MASecondary] (23,0) -- (23,11) -- (37.5,11) -- (38,0) -- cycle;
+    \fill[MASecondarySoft,draw=MASecondary] (38,0) -- (38.5,11) -- (53,11) -- (53,0) -- cycle;
+    \node[align=center] at (38,15) {L$-$R (DSB, 23--53)};
+    \fill[MAWarningSoft,draw=MAWarning] (55,0) rectangle (59,6);
+    \node[above,color=MAWarning] at (57,6) {RDS 57};
+    \foreach \x in {0,15,19,38,53,57} \draw (\x,0) -- (\x,-1) node[below]{\x};
+    \node[anchor=west,font=\sffamily\scriptsize\bfseries] at (0,29) {(a) Banda base MPX (antes de modular)};
+  \end{scope}
+  % ---------- (b) RF ----------
+  \begin{scope}[xshift=86mm]
+    \draw[flecha] (0,0) -- (74,0) node[right,rotulo]{$f$};
+    \draw[flecha] (0,0) -- (0,24) node[above,rotulo]{dB};
+    \draw[MAMuted] (0,3) -- (72,3) node[pos=0.06,above]{piso de ruido};
+    \draw[line width=0.9pt,color=MAPrimaryDark,fill=MAPrimarySoft,fill opacity=0.6]
+      plot[smooth] coordinates {(14,3.2) (18,5) (22,10) (26,15) (30,17.5) (36,18.5) (42,17.5) (46,15) (50,10) (54,5) (58,3.2)};
+    \draw[dashed,MAInk] (36,0) -- (36,21) node[above]{$f_c$ (p.\ ej.\ 100,9 MHz)};
+    \draw[<->,MASecondary] (26,-3) -- node[below]{$\pm 75$ kHz desviación máx.} (46,-3);
+    \draw[<->,MAPrimaryDark] (16,-8.5) -- node[below]{ocupación típica $\approx$ 200--260 kHz (regla de Carson)} (56,-8.5);
+    \node[anchor=west,font=\sffamily\scriptsize\bfseries] at (0,29) {(b) Canal FM en RF (esquema)};
+  \end{scope}
+\end{tikzpicture}

@@ -81,6 +81,8 @@ Los 20 ejercicios originales ya mostraban la salida esperada exacta y eran inequ
 
 ### Manual SDR
 
+> Registro histórico de la edición 1.2 (cinco prácticas). La edición 2.0 del 15-10-2026 la sustituyó por dos laboratorios de solo recepción; su revisión está en [`lab_SDR_surveillance_LaTeX/INFORME_REVISION.md`](../lab_SDR_surveillance_LaTeX/INFORME_REVISION.md).
+
 | Hallazgo | Corrección |
 |---|---|
 | Carpeta con 13 borradores `.tex`, 27 figuras (~56 MB) no usadas por la edición activa, `.py` generados y artefactos de compilación | Movidos a `_hist/` (local, fuera de Git); nada se borró. Flowgraphs de referencia en `grc/` |

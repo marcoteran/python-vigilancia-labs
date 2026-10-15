@@ -1,0 +1,14 @@
+% Campos de una trama larga DF17 (ADS-B 1090ES), 112 bits, a escala.
+\begin{tikzpicture}[x=1.32mm,y=1mm,font=\sffamily\scriptsize]
+  \def\campo#1#2#3#4#5{% inicio, fin, nombre, detalle, color
+    \fill[#5!25] (#1,0) rectangle (#2,9); \draw[MAInk] (#1,0) rectangle (#2,9);
+    \node[font=\sffamily\scriptsize\bfseries] at ({(#1+#2)/2},5.6) {#3};
+    \node at ({(#1+#2)/2},2.4) {#4};}
+  \campo{0}{5}{DF}{5}{MAPrimary}
+  \campo{5}{8}{CA}{3}{MAPrimary}
+  \campo{8}{32}{AA: dirección ICAO}{24 bits}{MASecondary}
+  \campo{32}{88}{ME: mensaje ADS-B (TC = 5 primeros bits)}{56 bits}{MATertiary}
+  \campo{88}{112}{PI: paridad}{24 bits}{MAWarning}
+  \foreach \b in {0,5,8,32,88,112} \node[below,rotulo] at (\b,-0.5) {\b};
+  \node[rotulo,anchor=west,align=left] at (0,-8) {Ejemplo verificado (conjunto de datos del Lab.\ 02): \texttt{8D 4D2023 2004D0F4CB1820 B0EFD4} $\Rightarrow$ DF 17, CA 5, ICAO 4D2023,\\TC 4 (identificación), indicativo «AMC421». La paridad de 24 bits da resto 0 (PI con II = 0).};
+\end{tikzpicture}

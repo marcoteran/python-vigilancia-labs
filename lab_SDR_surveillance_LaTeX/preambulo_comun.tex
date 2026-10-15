@@ -1,0 +1,167 @@
+% Preámbulo común del manual del estudiante (main.tex) y de la guía del instructor
+% (guia_instructor.tex). Se carga después de \documentclass y de marco-academic.
+
+\usepackage{longtable}
+\usepackage{calc}
+\usepackage{float}
+\usepackage{bookmark}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{ifthen}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,decorations.pathmorphing,shapes.geometric,fit,backgrounds,babel}
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{1}
+\RedeclareSectionCommand[tocnumwidth=2.5em]{section}
+\setlength{\LTleft}{0pt}
+% Con \LTright rígido, el \caption de longtable desborda exactamente \linewidth.
+\setlength{\LTright}{0pt plus 1fill}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.14}
+
+% ---------------------------------------------------------------------------
+% Numeración por laboratorio: 0.x (común), 1.x (Windows), 2.x (Ubuntu), A.x.
+% Cada laboratorio reinicia secciones y pasos; el prefijo de paso (W/U) evita
+% confusiones al citar «el paso W12» frente a «el paso U12».
+% ---------------------------------------------------------------------------
+\newcommand{\labnum}{0}
+\renewcommand{\thesection}{\labnum.\arabic{section}}
+\newcounter{paso}
+\newcommand{\pasoprefijo}{P}
+\renewcommand{\thepaso}{\pasoprefijo\arabic{paso}}
+\newcommand{\IniciarLaboratorio}[2]{% #1 número (0,1,2,A), #2 prefijo de paso
+  \renewcommand{\labnum}{#1}\setcounter{section}{0}%
+  \renewcommand{\pasoprefijo}{#2}\setcounter{paso}{0}}
+
+% Portadilla de laboratorio: aparece en el índice y en los marcadores del PDF.
+\newcommand{\PortadillaLaboratorio}[3]{% #1 kicker, #2 título, #3 entradilla
+  \clearpage
+  \phantomsection
+  \addcontentsline{toc}{part}{#2}%
+  \begin{tcolorbox}[enhanced,frame hidden,colback=MAPrimaryDark,coltext=white,arc=2mm,
+      left=7mm,right=7mm,top=6mm,bottom=6mm]
+    {\sffamily\bfseries\footnotesize\color{white!80!MAPrimarySoft}\MakeUppercase{#1}}\par\vspace{2mm}
+    {\sffamily\bfseries\fontsize{21}{25}\selectfont #2\par}
+  \end{tcolorbox}
+  \vspace{2mm}
+  \MAIntro{#3}
+}
+
+% ---------------------------------------------------------------------------
+% Recuadros adicionales sobre el sistema de marco-academic.
+% ---------------------------------------------------------------------------
+\newtcolorbox{esperado}{ma/base,colback=MASuccessSoft,coltitle=MASuccess,borderline west={2.5pt}{0pt}{MASuccess},title={QUÉ DEBE OBSERVAR Y POR QUÉ}}
+\newtcolorbox{alerta}[1][]{ma/base,colback=MADangerSoft,coltitle=MADanger,borderline west={3pt}{0pt}{MADanger},title={SEGURIDAD\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{diagnostico}[1][]{ma/base,colback=MASurfaceAlt,coltitle=MAInk,borderline west={2.5pt}{0pt}{MAMuted},title={DIAGNÓSTICO\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{prediccion}[1][]{ma/base,colback=MAWarningSoft,coltitle=MAWarning,borderline west={2.5pt}{0pt}{MAWarning},title={PREDIGA ANTES DE MEDIR\ifstrempty{#1}{}{ · #1}}}
+\newtcolorbox{estado}[1][]{ma/base,colback=MATertiarySoft,coltitle=MATertiary,borderline west={2.5pt}{0pt}{MATertiary},title={ESTADO DE VALIDACIÓN\ifstrempty{#1}{}{ · #1}}}
+
+% Paso detallado: acción, dónde, parámetro, por qué, observación, verificación, si falla.
+% Un argumento vacío omite su fila (no todos los pasos necesitan las siete partes).
+\newtcolorbox{pasobox}[2]{ma/base,breakable=false,colback=MASurface,colframe=MARule,frame hidden,
+  borderline={0.4pt}{0pt}{MARule},borderline west={2.5pt}{0pt}{MAPrimary},
+  coltitle=MAPrimaryDark,title={PASO #1\enspace·\enspace#2},left=3.5mm,right=3.5mm,top=2.2mm,bottom=2.4mm,
+  before skip=6pt,after skip=6pt}
+\newcommand{\MApasofila}[2]{\ifstrempty{#2}{}{\textcolor{MAMuted}{\sffamily\bfseries\scriptsize #1} & #2\\}}
+\newcommand{\Paso}[7]{%
+  \refstepcounter{paso}%
+  \begin{pasobox}{\thepaso}{#1}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}X@{}}
+      \MApasofila{DÓNDE}{#2}%
+      \MApasofila{PARÁMETRO}{#3}%
+      \MApasofila{POR QUÉ}{#4}%
+      \MApasofila{SE OBSERVA}{#5}%
+      \MApasofila{VERIFIQUE}{#6}%
+      \MApasofila{SI FALLA}{#7}%
+    \end{tabularx}
+  \end{pasobox}}
+
+% Orden de terminal: comando, propósito, salida esperada, cómo reconocer el fallo, recuperación.
+% El comando se escribe tal cual (\detokenize): no use %, # ni llaves desbalanceadas.
+\newtcolorbox{comandobox}[1]{ma/base,breakable=false,colback=MASurface,frame hidden,
+  borderline={0.4pt}{0pt}{MARule},borderline west={2.5pt}{0pt}{MASecondary},
+  left=3.5mm,right=3.5mm,top=2.2mm,bottom=2.4mm,before skip=6pt,after skip=6pt,
+  title={\ttfamily\small\color{MAInk}\hyphenpenalty=10000\exhyphenpenalty=10000\$\ #1},
+  coltitle=MAInk,fonttitle={},halign title=flush left}
+\newcommand{\Comando}[5]{%
+  \begin{comandobox}{\detokenize{#1}}
+    \small
+    \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}X@{}}
+      \MApasofila{PROPÓSITO}{#2}%
+      \MApasofila{SE OBSERVA}{#3}%
+      \MApasofila{FALLO}{#4}%
+      \MApasofila{RECUPERACIÓN}{#5}%
+    \end{tabularx}
+  \end{comandobox}}
+
+% Rótulos de interfaz y valores: estilo uniforme en todo el manual.
+\newcommand{\gui}[1]{\textsf{\textbf{#1}}}
+\newcommand{\menu}[1]{\textsf{#1}}
+\newcommand{\valor}[1]{\textbf{#1}}
+\newcommand{\tecla}[1]{{\setlength{\fboxsep}{1.2pt}\fbox{\sffamily\scriptsize #1}}}
+\newcommand{\cmd}[1]{\texttt{\detokenize{#1}}}
+
+% Etiquetas de decisión de preparación de hardware.
+\newcommand{\PASS}{{\sffamily\bfseries\color{MASuccess}PASS}}
+\newcommand{\COND}{{\sffamily\bfseries\color{MAWarning}CONDICIONAL}}
+\newcommand{\BLOQ}{{\sffamily\bfseries\color{MADanger}BLOQUEADO}}
+
+% Casillas para hojas de registro.
+\newcommand{\campo}[1][3.2cm]{\rule[-0.4ex]{#1}{0.4pt}}
+
+% ---------------------------------------------------------------------------
+% Cuestionarios: una sola fuente (contenido/cuestionarios.tex). El manual del
+% estudiante imprime enunciado y opciones; la guía del instructor añade la
+% respuesta y su justificación. Activar con \guiainstructortrue.
+% ---------------------------------------------------------------------------
+\newif\ifguiainstructor
+\newcounter{pregunta}
+\newcommand{\Pregunta}[7]{% #1 enunciado, #2-#5 opciones A-D, #6 letra correcta, #7 justificación
+  \refstepcounter{pregunta}%
+  \Needspace{6\baselineskip}%
+  \noindent\textbf{\sffamily\small\color{MAPrimaryDark}\thepregunta.}\enspace #1\par\vspace{1pt}
+  \begin{enumerate}[label=\textsf{\textbf{\Alph*}}),leftmargin=2.4em,itemsep=0pt,topsep=1pt]
+    \item #2
+    \item #3
+    \item #4
+    \item #5
+  \end{enumerate}
+  \ifguiainstructor
+    \vspace{-1pt}{\small\noindent\colorbox{MASuccessSoft}{\sffamily\bfseries\scriptsize\color{MASuccess}\,RESPUESTA #6\,}\enspace #7\par}
+  \fi
+  \vspace{5pt}}
+
+\setlist[itemize]{leftmargin=1.55em,itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.35em,topsep=0.35em}
+
+\definecolor{grisclaro}{HTML}{F3F4F6}
+\lstset{
+	style=ma-code,
+	basicstyle=\ttfamily\small,
+	backgroundcolor=\color{grisclaro},
+	frame=single,
+	rulecolor=\color{gray!35},
+	breaklines=true,
+	columns=fullflexible,
+	keepspaces=true,
+	showstringspaces=false,
+	numbers=none,
+	xleftmargin=0.4em,
+	xrightmargin=0.4em,
+	aboveskip=0.6em,
+	belowskip=0.6em
+}
+
+% Estilo común de los diagramas TikZ: alto contraste, texto sans legible.
+\tikzset{
+  bloque/.style={draw=MAPrimaryDark,line width=0.7pt,rounded corners=2pt,fill=MAPrimarySoft,
+    align=center,font=\sffamily\scriptsize,minimum height=9mm,inner sep=3pt},
+  bloquealt/.style={bloque,draw=MASecondary,fill=MASecondarySoft},
+  bloqueinst/.style={bloque,draw=MATertiary,fill=MATertiarySoft},
+  bloqueext/.style={bloque,draw=MAMuted,fill=MASurfaceAlt,dashed},
+  flecha/.style={-{Stealth[length=2.4mm]},line width=0.8pt,color=MAInk},
+  flechadash/.style={flecha,dashed,color=MAMuted},
+  rotulo/.style={font=\sffamily\scriptsize,color=MAMuted,align=center},
+}
