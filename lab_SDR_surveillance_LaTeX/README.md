@@ -9,6 +9,8 @@ Dos laboratorios universitarios **de solo recepción** con **HackRF One**, **SDR
 | 01 | Windows 10/11 | *De las ondas de radio al sonido:* recepción FM, SDR y análisis de espectro | 210 min | Audio FM recuperado; espectro y cascada; medidas con marcador en el SIGLENT; comparación de instrumentos |
 | 02 | Ubuntu 24.04 LTS | *Del pulso de 1090 MHz a la aeronave en el mapa:* recepción y decodificación ADS-B/Mode S | 225 min | Tramas con paridad válida, tabla de aeronaves, mapa, estadísticas; respaldo offline verificado |
 
+**Implementos:** la lista completa (lo que ya está en el banco, los adaptadores imprescindibles y las mejoras recomendadas), con enlaces de compra comprobados, está en el [README principal](../README.md#implementos-y-dónde-comprarlos).
+
 ## Antes de asignarlos
 
 - **Solo recepción.** Ninguna actividad transmite. La edición anterior (cinco prácticas, con transmisión FM conducida, GNU Radio y Wi-Fi/BLE) quedó retirada; sigue disponible en el historial de Git.

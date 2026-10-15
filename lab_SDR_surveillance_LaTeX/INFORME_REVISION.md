@@ -11,7 +11,7 @@
 | **Aceptación documental** | **93,5 / 100: no alcanza el umbral de 95.** Se cumplen las diez condiciones obligatorias (sección 7). Los 6,5 puntos que faltan corresponden sobre todo a procedimientos documentados pero no ejecutados (Ubuntu 24.04, banco físico). Más edición no puede ganarlos honestamente. |
 | **Validación de hardware en campo** | **Pendiente.** No se operó el HackRF One, la antena del kit ni el SIGLENT. La prueba en seco de la guía del instructor lo resuelve. |
 | **Respaldo offline ADS-B** | **Verificado en software**: SDRangel 7.27.2 (Windows), verificador propio y pyModeS 3.6.0. |
-| **Publicación** | En la rama `sdr-labs-v2`, sin fusionar en `main`, porque no se alcanzó el umbral de aceptación documental. |
+| **Publicación** | Se publicó primero en la rama `sdr-labs-v2`, sin fusionar en `main`, porque no se alcanzó el umbral de aceptación documental. El 15-10-2026, el responsable del repositorio ordenó fusionarla en `main` sabiendo que la puntuación era de 93,5/100 y que la validación en campo seguía pendiente. |
 
 ## 2. Evidencia por tipo
 
