@@ -1,0 +1,36 @@
+% Anexo A: fundamentos, aclaraciones y referencia técnica de los dos laboratorios.
+% Compile junto con los demás documentos (compile-xelatex.bat o make).
+
+\documentclass[11pt,a4paper]{scrartcl}
+\usepackage{xr-hyper}
+\usepackage[palette=signal,mode=lab,body=serif]{marco-academic}
+\input{preambulo_comun}
+\externaldocument[M-]{build/laboratorio_sdr_surveillance}[laboratorio_sdr_surveillance.pdf]
+
+\MASetup{
+ title={Anexo A\\Fundamentos y referencia técnica},
+ subtitle={Teoría, aclaraciones, seguridad, diagnóstico de fallos y datos de referencia de los laboratorios SDR de recepción FM y ADS-B/Mode S},
+ author={Marco Teran},
+ institution={Anexo del manual del estudiante · versión aprobada para uso en clase},
+ course={Vigilancia aeronáutica · Instrumentación RF y SDR},
+ code={LAB-SDR-1090 · ANEXO A · v3.0},
+ version={3.0},
+ date={16 de octubre de 2026},
+ header-left={Laboratorios SDR · Anexo A},
+ header-right={Fundamentos y referencia técnica},
+ cover-note={\textbf{Cómo usar este anexo.} El manual remite aquí con indicaciones como «Anexo A, §A.4». Puede leerlo de corrido antes de la sesión o consultarlo cuando un paso le plantee una pregunta. Nada de este anexo es necesario para \emph{ejecutar} los pasos; todo es necesario para \emph{explicarlos}.}
+}
+
+\hypersetup{pdftitle={Anexo A · Fundamentos y referencia técnica},pdfsubject={Laboratorios SDR: teoría, seguridad, diagnóstico y datos de referencia},pdflang={es},bookmarksnumbered=true}
+\AtBeginDocument{\hypersetup{pdftitle={Anexo A · Fundamentos y referencia técnica},pdfsubject={Laboratorios SDR: teoría, seguridad, diagnóstico y datos de referencia}}}
+
+\begin{document}
+\MAMakeTitle
+
+\tableofcontents
+\clearpage
+
+\IniciarLaboratorio{A}{A}
+\input{contenido/a_fundamentos}
+
+\end{document}

@@ -1,0 +1,392 @@
+% Anexo B · Evaluación y registro (cuaderno del estudiante, sin respuestas).
+
+% Renglones para respuestas manuscritas.
+\newcommand{\lineas}[1]{\par\vspace{3mm}\foreach \i in {1,...,#1}{\noindent\rule{\linewidth}{0.3pt}\par\vspace{6.5mm}}}
+% Celda vacía alta para tablas de registro.
+\newcommand{\vacio}{\rule{0pt}{5.5mm}}
+
+% ===========================================================================
+\section{Cómo se evalúa}
+\label{sec:b-como}
+
+Cada laboratorio vale 100 puntos. Se premia la \emph{interpretación honesta de la evidencia}, no los números bonitos: una recepción difícil bien explicada vale más que una tabla completa que no se puede justificar.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.35\linewidth}>{\raggedleft\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.49\linewidth}@{}}
+\toprule
+\textbf{Criterio} & \textbf{Pts.} & \textbf{Qué se espera} \\
+\midrule
+\endhead
+\multicolumn{3}{@{}l}{\textbf{Laboratorio 01}} \\
+Montaje y seguridad & 10 & Conexiones correctas; reglas respetadas; hoja W1 completa \\
+Configuración del receptor & 20 & Valores registrados y justificados; dispositivo y canal bien distinguidos \\
+Recepción FM & 20 & Hojas W2 y W3; audio obtenido y nivel de evidencia declarado \\
+Analizador & 20 & Hoja W4; RBW, VBW y detector justificados; marcador y $-26$ dB \\
+Experimentos & 20 & Hojas W5--W8 con predicción, observación y explicación física \\
+Interpretación & 10 & Hoja W9 y cuestionario final \\
+\multicolumn{3}{@{}l}{\textbf{Laboratorio 02}} \\
+Estación y Ubuntu & 10 & Hojas U1 y U2 \\
+Receptor y demodulador & 15 & Hojas U3 y U4 con parámetros justificados \\
+Tramas y validación & 20 & Hoja U5: trama decodificada; reglas de paridad por formato \\
+Tabla y mapa & 20 & Hojas U6 y U7: origen de cada campo; CPR explicado \\
+Experimento y analizador & 20 & Hojas U8 y U9: diseño A--B--A razonado; límites del barrido \\
+Referencia e interpretación & 15 & Hojas U10 y U11; origen EN VIVO o GRABACIÓN etiquetado \\
+\bottomrule
+\end{longtable}
+
+Los cuestionarios diagnósticos no puntúan: le sirven a usted y al instructor para saber qué repasar.
+
+% ===========================================================================
+\section{Laboratorio 01 · Cuestionario diagnóstico}
+\label{sec:b-diagw}
+
+Antes de la sesión, individual, 8 minutos, sin consultar. Marque una opción por pregunta.
+
+\CuestionarioDiagnosticoW
+
+% ===========================================================================
+\section{Laboratorio 01 · Hojas de registro}
+\label{sec:b-hojasw}
+
+\Hoja{W1}{Puesto y equipo}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.45\linewidth}>{\raggedright\arraybackslash}p{0.47\linewidth}@{}}
+\toprule
+Grupo e integrantes & \vacio \\ \cmidrule[0.3pt]{1-2}
+Fecha y puesto & \vacio \\ \cmidrule[0.3pt]{1-2}
+Número de serie del HackRF (últimos 6 dígitos) & \vacio \\ \cmidrule[0.3pt]{1-2}
+Versión de firmware y de \texttt{hackrf\_info} & \vacio \\ \cmidrule[0.3pt]{1-2}
+«HackRF One» sin advertencias en el Administrador de dispositivos (sí/no) & \vacio \\ \cmidrule[0.3pt]{1-2}
+Longitud de la antena ANT500 (cm) y ubicación & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+
+\Hoja{W2}{Predicción y barrido de banda}
+\textbf{Predicción} (antes de la etapa 4): ¿cuántas emisoras espera ver en 2,4 MHz de banda? ¿Tendrán todas la misma altura? ¿Por qué?
+\lineas{2}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.47\linewidth}@{}}
+\toprule
+\textbf{Frecuencia (MHz)} & \textbf{Altura sobre el ruido (dB)} & \textbf{Aspecto en la cascada} \\
+\midrule
+\vacio & & \\ \cmidrule[0.3pt]{1-3}
+\vacio & & \\ \cmidrule[0.3pt]{1-3}
+\vacio & & \\ \cmidrule[0.3pt]{1-3}
+\vacio & & \\ \cmidrule[0.3pt]{1-3}
+\vacio & & \\
+\bottomrule
+\end{tabular}\par\medskip
+
+\Hoja{W3}{Recepción FM}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.45\linewidth}>{\raggedright\arraybackslash}p{0.47\linewidth}@{}}
+\toprule
+Frecuencia de la emisora & \vacio \\ \cmidrule[0.3pt]{1-2}
+Frecuencia del dispositivo / desplazamiento del canal & \vacio \\ \cmidrule[0.3pt]{1-2}
+Tasa de muestreo / decimación & \vacio \\ \cmidrule[0.3pt]{1-2}
+RF amp / LNA / VGA & \vacio \\ \cmidrule[0.3pt]{1-2}
+RF BW / AF BW / de-énfasis & \vacio \\ \cmidrule[0.3pt]{1-2}
+Audio: inteligible, ruidoso o ausente; mono o estéreo; RDS & \vacio \\ \cmidrule[0.3pt]{1-2}
+Ancho aproximado en el espectro y altura sobre el ruido & \vacio \\ \cmidrule[0.3pt]{1-2}
+Nivel de evidencia alcanzado (1--7) y prueba & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+
+\Hoja{W4}{Medida con el analizador}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.45\linewidth}>{\raggedright\arraybackslash}p{0.47\linewidth}@{}}
+\toprule
+Centro / span / RBW / VBW & \vacio \\ \cmidrule[0.3pt]{1-2}
+Referencia / atenuación / preamplificador & \vacio \\ \cmidrule[0.3pt]{1-2}
+Detector / tipo de traza & \vacio \\ \cmidrule[0.3pt]{1-2}
+Frecuencia del pico (marcador) & \vacio \\ \cmidrule[0.3pt]{1-2}
+Nivel del pico (dBm) & \vacio \\ \cmidrule[0.3pt]{1-2}
+Ancho a $-26$ dB (kHz) y método & \vacio \\ \cmidrule[0.3pt]{1-2}
+Piso de ruido junto a la emisora (dBm) & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+
+\Hoja{W5}{Experimento 1 · Sintonía}
+\textbf{Predicción:} ¿qué oirá si aparta el canal 50, 100 y 200 kHz de la emisora?
+\lineas{2}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.48\linewidth}@{}}
+\toprule
+\textbf{Desplazamiento} & \textbf{Potencia del canal} & \textbf{Audio} \\
+\midrule
+$-300$ kHz (referencia) & \vacio & \\ \cmidrule[0.3pt]{1-3}
+$-250$ kHz & \vacio & \\ \cmidrule[0.3pt]{1-3}
+$-200$ kHz & \vacio & \\ \cmidrule[0.3pt]{1-3}
+$-100$ kHz & \vacio & \\
+\bottomrule
+\end{tabular}\par\medskip
+\textbf{Explicación física:}
+\lineas{2}
+
+\Hoja{W6}{Experimento 2 · Ancho de banda}
+\textbf{Predicción:} ¿qué ocurrirá con RF BW = 80 kHz? ¿Y con AF BW = 3 kHz?
+\lineas{2}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.62\linewidth}@{}}
+\toprule
+\textbf{Ajuste} & \textbf{Observación} \\
+\midrule
+RF BW 80 kHz & \vacio \\ \cmidrule[0.3pt]{1-2}
+RF BW 180 kHz & \vacio \\ \cmidrule[0.3pt]{1-2}
+RF BW 250 kHz & \vacio \\ \cmidrule[0.3pt]{1-2}
+AF BW 3 kHz & \vacio \\ \cmidrule[0.3pt]{1-2}
+AF BW 8 kHz & \vacio \\ \cmidrule[0.3pt]{1-2}
+AF BW 15 kHz & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+\textbf{¿Por qué RF BW y AF BW producen efectos distintos?}
+\lineas{2}
+
+\Hoja{W7}{Experimento 3 · Ganancia}
+\textbf{Predicción:} ¿mejorará siempre el audio al subir la ganancia? ¿Qué espera ver con ganancia excesiva?
+\lineas{2}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.14\linewidth}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.62\linewidth}@{}}
+\toprule
+\textbf{Condición} & \textbf{LNA} & \textbf{VGA} & \textbf{Piso, emisora, espurios, audio} \\
+\midrule
+Baja & 8 & 8 & \vacio \\ \cmidrule[0.3pt]{1-4}
+Moderada & 16 & 16 & \vacio \\ \cmidrule[0.3pt]{1-4}
+Alta & 32 & 30 & \vacio \\ \cmidrule[0.3pt]{1-4}
+Excesiva & 40 & 40 & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+\textbf{¿Vio signos de saturación? ¿Cuáles?}
+\lineas{2}
+
+\Hoja{W8}{Experimento 4 · Dos instrumentos}
+Responda «sí», «no» o «parcial» y justifique al menos dos filas.
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.52\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}@{}}
+\toprule
+\textbf{Pregunta} & \textbf{SDRangel + HackRF} & \textbf{SIGLENT} \\
+\midrule
+¿Muestra energía en función de la frecuencia? & & \\ \cmidrule[0.3pt]{1-3}
+¿Da un nivel absoluto en dBm con exactitud especificada? & & \\ \cmidrule[0.3pt]{1-3}
+¿Recupera el audio de la emisora? & & \\ \cmidrule[0.3pt]{1-3}
+¿Muestra la evolución temporal (cascada)? & & \\ \cmidrule[0.3pt]{1-3}
+¿Mide el ancho ocupado con marcadores? & & \\ \cmidrule[0.3pt]{1-3}
+¿Ve 20 MHz de banda a la vez? & & \\ \cmidrule[0.3pt]{1-3}
+¿Su resultado depende de la antena y el cable? & & \\
+\bottomrule
+\end{tabular}\par\medskip
+\lineas{3}
+
+\Hoja{W9}{Interpretación final}
+\begin{enumerate}
+  \item ¿Qué niveles de la escalera de evidencia alcanzó y con qué pruebas?
+  \lineas{2}
+  \item ¿Por qué la FM de radiodifusión ocupa unos 200 kHz? Use sus medidas de la hoja W4.
+  \lineas{2}
+  \item ¿Qué impide comparar directamente el nivel en dBm del analizador con los dB de SDRangel?
+  \lineas{2}
+\end{enumerate}
+
+% ===========================================================================
+\section{Laboratorio 01 · Entregables}
+\label{sec:b-entregaw}
+
+\begin{checklist}
+  \item Fotografía del montaje con la antena en el HackRF.
+  \item Salida de \texttt{hackrf\_info}.
+  \item Captura de SDRangel con \textbf{HackRF Input} y \textbf{Broadcast FM Demod} legibles.
+  \item Captura del espectro y la cascada con el canal sobre la emisora.
+  \item Captura del analizador con el marcador sobre la emisora y la traza Max Hold.
+  \item Hojas W1 a W9 completas.
+  \item Cuestionario final.
+\end{checklist}
+
+% ===========================================================================
+\section{Laboratorio 01 · Cuestionario final}
+\label{sec:b-finalw}
+
+Individual, después de la sesión.
+
+\CuestionarioFinalW
+
+% ===========================================================================
+\section{Laboratorio 02 · Cuestionario diagnóstico}
+\label{sec:b-diagu}
+
+Antes de la sesión, individual, 8 minutos, sin consultar.
+
+\CuestionarioDiagnosticoU
+
+% ===========================================================================
+\section{Laboratorio 02 · Hojas de registro}
+\label{sec:b-hojasu}
+
+\Hoja{U1}{Puesto y estación}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.45\linewidth}>{\raggedright\arraybackslash}p{0.47\linewidth}@{}}
+\toprule
+Grupo, fecha y puesto & \vacio \\ \cmidrule[0.3pt]{1-2}
+Ubicación de la antena (interior, ventana, exterior) y orientación & \vacio \\ \cmidrule[0.3pt]{1-2}
+¿Superficie metálica bajo la base? (sí/no) & \vacio \\ \cmidrule[0.3pt]{1-2}
+Cadena: antena -- filtro -- adaptadores -- HackRF & \vacio \\ \cmidrule[0.3pt]{1-2}
+Número de serie del HackRF (últimos 6 dígitos) & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+
+\Hoja{U2}{Comprobación de Ubuntu}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.35\linewidth}>{\raggedright\arraybackslash}p{0.57\linewidth}@{}}
+\toprule
+\textbf{Orden} & \textbf{Resultado relevante} \\
+\midrule
+\texttt{lsb\_release -ds} & \vacio \\ \cmidrule[0.3pt]{1-2}
+\texttt{lsusb -d 1d50:6089} & \vacio \\ \cmidrule[0.3pt]{1-2}
+\texttt{hackrf\_info} & \vacio \\ \cmidrule[0.3pt]{1-2}
+\texttt{snap connections sdrangel} & \vacio \\ \cmidrule[0.3pt]{1-2}
+Versión de SDRangel (\menu{Help}) & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+
+\Hoja{U3}{Receptor y piso de ruido}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.45\linewidth}>{\raggedright\arraybackslash}p{0.47\linewidth}@{}}
+\toprule
+Frecuencia / tasa / decimación & \vacio \\ \cmidrule[0.3pt]{1-2}
+LNA / VGA / RF amp / Bias tee & \vacio \\ \cmidrule[0.3pt]{1-2}
+Nivel del piso de ruido (dB) & \vacio \\ \cmidrule[0.3pt]{1-2}
+¿Trazos breves en la cascada? & \vacio \\ \cmidrule[0.3pt]{1-2}
+Parámetros del demodulador (SR, RF BW, umbral, S, Feed) & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+
+\Hoja{U4}{Primeras tramas y estadísticas}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.45\linewidth}>{\raggedright\arraybackslash}p{0.47\linewidth}@{}}
+\toprule
+Minutos hasta la primera fila & \vacio \\ \cmidrule[0.3pt]{1-2}
+Tramas totales en 5 minutos & \vacio \\ \cmidrule[0.3pt]{1-2}
+Tramas por DF: 0 / 4 / 5 / 11 / 17 / 20 / 21 / otros & \vacio \\ \cmidrule[0.3pt]{1-2}
+Type Code más frecuente & \vacio \\ \cmidrule[0.3pt]{1-2}
+Correlación mínima y máxima observadas (dB) & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+\textbf{¿Por qué un pico en el espectro no es todavía una trama?}
+\lineas{2}
+
+\Hoja{U5}{Una trama decodificada a mano}
+La trama \texttt{8D4D20232004D0F4CB1820B0EFD4} procede de la grabación de referencia y la han validado tres decodificadores. Use el \anexoA{sec:a-trama}.
+
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.52\linewidth}>{\raggedright\arraybackslash}p{0.40\linewidth}@{}}
+\toprule
+1. \texttt{8D} en binario & \vacio \\ \cmidrule[0.3pt]{1-2}
+2. DF (5 bits) y CA (3 bits) & \vacio \\ \cmidrule[0.3pt]{1-2}
+3. Dirección ICAO (bytes 2--4) & \vacio \\ \cmidrule[0.3pt]{1-2}
+4. Primer byte de ME (\texttt{20}) en binario; TC y categoría & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+
+5. Los 48 bits siguientes, \texttt{04D0F4CB1820}, forman 8 caracteres de 6 bits (1--26 = A--Z; 32 = espacio; 48--57 = 0--9):
+
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}*{8}{>{\raggedright\arraybackslash}p{0.07\linewidth}}@{}}
+\toprule
+\textbf{Carácter} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
+\midrule
+6 bits & & & & & & & & \\[4mm] \cmidrule[0.3pt]{1-9}
+Decimal & & & & & & & & \\[4mm] \cmidrule[0.3pt]{1-9}
+Letra o cifra & & & & & & & & \\[4mm]
+\bottomrule
+\end{tabular}\par\medskip
+
+6. ¿Qué tipo de mensaje es? ¿Por qué esta trama \emph{sola} no permite situar la aeronave en el mapa?
+\lineas{2}
+
+\Hoja{U6}{Tabla de aeronaves}
+Origen de cada valor: T = transmitido (nivel 5), D = derivado (6), E = externo (7).
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}@{}}
+\toprule
+\textbf{ICAO} & \textbf{Indicativo} & \textbf{Alt (ft)} & \textbf{GS (kt)} & \textbf{Lat / Lon} & \textbf{Tramas} & \textbf{Orígenes} \\
+\midrule
+\vacio & & & & & & \\ \cmidrule[0.3pt]{1-7}
+\vacio & & & & & & \\ \cmidrule[0.3pt]{1-7}
+\vacio & & & & & & \\
+\bottomrule
+\end{tabular}\par\medskip
+\textbf{¿Por qué una fila puede tener altitud y no indicativo?}
+\lineas{2}
+
+\Hoja{U7}{Mapa}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.45\linewidth}>{\raggedright\arraybackslash}p{0.47\linewidth}@{}}
+\toprule
+\gui{My Position} redondeada a 0,1° y estado de \gui{Auto-update position} & \vacio \\ \cmidrule[0.3pt]{1-2}
+Aeronaves en la tabla / con posición en el mapa & \vacio \\ \cmidrule[0.3pt]{1-2}
+Una aeronave: Lat/Lon en la tabla y en el mapa & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+\textbf{¿Qué parte del mapa depende de su configuración y no de la radio?}
+\lineas{2}
+
+\Hoja{U8}{Experimento de recepción A--B--A}
+\textbf{Predicción:} ¿qué condición dará más tramas válidas por minuto? ¿Aumentará también el número de aeronaves distintas?
+\lineas{2}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}@{}}
+\toprule
+\textbf{Cond.} & \textbf{Tramas} & \textbf{Por min} & \textbf{ICAO distintos} & \textbf{Con posición} & \textbf{Alcance máx.} & \textbf{Correlación media} \\
+\midrule
+A & & & & & & \\[3mm] \cmidrule[0.3pt]{1-7}
+B & & & & & & \\[3mm] \cmidrule[0.3pt]{1-7}
+A' & & & & & & \\[3mm] \cmidrule[0.3pt]{1-7}
+C & & & & & & \\[3mm] \cmidrule[0.3pt]{1-7}
+D & & & & & & \\[3mm]
+\bottomrule
+\end{tabular}\par\medskip
+\textbf{Conclusión:} ¿qué efectos quedaron demostrados y cuáles no? ¿Cambió el tráfico entre A y A'?
+\lineas{3}
+
+\Hoja{U9}{El analizador en 1090 MHz}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.45\linewidth}>{\raggedright\arraybackslash}p{0.47\linewidth}@{}}
+\toprule
+¿Elevación en 1090 MHz con Max Hold tras 2 minutos? & \vacio \\ \cmidrule[0.3pt]{1-2}
+Tiempo de barrido usado en span cero & \vacio \\ \cmidrule[0.3pt]{1-2}
+Nivel de disparo (dBm) & \vacio \\ \cmidrule[0.3pt]{1-2}
+Ráfagas capturadas y duración medida ($\mu$s) & \vacio \\ \cmidrule[0.3pt]{1-2}
+¿Trama corta (64 $\mu$s) o larga (120 $\mu$s)? & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+\textbf{¿Por qué el analizador no puede decirle si una ráfaga es una trama válida?}
+\lineas{2}
+
+\Hoja{U10}{Contraste con la grabación de referencia}
+\par\noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}@{}}
+\toprule
+\textbf{Campo} & \textbf{Valor de referencia} & \textbf{Observado} \\
+\midrule
+ICAO / indicativo & 4D2023 / AMC421 & \vacio \\ \cmidrule[0.3pt]{1-3}
+Altitud & 20\,025--24\,275 ft & \vacio \\ \cmidrule[0.3pt]{1-3}
+Velocidad / rumbo & 371--390 kt / $\approx$ 158° & \vacio \\ \cmidrule[0.3pt]{1-3}
+Posición con \emph{su} referencia & — & \vacio \\ \cmidrule[0.3pt]{1-3}
+Posición con referencia 37,0 N, 14,0 E & 36,96--37,10°N; 13,79--13,86°E & \vacio \\
+\bottomrule
+\end{tabular}\par\medskip
+\textbf{Explique por qué la primera posición era falsa y por qué el programa no lo advirtió.}
+\lineas{3}
+
+\Hoja{U11}{Interpretación final}
+\begin{enumerate}
+  \item ¿Qué demostró su estación y en qué nivel de la escalera?
+  \lineas{2}
+  \item ¿Qué cambiaría primero para mejorarla y por qué (apóyese en la hoja U8)?
+  \lineas{2}
+  \item ¿Qué información de la pantalla no procede de la radio?
+  \lineas{2}
+\end{enumerate}
+
+% ===========================================================================
+\section{Laboratorio 02 · Entregables}
+\label{sec:b-entregau}
+
+\begin{checklist}
+  \item Fotografía de la estación (antena, filtro y HackRF), sin datos de ubicación.
+  \item Salidas de las órdenes de la etapa 2.
+  \item Capturas de \gui{Display Statistics} y de la tabla de aeronaves.
+  \item Primeras 20 líneas del archivo CSV.
+  \item Captura del mapa \emph{sin} coordenadas exactas del receptor.
+  \item Captura del span cero en el analizador, si obtuvo ráfagas.
+  \item Capturas de la etapa 9, etiquetadas GRABACIÓN.
+  \item Hojas U1 a U11 completas.
+  \item Cuestionario final.
+\end{checklist}
+
+% ===========================================================================
+\section{Laboratorio 02 · Cuestionario final}
+\label{sec:b-finalu}
+
+Individual, después de la sesión.
+
+\CuestionarioFinalU

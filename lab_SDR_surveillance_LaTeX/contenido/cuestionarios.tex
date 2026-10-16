@@ -155,9 +155,9 @@
 
 \Pregunta{La referencia del receptor está en unos 4,7°N y la aeronave real en 37,1°N. Con decodificación CPR local, el resultado será:}
 {Correcto, porque la trama incluye la latitud completa.}{Un error de configuración de SDRangel.}{Una posición falsa en la zona de latitud más cercana a la referencia, sin aviso.}{Imposible de calcular: el mapa queda vacío.}
-{C}{La trama codifica la posición dentro de una zona de unos 6°; la decodificación local elige la zona más cercana a la referencia. Así ocurrió en la verificación del respaldo (bloque H del Laboratorio 02).}
+{C}{La trama codifica la posición dentro de una zona de unos 6°; la decodificación local elige la zona más cercana a la referencia. Es lo que se observa en la etapa 9 del Laboratorio 02.}
 
-\Pregunta{En el respaldo offline, ¿por qué el número de tramas por segundo no describe el tráfico real?}
+\Pregunta{Con la grabación de referencia, ¿por qué el número de tramas por segundo no describe el tráfico real?}
 {Porque SDRangel no cuenta tramas en archivos.}{Porque el archivo está a 2 MSa/s.}{Porque las tramas de la grabación no son válidas.}{Porque el archivo comprime el tiempo (silencios eliminados) y se reproduce en bucle.}
 {D}{Las tramas son válidas, pero su ritmo en el archivo no es el del aire.}
 

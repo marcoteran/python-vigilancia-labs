@@ -1,0 +1,38 @@
+% Anexo B: cuaderno de evaluación y registro del estudiante (sin respuestas).
+% Las respuestas están en la guía del instructor, que usa el mismo banco de preguntas.
+
+\documentclass[11pt,a4paper]{scrartcl}
+\usepackage{xr-hyper}
+\usepackage[palette=signal,mode=lab,body=serif]{marco-academic}
+\input{preambulo_comun}
+\input{contenido/cuestionarios}
+\externaldocument[M-]{build/laboratorio_sdr_surveillance}[laboratorio_sdr_surveillance.pdf]
+\externaldocument[A-]{build/anexo_a_fundamentos_sdr}[anexo_a_fundamentos_sdr.pdf]
+
+\MASetup{
+ title={Anexo B\\Evaluación y registro},
+ subtitle={Cuestionarios, hojas de registro, ejercicios y entregables de los laboratorios SDR de recepción FM y ADS-B/Mode S},
+ author={Marco Teran},
+ institution={Cuaderno del estudiante · versión aprobada para uso en clase},
+ course={Vigilancia aeronáutica · Instrumentación RF y SDR},
+ code={LAB-SDR-1090 · ANEXO B · v3.0},
+ version={3.0},
+ date={16 de octubre de 2026},
+ header-left={Laboratorios SDR · Anexo B},
+ header-right={Nombre: \rule{45mm}{0.4pt}},
+ cover-note={\textbf{Imprima este cuaderno y llévelo al laboratorio.} El manual indica en qué momento completar cada hoja. Responda el cuestionario diagnóstico \emph{antes} de la sesión y el final \emph{después}. Las respuestas no están aquí: las tiene su instructor.}
+}
+
+\hypersetup{pdftitle={Anexo B · Evaluación y registro},pdfsubject={Laboratorios SDR: cuestionarios, hojas de registro y entregables},pdflang={es},bookmarksnumbered=true}
+\AtBeginDocument{\hypersetup{pdftitle={Anexo B · Evaluación y registro},pdfsubject={Laboratorios SDR: cuestionarios, hojas de registro y entregables}}}
+
+\begin{document}
+\MAMakeTitle
+
+\tableofcontents
+\clearpage
+
+\IniciarLaboratorio{B}{B}
+\input{contenido/b_evaluacion}
+
+\end{document}

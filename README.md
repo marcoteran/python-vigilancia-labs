@@ -24,7 +24,7 @@
 
 ## Novedades
 
-- **Octubre de 2026 · Laboratorios SDR v2.0.** El manual SDR de cinco prácticas se sustituyó por **dos laboratorios de solo recepción**: FM comercial en Windows y una estación ADS-B/Mode S en Ubuntu 24.04. Incluyen una guía del instructor con claves y rúbrica, una grabación real de 1090 MHz verificada como respaldo, la [lista de implementos con enlaces de compra](#implementos-y-dónde-comprarlos) y un [informe de revisión](lab_SDR_surveillance_LaTeX/INFORME_REVISION.md) con el estado de validación.
+- **Octubre de 2026 · Laboratorios SDR 3.0.** Edición aprobada para uso en clase, con el banco completo. Un **manual** corto organizado en etapas, un **Anexo A** con toda la teoría y el diagnóstico, y un **Anexo B** imprimible con cuestionarios y hojas de registro, más la guía del instructor. Incluye la [lista de implementos con enlaces de compra](#implementos-y-dónde-comprarlos) y una grabación real de 1090 MHz verificada.
 - **Octubre de 2026 · Notebooks.** Revisión para principiantes absolutos, alineación con la presentación y verificador automático en GitHub Actions.
 
 ## Contenido
@@ -39,6 +39,7 @@
 - [Modelos, no mediciones](#modelos-no-mediciones)
 - [Si algo falla](#si-algo-falla)
 - [Laboratorios SDR con hardware](#laboratorios-sdr-con-hardware)
+  - [Cuatro documentos](#cuatro-documentos)
   - [Implementos y dónde comprarlos](#implementos-y-dónde-comprarlos)
 - [Instalación local (opcional)](#instalación-local-opcional)
 - [Para instructores y mantenedores](#para-instructores-y-mantenedores)
@@ -53,7 +54,7 @@ No necesitas instalar nada. Los notebooks se abren en Google Colab, que puede pe
 | **1** | Presentación: Python desde cero | [PDF, 28 páginas](slides/python_lab_slides.pdf) | — |
 | **2** | Laboratorio 01 · Python desde cero | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/marcoteran/python-vigilancia-labs/blob/main/notebooks/01_python_desde_cero.ipynb) | [`.ipynb`](https://raw.githubusercontent.com/marcoteran/python-vigilancia-labs/main/notebooks/01_python_desde_cero.ipynb) |
 | **3** | Laboratorio 02 · Python aplicado a radar y vigilancia | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/marcoteran/python-vigilancia-labs/blob/main/notebooks/02_calculos_vigilancia.ipynb) | [`.ipynb`](https://raw.githubusercontent.com/marcoteran/python-vigilancia-labs/main/notebooks/02_calculos_vigilancia.ipynb) |
-| **4** | Laboratorios SDR · FM y ADS-B con hardware (opcional) | [Manual, PDF de 59 páginas](lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf) | [Grabación `.sdriq`](lab_SDR_surveillance_LaTeX/datos_adsb/modes1_dump1090_2MSps_1090MHz.sdriq) |
+| **4** | Laboratorios SDR · FM y ADS-B con hardware (opcional) | [Manual](lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf) · [Anexo A](lab_SDR_surveillance_LaTeX/anexo_a_fundamentos_sdr.pdf) · [Anexo B](lab_SDR_surveillance_LaTeX/anexo_b_evaluacion_sdr.pdf) | [Grabación `.sdriq`](lab_SDR_surveillance_LaTeX/datos_adsb/modes1_dump1090_2MSps_1090MHz.sdriq) |
 
 Para descargar un `.ipynb`, haz clic derecho en el enlace y elige **Guardar enlace como…**; solo lo necesitas para la [instalación local](#instalación-local-opcional).
 
@@ -212,82 +213,74 @@ Cada notebook incluye además una tabla de errores frecuentes de Python y cómo 
 ## Laboratorios SDR con hardware
 
 <p>
-  <a href="lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf"><b>Manual del estudiante (PDF, 59 páginas)</b></a> ·
-  <a href="lab_SDR_surveillance_LaTeX/guia_instructor_sdr.pdf"><b>Guía del instructor (PDF, 22 páginas)</b></a> ·
-  <a href="lab_SDR_surveillance_LaTeX/README.md">Fuentes y compilación</a> ·
-  <a href="lab_SDR_surveillance_LaTeX/INFORME_REVISION.md">Informe de revisión</a>
+  <a href="lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf"><b>Manual del laboratorio (PDF)</b></a> ·
+  <a href="lab_SDR_surveillance_LaTeX/anexo_a_fundamentos_sdr.pdf"><b>Anexo A · Fundamentos</b></a> ·
+  <a href="lab_SDR_surveillance_LaTeX/anexo_b_evaluacion_sdr.pdf"><b>Anexo B · Evaluación y registro</b></a> ·
+  <a href="lab_SDR_surveillance_LaTeX/guia_instructor_sdr.pdf">Guía del instructor</a> ·
+  <a href="lab_SDR_surveillance_LaTeX/README.md">Fuentes y compilación</a>
 </p>
 
-Dos laboratorios universitarios **de solo recepción** con **HackRF One**, **SDRangel 7.27.2** y un analizador **SIGLENT SSA3032X Plus**. Llevan los modelos de los notebooks a señales reales: una emisora de FM comercial y las ráfagas de 1090 MHz de los transpondedores de las aeronaves. Su eje es distinguir niveles de evidencia: ver energía en una cascada no es lo mismo que demodular, validar una trama o decodificar información, y lo que muestra la pantalla puede venir de cálculos del receptor o de bases de datos externas y no de la aeronave.
+Dos laboratorios universitarios **de solo recepción** con **HackRF One**, **SDRangel 7.27.2** y un analizador **SIGLENT SSA3032X Plus**. Llevan los modelos de los notebooks a señales reales: una emisora de FM comercial y las ráfagas de 1090 MHz que emiten los transpondedores de las aeronaves. El hilo conductor es la **escalera de evidencia**: ver energía en una cascada no es lo mismo que demodular, validar una trama o decodificar información, y lo que muestra la pantalla puede venir de cálculos del receptor o de bases de datos externas, no de la aeronave.
 
-**Requisitos:** los conceptos del Laboratorio 02 (dB, ancho de banda, muestreo, modulación, PSR/SSR/ADS-B), el [banco de implementos](#implementos-y-dónde-comprarlos) y computadores con Windows 10/11 y Ubuntu 24.04 LTS nativo. Los notebooks no los exigen, y ellos tampoco bastan como preparación: el banco pide además usar SDRangel, una terminal y hardware RF.
+**Requisitos:** los conceptos del Laboratorio 02 (dB, ancho de banda, muestreo, modulación, PSR/SSR/ADS-B), el [banco de implementos](#implementos-y-dónde-comprarlos) y computadores con Windows 10/11 y Ubuntu 24.04 LTS nativo. Los notebooks no exigen estos laboratorios, y por sí solos tampoco bastan como preparación: el banco pide además usar SDRangel, una terminal y hardware RF.
+
+### Cuatro documentos
+
+| Documento | Para quién | Qué contiene |
+|---|---|---|
+| [Manual del laboratorio](lab_SDR_surveillance_LaTeX/laboratorio_sdr_surveillance.pdf) (23 p.) | Estudiante, junto al equipo | Solo el procedimiento: etapas con una transición al inicio, pasos con valores y verificación, y un punto de control al final |
+| [Anexo A · Fundamentos](lab_SDR_surveillance_LaTeX/anexo_a_fundamentos_sdr.pdf) (17 p.) | Estudiante | FM y MPX, receptor SDR, analizador de barrido, antenas, seguridad, Mode S y ADS-B, CPR, diagnóstico de fallos, glosario y referencias |
+| [Anexo B · Evaluación y registro](lab_SDR_surveillance_LaTeX/anexo_b_evaluacion_sdr.pdf) (21 p.) | Estudiante, impreso | Cuestionarios diagnóstico y final, 20 hojas de registro con predicciones, una trama decodificada a mano, entregables y criterios de evaluación |
+| [Guía del instructor](lab_SDR_surveillance_LaTeX/guia_instructor_sdr.pdf) (18 p.) | Instructor | Preparación del banco, ensayo previo, conducción de la sesión, claves y respuestas de referencia |
 
 ### Los dos laboratorios
 
 | # | Sistema | Laboratorio | Qué consigues | Duración |
 |---|---|---|---|---|
-| 01 | Windows 10/11 | **De las ondas de radio al sonido:** recepción FM, SDR y análisis de espectro | Audio recuperado de una emisora real; espectro y cascada; ancho ocupado medido con marcadores en el SIGLENT; cuatro experimentos (sintonía, ancho de banda, ganancia, comparación de instrumentos) | 210 min |
-| 02 | Ubuntu 24.04 LTS | **Del pulso de 1090 MHz a la aeronave en el mapa:** recepción y decodificación ADS-B/Mode S | Tramas con paridad válida, una trama decodificada a mano, tabla de aeronaves, mapa con posición CPR, experimento de recepción A–B–A, span cero en el SIGLENT | 225 min |
+| 01 | Windows 10/11 | **De las ondas de radio al sonido:** recepción FM, SDR y análisis de espectro | Audio de una emisora real; espectro y cascada; ancho ocupado medido con marcadores en el SIGLENT; cuatro experimentos (sintonía, ancho de banda, ganancia, comparación de instrumentos) | 210 min |
+| 02 | Ubuntu 24.04 LTS | **Del pulso de 1090 MHz a la aeronave en el mapa:** recepción y decodificación ADS-B/Mode S | Tramas con paridad válida, una trama decodificada a mano, tabla de aeronaves, mapa con posición CPR, experimento A–B–A, span cero en el SIGLENT y contraste con una grabación de referencia | 225 min |
 
 ```mermaid
 flowchart LR
     subgraph L1["Laboratorio 01 · Windows · FM"]
-        E1["Emisora FM<br/>88–108 MHz"] --> A1["Antena"] --> H1["HackRF One"] --> S1["SDRangel<br/>Broadcast FM"] --> U1["Audio"]
+        E1["Emisora FM<br/>88–108 MHz"] --> A1["ANT500"] --> H1["HackRF One"] --> S1["SDRangel<br/>Broadcast FM"] --> U1["Audio"]
     end
     subgraph L2["Laboratorio 02 · Ubuntu · 1090 MHz"]
-        T2["Transpondedor<br/>Mode S / ADS-B"] --> A2["Antena"] --> H2["HackRF One"] --> S2["SDRangel<br/>ADS-B Demodulator"] --> M2["Tabla y mapa"]
+        T2["Transpondedor<br/>Mode S / ADS-B"] --> A2["Antena 1090<br/>+ filtro"] --> H2["HackRF One"] --> S2["SDRangel<br/>ADS-B Demodulator"] --> M2["Tabla y mapa"]
     end
 ```
 
-Cada procedimiento usa el mismo formato: **acción, dónde, parámetro, por qué, qué debe observarse, cómo verificarlo y qué hacer si falla**. Hay predicciones antes de cada medida, hojas de registro, cuestionarios diagnóstico y final (respuestas solo en la guía del instructor) y tablas de diagnóstico de fallos.
-
 ### Implementos y dónde comprarlos
 
-La tabla lista lo que usa el banco, lo que falta y lo que mejora los resultados. **Disponible** significa que ya está en el banco del curso. **Imprescindible** significa que, sin ese elemento, una parte del laboratorio queda bloqueada.
+El banco completo de la edición 3.0. Los enlaces apuntan a Amazon Estados Unidos; cualquier equivalente con las mismas especificaciones sirve.
 
-| # | Implemento | Para qué sirve | Estado | Comprar en Amazon |
+| # | Implemento | Uso | Lab. | Comprar en Amazon |
 |---|---|---|---|---|
-| 1 | **HackRF One** (SDR de 1 MHz a 6 GHz, semidúplex) | Receptor de ambos laboratorios | Disponible | [Nooelec HackRF One + ANT500 + adaptadores SMA](https://www.amazon.com/dp/B0BKH7Z2NJ) |
-| 2 | **SIGLENT SSA3032X Plus** (9 kHz a 3,2 GHz) | Análisis de espectro: Lab. 01 bloque E y Lab. 02 bloque J | Disponible | [SIGLENT SSA3032X Plus](https://www.amazon.com/dp/B08KHH1DT8) |
-| 3 | Kit de antenas «LoRa Antenna Kit» (Seeed 109990225) | Antena B del manual; **no calificada** para FM ni para 1090 MHz | Disponible | — (ya en el banco) |
-| 4 | Computadores con Windows 10/11 y Ubuntu 24.04 LTS nativo, con auriculares | SDRangel, herramientas HackRF | Disponible | — |
-| 5 | Adaptador **N macho → SMA hembra** | Conectar una antena SMA a la entrada tipo N del analizador | **Imprescindible** | [TUOLNK N macho a SMA hembra (2 u.)](https://www.amazon.com/dp/B0BGS9N6RC) |
-| 6 | Adaptador **N macho → RP-SMA hembra** | Lo mismo, si la antena del kit resulta ser RP-SMA (agujero en el centro) | Imprescindible si la antena es RP-SMA | [Boobrie N macho a RP-SMA hembra (2 u.)](https://www.amazon.com/dp/B09P52CMYB) |
-| 7 | Adaptador **RP-SMA hembra → SMA macho** | Conectar una antena RP-SMA al HackRF; sin él no hay contacto central | Imprescindible si la antena es RP-SMA | [onelinkmore RP-SMA hembra a SMA macho (2 u.)](https://www.amazon.com/dp/B0716MHRZX) |
-| 8 | Antena telescópica **ANT500** (75 MHz a 1 GHz) | Recepción FM predecible en el Lab. 01 | Recomendado | [ANT500](https://www.amazon.com/dp/B01CQYZJV2), también incluida en el n.º 1 |
-| 9 | Antena **1090 MHz** con conector SMA macho, base magnética y 3 m de cable | Recepción ADS-B en vivo en el Lab. 02 | Recomendado | [onelinkmore 1090 MHz, 3 dBi](https://www.amazon.com/dp/B086TX3QFF) |
-| 10 | Cable de extensión **SMA macho–hembra de bajas pérdidas** | Llevar la antena a la ventana sin perder la señal en el cable | Recomendado | [GEMEK 0,9 m, KMR240](https://www.amazon.com/dp/B07TCLCVRR) o [Maswell 2 m, equivalente a LMR200](https://www.amazon.com/dp/B0DRJ8TV59) |
-| 11 | **Filtro pasabanda de 1090 MHz** (SMA) | Atenuar emisiones lejanas a 1090 MHz (FM, TV, telefonía). Su efecto a 1030 MHz depende del ancho de banda del filtro: algunos dejan pasar de 980 a 1150 MHz | Opcional | [AirNav Radar, filtro ADS-B de 1090 MHz](https://www.amazon.com/dp/B082WR1SDF) |
-| 12 | **Atenuador fijo SMA de 20 dB y 2 W** | Proteger la entrada del HackRF en lugares muy cercanos a radares secundarios o DME, a costa de sensibilidad | Opcional | [BECEN 20 dB, DC–6 GHz](https://www.amazon.com/dp/B0757M77QN) |
+| 1 | **HackRF One** (SDR de 1 MHz a 6 GHz, semidúplex) | Receptor | 01 y 02 | [Nooelec HackRF One + ANT500 + adaptadores SMA](https://www.amazon.com/dp/B0BKH7Z2NJ) |
+| 2 | **SIGLENT SSA3032X Plus** (9 kHz a 3,2 GHz) | Analizador de espectro | 01 y 02 | [SIGLENT SSA3032X Plus](https://www.amazon.com/dp/B08KHH1DT8) |
+| 3 | Antena telescópica **ANT500** (75 MHz a 1 GHz) | Antena de FM, extendida a unos 75 cm | 01 | [ANT500](https://www.amazon.com/dp/B01CQYZJV2), también incluida en el n.º 1 |
+| 4 | Antena **1090 MHz**, SMA macho, base magnética y 3 m de cable | Antena de ADS-B | 02 | [onelinkmore 1090 MHz, 3 dBi](https://www.amazon.com/dp/B086TX3QFF) |
+| 5 | **Filtro pasabanda de 1090 MHz**, pasivo (SMA) | Atenúa emisiones lejanas a 1090 MHz (FM, TV, telefonía) | 02 | [AirNav Radar, filtro ADS-B de 1090 MHz](https://www.amazon.com/dp/B082WR1SDF) |
+| 6 | Adaptador **N macho → SMA hembra** | Conectar las antenas a la entrada N del analizador | 01 y 02 | [TUOLNK N macho a SMA hembra (2 u.)](https://www.amazon.com/dp/B0BGS9N6RC) |
+| 7 | Cable de extensión **SMA macho–hembra de bajas pérdidas** | Llevar la antena a la ventana | 01 y 02 | [GEMEK 0,9 m, KMR240](https://www.amazon.com/dp/B07TCLCVRR) o [Maswell 2 m, equivalente a LMR200](https://www.amazon.com/dp/B0DRJ8TV59) |
+| 8 | **Atenuador fijo SMA de 20 dB y 2 W** | Protección en aulas muy cercanas a radares secundarios o DME | 02 | [BECEN 20 dB, DC–6 GHz](https://www.amazon.com/dp/B0757M77QN) |
+| 9 | Computadores con Windows 10/11 y Ubuntu 24.04 LTS nativo, con auriculares | Estaciones | 01 y 02 | — |
+
+Solo si alguna antena termina en **RP-SMA** (agujero en el centro del conector, en lugar de un pin) se necesitan además adaptadores [N macho → RP-SMA hembra](https://www.amazon.com/dp/B09P52CMYB) y [RP-SMA hembra → SMA macho](https://www.amazon.com/dp/B0716MHRZX).
 
 > [!IMPORTANT]
-> **Antes de comprar.**
-> - **Conectores.** Mire el centro del conector de su antena: un **pin** indica SMA macho; un **agujero**, RP-SMA macho. Elija los adaptadores 6 y 7 solo si su antena es RP-SMA, y confirme en la ficha el género de cada extremo: algunos anuncios de adaptadores se contradicen.
-> - **Filtros y atenuadores pasivos.** Use solo modelos que no necesiten alimentación. La casilla **Bias tee** de SDRangel debe seguir desactivada.
-> - **HackRF genuino.** Hay copias de calidad variable; puede comprobar los distribuidores autorizados en la [página oficial de Great Scott Gadgets](https://greatscottgadgets.com/hackrf/one/).
-> - **Enlaces.** No son de afiliado y apuntan a Amazon Estados Unidos. El 15 de octubre de 2026 se comprobó que cada página existía y describía el producto indicado. El precio, la disponibilidad (la ANT500 suelta puede figurar agotada) y el envío a su país cambian. Cualquier equivalente con las mismas especificaciones sirve.
+> **Antes de comprar.** Confirme en la ficha el género de cada conector. El filtro y el atenuador deben ser pasivos: la casilla **Bias tee** de SDRangel permanece desactivada. Para un HackRF genuino, consulte los distribuidores autorizados en la [página oficial de Great Scott Gadgets](https://greatscottgadgets.com/hackrf/one/). Los enlaces no son de afiliado; el 15-10-2026 se comprobó que cada página existía y describía el producto indicado. Precio, disponibilidad y envío cambian.
 
-### Seguridad y estado
+### Seguridad
 
 > [!WARNING]
-> **Solo recepción.** Ninguna actividad transmite: está prohibido emitir en FM, en 1030/1090 MHz o en cualquier banda aeronáutica, y conectar el HackRF al analizador. El límite de entrada del HackRF es −5 dBm. Cerca de un radar secundario, el pico recibido puede acercarse a ese límite: mantenga **RF amp** apagado (sección 0.3 del manual).
+> **Solo recepción.** Ninguna actividad transmite: está prohibido emitir en FM, en 1030/1090 MHz o en cualquier banda aeronáutica, y conectar el HackRF al analizador. El límite de entrada del HackRF es −5 dBm. Cerca de un radar secundario el pico recibido puede acercarse a ese límite: **RF amp** siempre apagado (Anexo A, «Seguridad de RF en detalle»).
 
-> [!NOTE]
-> **Qué está verificado.**
-> - Los dos PDF compilan sin errores ni desbordamientos y se revisaron página a página.
-> - El respaldo ADS-B se verificó en SDRangel 7.27.2 y con dos decodificadores independientes.
->
-> **Qué no.** Los procedimientos **no** se han ensayado con el HackRF, la antena ni el analizador reales, ni en Ubuntu 24.04: la prueba en seco del instructor es obligatoria. La autoevaluación documental es de 93,5/100. Detalle en el [informe de revisión](lab_SDR_surveillance_LaTeX/INFORME_REVISION.md).
+### Grabación de referencia
 
-### Respaldo offline del Laboratorio 02
+El Laboratorio 02 incluye una **grabación real de 1090 MHz**. Procede de [dump1090](https://github.com/antirez/dump1090) (licencia BSD-3) y está convertida al formato `.sdriq` de SDRangel. Contiene 242 tramas con paridad válida de la aeronave 4D2023 «AMC421». Tres decodificadores independientes (el verificador del repositorio, pyModeS y SDRangel 7.27.2) la verificaron. Sirve para contrastar la estación con datos conocidos y para descubrir cómo falla la posición CPR con una referencia lejana. Archivo, sumas y evidencia: [`datos_adsb/`](lab_SDR_surveillance_LaTeX/datos_adsb/).
 
-Si no hay tráfico aéreo o la antena no basta, el grupo trabaja con una **grabación real de 1090 MHz**:
-- Origen: [dump1090](https://github.com/antirez/dump1090), licencia BSD-3, convertida al formato `.sdriq` de SDRangel.
-- Contenido: 242 tramas con paridad válida de la aeronave 4D2023 «AMC421».
-- Archivo: [`datos_adsb/`](lab_SDR_surveillance_LaTeX/datos_adsb/), con sumas SHA-256 y licencia.
-- Comprobación con Python: `python3 lab_SDR_surveillance_LaTeX/herramientas/adsb_iq.py verificar lab_SDR_surveillance_LaTeX/datos_adsb/modes1_dump1090_2MSps_1090MHz.sdriq`.
-
-La evidencia obtenida así se etiqueta siempre **GRABACIÓN**, nunca «en vivo».
+**Estado:** edición 3.0, aprobada por el autor para uso en clase. Como en todo laboratorio con hardware, el instructor hace antes de cada curso el ensayo previo descrito en su guía. El historial de revisión y de verificación está en el [informe de revisión](lab_SDR_surveillance_LaTeX/INFORME_REVISION.md).
 
 ## Instalación local (opcional)
 
@@ -391,15 +384,17 @@ python-vigilancia-labs/
 │   ├── 01_python_desde_cero.ipynb       # Laboratorio 01 (alumno)
 │   └── 02_calculos_vigilancia.ipynb     # Laboratorio 02 (alumno)
 ├── lab_SDR_surveillance_LaTeX/
-│   ├── laboratorio_sdr_surveillance.pdf # manual SDR del estudiante (Lab. 01 FM y Lab. 02 ADS-B)
-│   ├── guia_instructor_sdr.pdf          # guía del instructor: preparación, claves y rúbrica
-│   ├── main.tex, guia_instructor.tex    # maestros LaTeX
-│   ├── preambulo_comun.tex              # estilos, recuadros de paso y cuestionarios compartidos
+│   ├── laboratorio_sdr_surveillance.pdf # manual del laboratorio (Lab. 01 FM y Lab. 02 ADS-B)
+│   ├── anexo_a_fundamentos_sdr.pdf      # anexo A: fundamentos y referencia técnica
+│   ├── anexo_b_evaluacion_sdr.pdf       # anexo B: cuestionarios y hojas de registro
+│   ├── guia_instructor_sdr.pdf          # guía del instructor: preparación, claves y respuestas
+│   ├── main.tex, anexo_a.tex, anexo_b.tex, guia_instructor.tex  # maestros LaTeX
+│   ├── preambulo_comun.tex              # estilos, recuadros, hojas y referencias entre documentos
 │   ├── contenido/                       # capítulos y banco único de preguntas
-│   ├── figuras/                         # diagramas TikZ y fotografía del kit de antenas
+│   ├── figuras/                         # diagramas TikZ
 │   ├── datos_adsb/                      # grabación de 1090 MHz verificada, licencia y SHA-256
 │   ├── herramientas/adsb_iq.py          # conversor .bin -> .sdriq y verificador Mode S
-│   ├── compile-xelatex.bat, Makefile    # compilación de los dos PDF
+│   ├── compile-xelatex.bat, Makefile    # compilación de los cuatro PDF
 │   └── README.md, INFORME_REVISION.md   # compilación, estado y revisión
 ├── instructor/
 │   ├── guia_instructor.md               # conducción de clase, tiempos y errores frecuentes

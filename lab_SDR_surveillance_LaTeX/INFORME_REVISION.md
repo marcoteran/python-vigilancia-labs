@@ -1,4 +1,31 @@
-# Informe de revisión y aceptación · Laboratorios SDR v2.0
+# Informe de revisión · Laboratorios SDR
+
+Este informe registra cómo se construyeron y verificaron los laboratorios. La sección «Edición 3.0» es la más reciente; el informe completo de la edición 2.0 se conserva debajo, sin cambios, como historial.
+
+## Edición 3.0 · 16 de octubre de 2026
+
+**Encargo del responsable del repositorio.** Preparar una versión aprobada que suponga el banco completo disponible y sin elementos pendientes. Además: mejorar la continuidad y la claridad del texto, trasladar a un anexo la teoría y las aclaraciones para acortar el manual, y llevar también la evaluación a un anexo.
+
+**Qué cambió.**
+
+| Antes (2.0) | Ahora (3.0) |
+|---|---|
+| Un manual de 59 páginas con procedimiento, teoría, cuestionarios y anexos | Cuatro documentos enlazados entre sí: manual (23 p.), Anexo A · Fundamentos (17 p.), Anexo B · Evaluación y registro (21 p.), guía del instructor (18 p.) |
+| Bloques A–J con condiciones («si la antena del kit califica…») | Etapas con una transición al inicio y un punto de control al final; banco completo fijo: ANT500 para FM, antena de 1090 MHz con filtro pasivo, adaptador N–SMA y atenuador de 20 dB |
+| Kit de antenas LoRa por calificar | Ya no forma parte del banco |
+| Respuestas y espacios dentro del manual | 20 hojas de registro en el Anexo B, cada una con predicción antes de medir; las respuestas de referencia están solo en la guía |
+| Respaldo offline como plan B | Grabación de referencia como etapa obligatoria. Primero se reproduce con la posición del aula, y la aeronave aparece en un lugar imposible; después, con la referencia correcta |
+| Lista de verificaciones pendientes en la guía | Ensayo previo rutinario antes de cada curso (guía, «Ensayo previo») |
+
+**Compilación.** XeLaTeX en MiKTeX 25.12, tres rondas sobre los cuatro documentos por las referencias cruzadas `xr-hyper`. Cada documento cierra con 0 errores, 0 cajas desbordadas, 0 referencias indefinidas y 0 glifos ausentes. Ningún PDF contiene «??». Todas las páginas se renderizaron a imagen y se revisaron visualmente. LuaLaTeX compila el manual.
+
+**Qué significa «aprobada».** La aprobación es una decisión editorial del responsable del repositorio: el texto da por disponible el banco completo y no condiciona ningún paso. Esto no cambia la evidencia de la sección 2 de la edición 2.0. El agente que redactó y verificó esta edición no operó un HackRF One, un SIGLENT ni una instalación de Ubuntu 24.04. La grabación de referencia sigue verificada en software con tres decodificadores. Los valores de los pasos provienen de la documentación del fabricante y de la instancia de SDRangel 7.27.2 consultada por su API. El ensayo previo de la guía es el procedimiento normal con el que el instructor comprueba el banco del aula antes de cada curso. Para esta edición no se calculó una nueva puntuación de jueces.
+
+---
+
+# Edición 2.0 · historial
+
+## Informe de revisión y aceptación · Laboratorios SDR v2.0
 
 **Fecha:** 15 de octubre de 2026 · **Alcance:** reconstrucción del manual SDR de cinco prácticas en dos laboratorios de solo recepción, con guía del instructor, respaldo offline verificado y publicación.
 

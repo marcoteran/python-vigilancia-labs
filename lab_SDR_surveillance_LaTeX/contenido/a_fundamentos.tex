@@ -1,0 +1,509 @@
+% Anexo A · Fundamentos y referencia técnica.
+
+% ===========================================================================
+\section{La escalera de evidencia}
+\label{sec:a-escalera}
+
+Los dos laboratorios comparten una pregunta: ¿qué demuestra realmente lo que veo? La respuesta se ordena en siete niveles. Un nivel superior exige los anteriores, pero ninguno los sustituye.
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_escalera_evidencia}}
+\caption{Escalera de evidencia común a los dos laboratorios.}
+\label{fig:a-escalera}
+\end{figure}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.35\linewidth}>{\raggedright\arraybackslash}p{0.37\linewidth}@{}}
+\toprule
+\textbf{Nivel} & \textbf{Ejemplo en el Laboratorio 01} & \textbf{Ejemplo en el Laboratorio 02} \\
+\midrule
+\endhead
+1 · Energía & Un bloque de 200 kHz en el espectro & Trazos breves en la cascada a 1090 MHz \\
+2 · Demodulación & Audio inteligible & La envolvente de los pulsos \\
+3 · Sincronización & Piloto estéreo reconocido & Preámbulo Mode S con correlación alta \\
+4 · Trama válida & Bloque RDS correcto & Paridad de 24 bits coherente con su formato \\
+5 · Información & Nombre de la emisora (RDS) & Dirección ICAO, indicativo, altitud \\
+6 · Derivada & — & Posición CPR, distancia, alcance máximo \\
+7 · Externa & — & Modelo y matrícula de una base de datos \\
+\bottomrule
+\end{longtable}
+
+Una cascada llena de actividad es nivel 1. Una tabla con posiciones es nivel 6, y depende de la posición configurada del receptor. Un modelo de avión es nivel 7: el avión no lo transmitió.
+
+% ===========================================================================
+\section{Ondas, espectro y modulación de frecuencia}
+\label{sec:a-fm}
+
+\subsection{Frecuencia y longitud de onda}
+
+Una emisora produce una onda electromagnética: campos eléctrico y magnético que oscilan y se propagan a $c \approx 3\times10^{8}$ m/s. Su frecuencia $f$ y su longitud de onda $\lambda$ cumplen
+\begin{equation}
+\lambda = \frac{c}{f}, \qquad \lambda_{100\,\mathrm{MHz}} = 3~\mathrm{m}, \qquad \lambda_{1090\,\mathrm{MHz}} \approx 27{,}5~\mathrm{cm}.
+\end{equation}
+El espectro radioeléctrico se reparte por regulación entre servicios. La radiodifusión FM ocupa 88--108 MHz, con emisoras separadas típicamente 200 kHz en América. A 1090 MHz responden los transpondedores de las aeronaves.
+
+\subsection{Modulación de frecuencia}
+
+La FM imprime la información en la frecuencia instantánea de la portadora:
+\begin{equation}
+f_i(t) = f_c + k_f\, m(t),
+\end{equation}
+con una desviación máxima de $\pm 75$ kHz en radiodifusión. La señal que modula no es solo el audio: es la señal múltiplex (MPX) de la figura~\ref{fig:a-fm}(a), que contiene el canal mono (L+R), un piloto de 19 kHz, la diferencia estéreo (L$-$R) entre 23 y 53 kHz y, a menudo, datos RDS en 57 kHz.
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_fm_espectro}}
+\caption{(a) Señal múltiplex que modula a la portadora. (b) El canal de FM en RF es una banda de unos 200 kHz, no una línea. Esquema, no medida.}
+\label{fig:a-fm}
+\end{figure}
+
+La regla de Carson estima el ancho que ocupa la señal:
+\begin{equation}
+B \approx 2\,(\Delta f + f_m) = 2\,(75 + 53)~\text{kHz} \approx 256~\text{kHz}\quad\text{(estéreo)}.
+\end{equation}
+Por eso la FM de radiodifusión necesita un canal de unos 200 kHz, mientras que la FM de voz de las radios portátiles (NFM) usa desviaciones de pocos kHz y canales de 12,5 o 25 kHz. En SDRangel son demoduladores distintos: \emph{Broadcast FM Demodulator} para radiodifusión, con estéreo y RDS; \emph{NFM Demodulator} para voz.
+
+\subsection{Pre-énfasis y de-énfasis}
+
+El transmisor realza los agudos antes de modular (pre-énfasis) y el receptor los atenúa en la misma medida (de-énfasis), lo que reduce el ruido audible. La constante de tiempo es de 75 $\mu$s en América y de 50 $\mu$s en Europa. SDRangel 7.27.2 trae 50 $\mu$s por defecto. Con el valor equivocado, el audio suena con los agudos descompensados, pero se oye.
+
+\subsection{Qué controla cada ancho de banda}
+
+\gui{RF BW} es el ancho del filtro que aísla el canal \emph{antes} de demodular: si es menor que el ancho ocupado, recorta las excursiones de frecuencia y distorsiona. \gui{AF BW} limita el audio \emph{ya demodulado}: con 3 kHz suena «telefónico», pero inteligible. Son filtros distintos en puntos distintos de la cadena.
+
+% ===========================================================================
+\section{El receptor SDR}
+\label{sec:a-sdr}
+
+\subsection{La cadena}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_hackrf_frontend}}
+\caption{Cadena de recepción simplificada del HackRF One y sus controles en SDRangel. Rangos tomados de la documentación del plugin \emph{HackRF Input}; límite de entrada, de la documentación oficial del HackRF One.}
+\label{fig:a-frontend}
+\end{figure}
+
+La antena convierte el campo en una tensión. El HackRF amplifica, traslada la banda de interés a banda base, filtra y digitaliza con un convertidor de 8 bits, y entrega pares de muestras $(I, Q)$: la parte real e imaginaria de una señal compleja. SDRangel hace el resto en el PC: calcula el espectro, aísla canales, demodula y produce audio o mensajes.
+
+\subsection{Muestreo complejo}
+
+Con muestras complejas a $f_s$ muestras por segundo se observa una ventana de $f_s$ hertzios centrada en la frecuencia del dispositivo, de $-f_s/2$ a $+f_s/2$. Así, 2,4 MSa/s muestran 2,4 MHz de espectro a la vez, y 4 MSa/s muestran 4 MHz. El criterio de Nyquist de «dos veces el ancho de banda» se aplica al muestreo \emph{real}, no al complejo.
+
+\subsection{Ganancia, ruido y saturación}
+
+La ganancia se reparte entre tres etapas: el amplificador RF (0 o 14 dB), el LNA (0--40 dB en pasos de 8) y el VGA de banda base (0--62 dB en pasos de 2). Subirla eleva a la vez la señal y el ruido; solo mejora la relación señal/ruido mientras el ruido de las etapas posteriores importe. Si se sube demasiado, las señales fuertes saturan el receptor. Hay tres síntomas típicos:
+\begin{itemize}
+  \item el piso de ruido sube en toda la ventana;
+  \item aparecen «emisoras» donde no las había: productos de intermodulación;
+  \item el audio se distorsiona aunque el nivel sea alto.
+\end{itemize}
+Por eso se empieza con ganancias moderadas y con el amplificador RF apagado.
+
+\subsection{El pico DC y la sintonía con desplazamiento}
+
+Un receptor de conversión directa produce un artefacto en el centro exacto de la ventana: el pico DC. La corrección \gui{DC} lo atenúa, pero demodular justo encima degrada la señal. La solución es sintonizar el dispositivo unos cientos de kHz al lado y desplazar el canal hasta la emisora: $\Delta f = f_{\mathrm{emisora}} - f_{\mathrm{dispositivo}}$. En 1090 MHz se centra el dispositivo sobre la señal: un mensaje ADS-B ocupa del orden de 2 MHz, y eliminar una franja estrecha en el centro afecta poco a la decodificación.
+
+% ===========================================================================
+\section{Espectro, cascada y decibelios}
+\label{sec:a-espectro}
+
+\begin{figure}[H]
+\centering
+\input{figuras/fig_espectro_waterfall}
+\caption{Dos vistas del mismo flujo I/Q (ilustración esquemática, no captura).}
+\label{fig:a-waterfall}
+\end{figure}
+
+El espectro muestra la potencia frente a la frecuencia en un instante; la cascada apila espectros sucesivos y codifica la potencia en color. Una emisora continua deja una traza vertical; una emisión intermitente deja trazos cortos. El piso de ruido es lo que se ve sin señal: ruido térmico, ruido del receptor e interferencias.
+
+\textbf{dB y dBm.} El decibelio expresa un cociente: $+3$ dB duplica la potencia y $+10$ dB la multiplica por diez. El dBm es una potencia absoluta: $P_{\mathrm{dBm}} = 10\log_{10}(P/1~\mathrm{mW})$. SDRangel muestra dB \emph{relativos} a la escala completa digital; el analizador muestra dBm en su entrada. Las dos cifras no se pueden comparar sin una calibración.
+
+% ===========================================================================
+\section{El analizador de espectro de barrido}
+\label{sec:a-analizador}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_analizador_bloques}}
+\caption{Analizador superheterodino de barrido (conceptual). El filtro FI fija la RBW; el filtro de vídeo, la VBW.}
+\label{fig:a-analizador}
+\end{figure}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.70\linewidth}@{}}
+\toprule
+\textbf{Ajuste} & \textbf{Qué hace} \\
+\midrule
+\endhead
+RBW & Ancho del filtro que «mira» cada frecuencia. Una RBW menor separa señales cercanas y baja el ruido mostrado unos 10 dB por cada factor 10, pero alarga el barrido. SSA3032X Plus: 1 Hz--1 MHz. \\
+VBW & Filtra la traza después del detector. Una VBW menor que la RBW suaviza el ruido sin cambiar la resolución. \\
+Nivel de referencia & La línea superior de la pantalla. \\
+Atenuación & Protege el mezclador; más atenuación eleva el ruido mostrado. El manual relaciona ambos ajustes: $\text{Ref} \le \text{ATT} - \text{PA} - 20$ dBm. \\
+Preamplificador & Unos 20 dB delante del mezclador: baja el ruido mostrado para señales débiles. \\
+Detector & \emph{Pos Peak} (por defecto) muestra el máximo de cada intervalo; \emph{Sample}, el valor instantáneo; \emph{Average}, el promedio. \\
+Traza & \emph{Clear Write} se refresca en cada barrido; \emph{Max Hold} conserva el máximo de muchos barridos. \\
+N dB BW & Función de \gui{Marker Fn}: mide el ancho entre los puntos situados $N$ dB por debajo del marcador. El ancho al 99~\% (\emph{Occupied BW}) pertenece al kit opcional AMK. \\
+Demod & Demodulación AM/FM con salida por auriculares de 3,5 mm. \\
+\bottomrule
+\end{longtable}
+
+\textbf{Qué significa una lectura en dBm.} Es la potencia en la entrada del analizador, medida con la RBW elegida, a través de una antena y un adaptador concretos. No es la potencia del transmisor ni la intensidad de campo. Para una medida trazable haría falta la ganancia calibrada de la antena, las pérdidas de la cadena y la calibración vigente del instrumento.
+
+Las teclas y funciones citadas son las del manual de usuario del SSA3000X Plus (UM0703P-E01A).
+
+% ===========================================================================
+\section{Antenas, cables y conectores}
+\label{sec:a-antenas}
+
+\begin{longtable}{@{}lrrl@{}}
+\toprule
+\textbf{Frecuencia} & $\boldsymbol{\lambda}$ & $\boldsymbol{\lambda/4}$ & \textbf{Uso} \\
+\midrule
+\endhead
+100 MHz & 3,00 m & 75 cm & FM: longitud de la ANT500 en el Lab.\ 01 \\
+1090 MHz & 27,5 cm & 6,9 cm & ADS-B: monopolo de cuarto de onda \\
+\bottomrule
+\end{longtable}
+
+\textbf{Monopolo y plano de tierra.} Una varilla de $\lambda/4$ resuena a la frecuencia de diseño. Para radiar y recibir bien necesita una superficie conductora debajo: por eso la base magnética de la antena de 1090 MHz rinde más sobre metal. La ANT500 extendida a 75 cm funciona como monopolo aproximado en la banda de FM.
+
+\textbf{Polarización.} Las antenas de los aviones y la mayoría de las de radiodifusión son verticales: mantenga verticales las antenas receptoras.
+
+\textbf{Pérdidas del cable.} Un coaxial delgado tipo RG-174 pierde del orden de 0,2 dB/m a 100 MHz y de 0,6--0,7 dB/m a 1 GHz (valores típicos de fabricantes). Unos 3 m a 1090 MHz cuestan unos 2 dB. Casi siempre compensa si permiten llevar la antena a una ventana.
+
+\textbf{El filtro de 1090 MHz.} Atenúa emisiones lejanas a la banda (FM, televisión, telefonía) que, siendo fuertes, pueden saturar el receptor, y añade unos pocos dB de pérdida. Su efecto a 1030 MHz depende de su ancho de banda: algunos modelos dejan pasar de 980 a 1150 MHz. La condición D de la etapa 7 mide su efecto en su estación.
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_conectores}}
+\caption{Identificación de conectores (esquema, no a escala). Un RP-SMA macho enroscado en un SMA hembra no establece contacto central.}
+\label{fig:a-conectores}
+\end{figure}
+
+El analizador tiene entrada tipo N hembra; las antenas del laboratorio terminan en SMA macho. El adaptador N macho -- SMA hembra une ambos mundos.
+
+% ===========================================================================
+\section{Seguridad de RF en detalle}
+\label{sec:a-seguridad}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.35\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}@{}}
+\toprule
+\textbf{Puerto} & \textbf{Límite documentado} & \textbf{Consecuencia} \\
+\midrule
+\endhead
+HackRF, ANTENNA (recepción) & Máximo $-5$ dBm; superarlo puede causar daño permanente (documentación oficial del HackRF One) & No conectarlo a generadores, transmisores ni a la salida TG del analizador. \gui{RF amp} apagado \\
+HackRF, alimentación de antena & 3,0--3,3 V, máximo 50 mA (documentación del HackRF) & \gui{Bias tee} siempre desactivado: el filtro y las antenas son pasivos \\
+SIGLENT, RF INPUT & N hembra, 50 $\Omega$. Potencia media máxima de 30 dBm (3 min, $f_c \ge 10$ MHz, ATT $> 20$ dB, preamplificador apagado); daño a 33 dBm; DC máximo $\pm 50$ V (hoja de datos DS0703P) & Con antenas pasivas, los niveles reales son mucho menores; el riesgo práctico es la descarga electrostática \\
+SIGLENT, salida TG & Hasta 0 dBm, si la opción está instalada & Apagada y sin conectar \\
+\bottomrule
+\end{longtable}
+
+\textbf{Descargas electrostáticas.} Toque una superficie metálica conectada a tierra antes de manipular conectores y no toque el pin central. Conecte y desconecte con el receptor detenido.
+
+\textbf{Cerca de radares secundarios.} El HackRF no tiene preselección: las interrogaciones de un radar secundario (SSR, 1030 MHz) llegan a su entrada aunque esté sintonizado en otra frecuencia. Como orden de magnitud: con unos 90 dBm de potencia de pico radiada y unos 93 dB de pérdida de espacio libre a 1 km, el pico recibido por una antena de 0 dBi ronda los $-4$ dBm, comparable al límite de entrada. A pocos kilómetros de un SSR o un DME, el \gui{RF amp} debe quedar siempre apagado. En emplazamientos muy cercanos, el instructor puede intercalar el atenuador fijo de 20 dB del banco, a costa de sensibilidad.
+
+% ===========================================================================
+\section{Windows: controlador y herramientas}
+\label{sec:a-windows}
+
+Windows necesita el controlador \textbf{WinUSB} para que una aplicación hable con el HackRF a través de \texttt{libusb}. Si el Administrador de dispositivos ya muestra «HackRF One» sin advertencias, el controlador está instalado. Si falta, el instructor lo instala con Zadig (\url{https://zadig.akeo.ie/}), con permisos de administrador:
+\begin{enumerate}
+  \item \menu{Options $\rightarrow$ List All Devices} y seleccionar \textbf{HackRF One}, comprobando que el campo \emph{USB ID} indica \textbf{1D50 6089}. Si muestra otro número, se ha seleccionado otro dispositivo.
+  \item Si el controlador actual ya es WinUSB y Zadig ofrece \textbf{Downgrade WCID Driver}, no pulsarlo: el controlador existente funciona.
+  \item Solo si no hay controlador: elegir WinUSB y pulsar \textbf{Install Driver}.
+\end{enumerate}
+El instalador de SDRangel para Windows no incluye \texttt{hackrf\_info}. La documentación de HackRF recomienda obtenerla con radioconda, que el instructor instala antes de la sesión.
+
+% ===========================================================================
+\section{Ubuntu: paquetes, permisos y recuperación}
+\label{sec:a-ubuntu}
+
+\begin{itemize}
+  \item \textbf{Herramientas HackRF:} paquete \texttt{hackrf} 2023.01.1 del repositorio \emph{universe} de Ubuntu 24.04. Su biblioteca \texttt{libhackrf0} instala la regla \texttt{/usr/lib/udev/rules.d/60-libhackrf0.rules}, que da acceso al HackRF a los usuarios sin privilegios.
+  \item \textbf{SDRangel:} el paquete snap oficial (7.27.2). Necesita la conexión \texttt{raw-usb} para usar el HackRF y lee con seguridad los archivos de la carpeta personal. El paquete \texttt{.deb} de 24.04 de la misma versión no sirve: depende de \texttt{libuhd4.10.0}, que no está en los repositorios estándar.
+  \item \textbf{Un programa por HackRF:} cierre SDRangel antes de \texttt{hackrf\_info} y viceversa. No ejecute SDRangel con \texttt{sudo}: los archivos de configuración creados como \emph{root} causan fallos posteriores.
+\end{itemize}
+
+\Comando{cat /usr/lib/udev/rules.d/60-libhackrf0.rules}
+{Leer la regla de permisos.}
+{Líneas con \texttt{1d50} y \texttt{6089} que fijan grupo, modo o etiqueta \texttt{uaccess}.}
+{\texttt{No such file or directory}.}
+{\texttt{sudo apt install --reinstall libhackrf0}.}
+
+\Comando{sudo usermod -aG plugdev $USER}
+{Solo si la regla asigna el grupo \texttt{plugdev} y la orden \texttt{groups} no lo muestra.}
+{Sin salida.}
+{\texttt{user ... does not exist}: orden mal escrita.}
+{Cierre la sesión y vuelva a entrar; reconecte el HackRF; repita \texttt{hackrf\_info}.}
+
+\Comando{sudo apt install hackrf}
+{Reinstalar las herramientas si faltan.}
+{\texttt{hackrf is already the newest version (2023.01.1-9build1)} o su instalación.}
+{\texttt{Unable to locate package hackrf}.}
+{\texttt{sudo add-apt-repository universe} y \texttt{sudo apt update}.}
+
+% ===========================================================================
+\section{Radar, Mode S y ADS-B}
+\label{sec:a-sistemas}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.48\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}@{}}
+\toprule
+\textbf{Sistema} & \textbf{Qué es} & \textbf{¿Lo observa la estación?} \\
+\midrule
+\endhead
+PSR & Radar primario: emite pulsos y recibe el eco. No necesita cooperación y no identifica. & No \\
+SSR & Radar secundario: interroga en 1030 MHz; el transpondedor responde en 1090 MHz. & Solo las respuestas \\
+Modo A/C & Respuestas clásicas: código de identidad de 4 dígitos (4096 códigos) y altitud de presión. & No las decodifica \\
+Mode S & Interrogación selectiva por dirección ICAO de 24 bits; respuestas con paridad. & Sí: respuestas a interrogaciones de otros \\
+ADS-B Out & La aeronave difunde sin ser interrogada su posición (GNSS), su velocidad y su identificación. & Sí \\
+1090ES & \emph{Extended squitter}: el enlace ADS-B más usado (tramas DF17/18 de 112 bits). & Sí \\
+ADS-B In & Recepción y decodificación de esos mensajes, a bordo o en tierra. & Es la estación \\
+MLAT & Posición a partir de diferencias de tiempo de llegada en varios receptores sincronizados. & No: requiere una red \\
+\bottomrule
+\end{longtable}
+
+Recibir ADS-B no equivale a operar un radar secundario: la estación no elige a quién preguntar, no mide distancias por ida y vuelta y no puede forzar una respuesta.
+
+% ===========================================================================
+\section{La trama Mode S}
+\label{sec:a-trama}
+
+\subsection{Preámbulo y modulación por posición de pulso}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_modes_trama}}
+\caption{Respuesta Mode S a escala: preámbulo de 8 $\mu$s y datos en PPM. Los ocho bits mostrados son el primer byte, 0x8D, de una trama real de la grabación de referencia.}
+\label{fig:a-trama}
+\end{figure}
+
+Cada bit dura 1 $\mu$s y contiene un pulso de 0,5 $\mu$s: en la primera mitad si el bit es 1 y en la segunda si es 0. A 4 MSa/s cada bit ocupa 4 muestras y el demodulador compara la energía de sus dos mitades. A 2 MSa/s hay una sola muestra por medio bit, y por eso esa tasa es el mínimo admitido. El umbral de correlación decide cuánto debe parecerse una ráfaga al preámbulo ideal para intentar decodificarla. Si se baja, se intentan más tramas, se aceptan más errores y la CPU trabaja más.
+
+\subsection{Formatos y validación}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.38\linewidth}>{\raggedright\arraybackslash}p{0.37\linewidth}@{}}
+\toprule
+\textbf{DF} & \textbf{Bits} & \textbf{Contenido} & \textbf{Comprobación posible en un receptor pasivo} \\
+\midrule
+\endhead
+0 & 56 & Vigilancia aire-aire (ACAS), altitud & Paridad superpuesta con la dirección (AP): el resto \emph{es} la dirección ICAO. Solo valida si la dirección ya se conoce \\
+4 & 56 & Respuesta de vigilancia: altitud & AP \\
+5 & 56 & Respuesta de vigilancia: identidad & AP \\
+11 & 56 & Respuesta a \emph{all-call} y \emph{squitter} de adquisición; dirección en claro & Paridad con identificador de interrogador: resto 0 en el squitter espontáneo \\
+16 & 112 & Vigilancia aire-aire larga (ACAS) & AP \\
+17 & 112 & \textbf{Squitter extendido ADS-B}; dirección en claro & Paridad pura: resto \textbf{0}. La comprobación más fuerte \\
+18 & 112 & Squitter extendido sin transpondedor (TIS-B, vehículos) & Paridad pura: resto 0 \\
+20, 21 & 112 & Respuestas Comm-B con un registro de 56 bits & AP \\
+\bottomrule
+\end{longtable}
+
+Todas usan el mismo polinomio de paridad de 24 bits, pero lo que se superpone a la paridad cambia con el formato. Una DF17 se valida sola. Una DF4 «se valida» solo si el receptor ya conoce la dirección que aparece como resto; si no, cualquier ruido produce una dirección plausible. Por eso los decodificadores aceptan esos formatos solo para aeronaves ya confirmadas por una DF11 o una DF17.
+
+\subsection{La trama DF17 y sus mensajes}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_df17_campos}}
+\caption{Campos de una trama DF17 de 112 bits, a escala.}
+\label{fig:a-df17}
+\end{figure}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.40\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}@{}}
+\toprule
+\textbf{Campo de la tabla} & \textbf{De qué mensaje sale} & \textbf{Por qué puede faltar} \\
+\midrule
+\endhead
+ICAO & Cualquier DF11, 17 o 18 & Nunca falta: es la clave de la fila \\
+Indicativo & DF17, TC 1--4 (identificación) & Aún no llegó; se emite con menos frecuencia que la posición \\
+Altitud & DF17, TC 9--18; también DF0, 4 y 20 & Respuestas sin altitud codificada \\
+Velocidad y rumbo & DF17, TC 19 & Aeronave sin ADS-B o mensaje aún no recibido \\
+Lat/Lon & DF17, TC 9--18 (barométrica) o 20--22 (GNSS); en superficie, TC 5--8; más el cálculo CPR & Falta un par de mensajes o una referencia válida \\
+Distancia, acimut & Cálculo con \gui{My Position} & Derivado: erróneo si la referencia lo es \\
+Modelo, matrícula & Base de datos descargada & Nivel 7: no es RF \\
+\bottomrule
+\end{longtable}
+
+La posición y la velocidad se difunden del orden de dos veces por segundo; la identificación, con mucha menor frecuencia. Una aeronave puede mostrar altitud y no indicativo durante bastante tiempo, o al revés.
+
+\textbf{Juego de caracteres del indicativo.} Cada carácter ocupa 6 bits: 1--26 corresponden a A--Z, 32 al espacio y 48--57 a los dígitos 0--9.
+
+% ===========================================================================
+\section{La posición CPR}
+\label{sec:a-cpr}
+
+Para caber en 17 bits por coordenada, ADS-B usa la codificación compacta de la posición (CPR): la trama transmite la posición \emph{dentro de una zona} de latitud de unos 6°. Hay dos formatos, par e impar, con zonas de tamaño ligeramente distinto. La posición se reconstruye de dos maneras:
+\begin{itemize}
+  \item \textbf{Global:} con una trama par y una impar recientes de la misma aeronave (los decodificadores suelen exigir que estén separadas menos de unos 10 s). No necesita referencia.
+  \item \textbf{Local:} con una sola trama y una posición de referencia a menos de media zona (unos 180 NM). La referencia es \gui{My Position} o una posición previa de la aeronave.
+\end{itemize}
+
+Si la referencia está lejos, la decodificación local elige la zona equivocada \emph{sin avisar}. Es lo que se observó al preparar este laboratorio y lo que usted reproduce en la etapa 9 del Laboratorio 02.
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_cpr_referencia}}
+\caption{Medido con SDRangel 7.27.2 sobre la grabación de referencia (aeronave real cerca de Sicilia, a 37,1°N). Con la posición del receptor en Bogotá ($\approx$ 4,7°N), la aeronave apareció en Colombia, a $\approx$ 6,6°N. Con una referencia de 37,0°N, 14,0°E, apareció en 36,98--37,10°N, igual que en dos decodificadores independientes.}
+\label{fig:a-cpr}
+\end{figure}
+
+% ===========================================================================
+\section{Por qué el barrido no ve las ráfagas}
+\label{sec:a-barrido}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_barrido_vs_pulsos}}
+\caption{(a) Un barrido casi nunca coincide con ráfagas de microsegundos. (b) En span cero el analizador se convierte en un receptor fijo que muestra la envolvente en el tiempo. Esquema conceptual.}
+\label{fig:a-barrido}
+\end{figure}
+
+En barrido, el oscilador local pasa por 1090 MHz solo durante una fracción de cada barrido, así que la mayoría de las ráfagas llegan mientras el analizador mira otra frecuencia. \emph{Max Hold} acumula las pocas coincidencias. En \emph{span cero}, el eje horizontal pasa a ser tiempo, y el disparo de vídeo (válido solo en span cero) congela la pantalla cuando la envolvente supera un nivel. El SSA3000X Plus admite un tiempo de barrido mínimo de 900 $\mu$s: con 751 puntos, cada punto representa unos 1,2 $\mu$s. Se distinguen tramas de 64 y de 120 $\mu$s, pero no pulsos de 0,5 $\mu$s ni bits. El analizador no decodifica ni valida tramas.
+
+% ===========================================================================
+\Needspace{16\baselineskip}
+\section{Diagnóstico de fallos · Laboratorio 01}
+\label{sec:a-diagfm}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}@{}}
+\toprule
+\textbf{Síntoma} & \textbf{Compruebe} & \textbf{Acción} \\
+\midrule
+\endhead
+HackRF no reconocido & ¿Encienden los LED? ¿Aparece en el Administrador de dispositivos? & Otro cable de datos y otro puerto; si hay triángulo amarillo, controlador (§\ref{sec:a-windows}). \\
+Dispositivo en uso & ¿Hay otro programa SDR abierto? & Cierre todos; reconecte el USB; abra solo uno. \\
+Botón de arranque en rojo & El dispositivo se desconectó & Detenga, reconecte y arranque. \\
+Ninguna emisora visible & ¿Antena en ANTENNA? ¿Frecuencia en kHz correcta (89\,000 = 89 MHz)? & Revise el conector; extienda la antena; acérquela a la ventana. \\
+Ruido excesivo & ¿Ganancias altas? ¿Espurios que cambian con la ganancia? & LNA 16 / VGA 16; RF amp apagado; aleje la antena del PC. \\
+Hay emisora pero no audio & ¿Canal sobre la emisora? ¿Mute? ¿Squelch? ¿Salida de audio? & Desplazamiento correcto; mute desactivado; squelch al mínimo; \menu{Preferences $\rightarrow$ Audio}; mezclador de Windows. \\
+Audio distorsionado & ¿Demodulador equivocado? ¿RF BW pequeña? & Broadcast FM Demodulator; RF BW 180 kHz; centre el canal. \\
+Agudos descompensados & De-énfasis & 75 $\mu$s en América. \\
+Silbido en el centro & Canal sobre el pico DC & Sintonía con desplazamiento. \\
+Analizador sin señal & ¿Adaptador bien apretado? ¿Referencia muy alta? & Preamplificador activado; referencia $-40$ dBm; RBW 100 kHz. \\
+Lecturas extrañas en el analizador & ¿Aparece UNCAL? ¿RBW o detector inadecuados? & Barrido automático; anote RBW y detector; no compare dBm con dB de SDRangel. \\
+\bottomrule
+\end{longtable}
+
+% ===========================================================================
+\Needspace{16\baselineskip}
+\section{Diagnóstico de fallos · Laboratorio 02}
+\label{sec:a-diagadsb}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}@{}}
+\toprule
+\textbf{Síntoma} & \textbf{Compruebe} & \textbf{Acción} \\
+\midrule
+\endhead
+\texttt{lsusb} no muestra 1d50:6089 & Cable, puerto, alimentación & Otro cable y puerto directo; \texttt{sudo dmesg | tail}. \\
+\texttt{hackrf\_info} solo funciona con \texttt{sudo} & Regla udev o grupo & §\ref{sec:a-ubuntu}. \\
+SDRangel no lista el HackRF & \texttt{raw-usb}; otro programa usando el HackRF & \texttt{snap connections sdrangel}; cerrar otros programas; reconectar. \\
+Espectro sin trazos & Antena, filtro, ubicación, tráfico & Revise la cadena; antena vertical en la ventana; espere 10 min. \\
+Ruido muy alto o espurios & Ganancia excesiva & LNA 24 / VGA 20; RF amp apagado; filtro en la cadena. \\
+Muchos intentos y ninguna fila & Umbral bajo o señales débiles & Umbral de 7 dB; mejore la ubicación. \\
+Filas sin indicativo & Mensajes de identificación pendientes & Esperar; es normal. \\
+Tabla con filas y mapa vacío & Sin pares CPR, sin mosaicos o referencia errónea & Esperar mensajes de posición; comprobar Internet; revisar \gui{My Position}. \\
+Aeronave en un lugar imposible & Referencia CPR lejana & Corrija \gui{My Position} (§\ref{sec:a-cpr}). \\
+FileInput no abre el archivo & Archivo fuera de la carpeta personal, reproducción en curso o archivo alterado & Pausa; copiar a \texttt{\textasciitilde/}; comprobar el SHA-256 (§\ref{sec:a-grabacion}). \\
+Interfaz lenta & Mapa 3D o muchas trayectorias & Mapa 2D; cerrar ventanas. \\
+Analizador sin ráfagas & Barrido frente a pulsos & Max Hold 2 min o span cero con disparo de vídeo. \\
+\bottomrule
+\end{longtable}
+
+% ===========================================================================
+\section{La grabación de referencia}
+\label{sec:a-grabacion}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.67\linewidth}@{}}
+\toprule
+\textbf{Atributo} & \textbf{Valor} \\
+\midrule
+\endhead
+Archivo & {\ttfamily\nolinkurl{datos_adsb/modes1_dump1090_2MSps_1090MHz.sdriq}} (1\,427\,504 bytes) \\
+SHA-256 & {\ttfamily\small\nolinkurl{d201250f486e5ff14133bc57664c8e5be6c42be3bb989529f29789674ee5f25d}} \\
+Origen & \texttt{testfiles/modes1.bin} del proyecto dump1090 de Salvatore Sanfilippo (\url{https://github.com/antirez/dump1090}), añadido el 05-01-2013; licencia BSD-3 (\texttt{datos\_adsb/LICENSE\_dump1090.txt}) \\
+Formato & Cabecera \texttt{.sdriq} de 32 bytes (2\,000\,000 S/s; 1\,090\,000\,000 Hz; 16 bits; CRC-32); muestras I/Q \texttt{int16} little endian, convertidas desde 8 bits sin signo como $(u-127{,}5)\times256$ \\
+Contenido & 178,4 ms; 242 tramas con paridad válida (DF0: 10, DF4: 4, DF5: 9, DF11: 68, DF17: 132, DF20: 13, DF21: 6), todas de la aeronave ICAO 4D2023, «AMC421» \\
+Verificación & Verificador del repositorio, pyModeS 3.6.0 (242/242 coincidencias) y SDRangel 7.27.2 (143 tramas distintas, todas válidas) \\
+\bottomrule
+\end{longtable}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.58\linewidth}@{}}
+\caption{Valores de referencia observados al reproducir la grabación.}\label{tab:a-referencia}\\
+\toprule
+\textbf{Campo} & \textbf{Rango} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Campo} & \textbf{Rango} \\
+\midrule
+\endhead
+ICAO / indicativo & 4D2023 / AMC421 \\
+Altitud & 20\,025--24\,275 ft (varía en cada vuelta del bucle) \\
+Velocidad / rumbo & 371--390 kt / $\approx$ 158° \\
+Posición (referencia 37,0 N, 14,0 E) & 36,96--37,10°N; 13,79--13,86°E \\
+Formatos & DF0, 4, 5, 11, 17, 20, 21 \\
+Correlación de preámbulo & $\approx$ 6--63 dB (mediana $\approx$ 23 dB) \\
+\bottomrule
+\end{longtable}
+
+\textbf{Limitaciones.} En 178 ms la altitud baja más de 4000 ft: el archivo tiene el tiempo comprimido. Con toda probabilidad se recortó con la opción \texttt{--snip} de dump1090, que elimina los silencios. Las tasas de tramas y el alcance no tienen significado físico. SDRangel repite el archivo en bucle y la aeronave «salta» hacia atrás en cada vuelta.
+
+\textbf{Comprobación independiente} (Python 3 y \texttt{numpy}, desde \texttt{lab\_SDR\_surveillance\_LaTeX}):
+
+\begin{lstlisting}
+sha256sum datos_adsb/modes1_dump1090_2MSps_1090MHz.sdriq
+python3 herramientas/adsb_iq.py verificar datos_adsb/modes1_dump1090_2MSps_1090MHz.sdriq
+\end{lstlisting}
+
+El verificador informa 430 preámbulos candidatos, 242 tramas válidas y 1 dirección ICAO. La diferencia entre candidatos y tramas válidas es la escalera de evidencia en números. También marca 4 posiciones «sospechosas», calculadas con pares de tramas separadas en el tiempo real.
+
+\textbf{Reproducción del archivo desde su origen:}
+
+\begin{lstlisting}
+curl -L -o modes1.bin https://raw.githubusercontent.com/antirez/dump1090/master/testfiles/modes1.bin
+python3 herramientas/adsb_iq.py convertir modes1.bin datos_adsb/modes1_dump1090_2MSps_1090MHz.sdriq --t0 1357390345000
+\end{lstlisting}
+
+% ===========================================================================
+\section{Glosario}
+\label{sec:a-glosario}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.70\linewidth}@{}}
+\toprule
+\textbf{Término} & \textbf{Significado} \\
+\midrule
+\endhead
+ADS-B & Vigilancia dependiente automática por radiodifusión: la aeronave difunde sus propios datos sin ser interrogada. \\
+AP / PI & Paridad superpuesta con la dirección (AP) o con el identificador del interrogador (PI). \\
+CPR & Codificación compacta de la posición; necesita dos tramas o una referencia. \\
+dB, dBm & Cociente logarítmico; el dBm es potencia absoluta referida a 1 mW. \\
+Decimación & Reducción de la tasa de muestreo después de filtrar. \\
+DF, TC & \emph{Downlink Format} (tipo de trama Mode S) y \emph{Type Code} (tipo de mensaje ADS-B). \\
+Desplazamiento ($\Delta f$) & Diferencia entre la frecuencia del canal y la del dispositivo. \\
+I/Q & Muestras en fase y en cuadratura: representación compleja de la señal. \\
+ICAO & Dirección única de 24 bits del transpondedor. \\
+Max Hold & Traza que conserva el máximo de muchos barridos. \\
+Pico DC & Artefacto en el centro del espectro de un receptor de conversión directa. \\
+PPM & Modulación por posición de pulso. \\
+RBW, VBW & Ancho de banda de resolución y de vídeo del analizador. \\
+RP-SMA & Variante de SMA con el género del contacto central invertido. \\
+Span cero & Modo del analizador en el que el eje horizontal es tiempo. \\
+WinUSB & Controlador genérico de Windows para dispositivos USB de usuario. \\
+\bottomrule
+\end{longtable}
+
+% ===========================================================================
+\section{Referencias}
+\label{sec:a-referencias}
+
+Consultadas el 15 de octubre de 2026. Ante una discrepancia, prevalece la documentación de la versión instalada.
+
+\begin{itemize}[itemsep=0.35em]
+  \item \textbf{HackRF One}, documentación oficial: \url{https://hackrf.readthedocs.io/}. Rango, tasas, ADC, límite de $-5$ dBm, alimentación de antena e instalación (radioconda, \texttt{apt}).
+  \item \textbf{SDRangel}: \url{https://github.com/f4exb/sdrangel}, versión 7.27.2. Readme de los plugins \emph{HackRF Input}, \emph{Broadcast FM Demodulator}, \emph{ADS-B Demodulator}, \emph{Map} y \emph{FileInput}; guía rápida; código fuente (valores por defecto, cabecera \texttt{.sdriq}, actualización automática de posición).
+  \item \textbf{SDRangel en la Snap Store}: \url{https://snapcraft.io/sdrangel}.
+  \item \textbf{Ubuntu 24.04}, paquetes: \url{https://packages.ubuntu.com/noble/hackrf}.
+  \item \textbf{SIGLENT SSA3000X Plus}: hoja de datos DS0703P (E04B) y manual de usuario UM0703P-E01A.
+  \item \textbf{Zadig}: \url{https://zadig.akeo.ie/}.
+  \item \textbf{dump1090}: \url{https://github.com/antirez/dump1090}. Origen y licencia de la grabación.
+  \item \textbf{pyModeS}: \url{https://github.com/junzis/pyModeS}. Decodificador independiente usado en la verificación (3.6.0).
+\end{itemize}

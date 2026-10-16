@@ -2,8 +2,8 @@
 \begin{tikzpicture}[node distance=5mm and 7mm]
   % Configuración 1: SDR
   \node[bloqueext,minimum width=23mm] (tx) {Emisora FM\\comercial\\(88--108 MHz)};
-  \node[bloque,right=14mm of tx,minimum width=23mm] (ant) {Antena receptora\\(no calificada\\en FM)};
-  \node[bloque,right=of ant,minimum width=19mm] (coax) {Cable coaxial\\(opcional)};
+  \node[bloque,right=14mm of tx,minimum width=23mm] (ant) {Antena \textbf{ANT500}\\extendida a\\$\approx$ 75 cm};
+  \node[bloque,right=of ant,minimum width=19mm] (coax) {Cable de\\extensión SMA\\(si hace falta)};
   \node[bloque,right=of coax,minimum width=26mm] (hrf) {\textbf{HackRF One}\\puerto \textbf{ANTENNA}\\(SMA hembra)};
   \draw[flecha,decorate,decoration={snake,amplitude=1.1mm,segment length=3mm,post length=2.5mm}] (tx) -- (ant);
   \node[rotulo,above=0.5mm] at ($(tx.east)!0.5!(ant.west)+(0,3mm)$) {onda EM};
@@ -20,8 +20,8 @@
   \draw[flecha] (bfm) -- (aud);
 
   % Configuración 2: analizador, secuencial
-  \node[bloque,below=17mm of aud.south west,anchor=north west,minimum width=23mm] (ant2) {La \emph{misma}\\antena y cable};
-  \node[bloqueext,right=9mm of ant2,minimum width=29mm] (adp) {Adaptador N macho --\\SMA hembra\\(\emph{no confirmado})};
+  \node[bloque,below=17mm of aud.south west,anchor=north west,minimum width=23mm] (ant2) {La \emph{misma}\\antena ANT500};
+  \node[bloque,right=9mm of ant2,minimum width=29mm] (adp) {Adaptador\\N macho --\\SMA hembra};
   \node[bloqueinst,right=9mm of adp,minimum width=36mm] (sa) {\textbf{SIGLENT SSA3032X Plus}\\\textbf{RF INPUT} 50~$\Omega$ (N hembra)\\generador TG \emph{apagado}};
   \draw[flecha] (ant2) -- (adp);
   \draw[flecha] (adp) -- (sa);

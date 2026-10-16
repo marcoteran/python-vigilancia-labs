@@ -1,0 +1,81 @@
+% Manual · parte inicial: organización, banco, seguridad e hilo conductor.
+
+\PortadillaLaboratorio{Antes de empezar · 10 minutos de lectura}{Cómo funciona este laboratorio}{En dos sesiones va a construir dos receptores reales. En la primera, una emisora de FM pasa por una antena, un HackRF y un programa hasta convertirse en sonido. En la segunda, ráfagas de microsegundos emitidas por aviones se convierten en una tabla y un mapa. En ambas aprenderá lo mismo: distinguir lo que \emph{ve} de lo que puede \emph{demostrar}.}
+
+\section{Cuatro documentos, una tarea}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.66\linewidth}@{}}
+\toprule
+\textbf{Documento} & \textbf{Para qué lo usa} \\
+\midrule
+\endhead
+\textbf{Manual} (este) & Qué hacer, en qué orden, con qué valores y qué debe ver. Es lo único que necesita abierto junto al equipo. \\
+\textbf{Anexo A} · Fundamentos & Por qué funciona: teoría, aclaraciones, seguridad detallada, diagnóstico de fallos y datos de referencia. \\
+\textbf{Anexo B} · Evaluación y registro & Cuestionarios, hojas de registro y entregables. Imprímalo y llévelo. \\
+\textbf{Guía del instructor} & Preparación del banco, claves y rúbrica. No es para el estudiante. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Cómo leer un paso}
+
+Cada paso importante es un recuadro con una acción y hasta seis filas:
+
+\Paso{La acción, en una frase}
+{El conector, el menú o el control exactos.}
+{El valor que debe poner.}
+{La razón técnica, en una línea.}
+{Lo que verá u oirá si todo va bien.}
+{Una comprobación concreta.}
+{Qué hacer de inmediato si no sale.}
+
+Las órdenes de terminal (Laboratorio 02) se presentan en otro recuadro: la orden exacta arriba y, debajo, su propósito, la salida esperada, cómo reconocer un fallo y cómo recuperarse. Cuando un paso le pida registrar algo, el manual le indicará la hoja del Anexo B, por ejemplo la \hoja{W2}.
+
+\section{El banco}
+\label{sec:banco}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.42\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}@{}}
+\toprule
+\textbf{Elemento} & \textbf{Función} & \textbf{Laboratorio} \\
+\midrule
+\endhead
+HackRF One y su cable USB de datos & Receptor SDR de 1 MHz a 6 GHz & 01 y 02 \\
+Antena telescópica ANT500 (75 MHz--1 GHz, SMA macho) & Antena de FM & 01 \\
+Antena de 1090 MHz con base magnética y 3 m de cable (SMA macho) & Antena de ADS-B & 02 \\
+Filtro pasabanda de 1090 MHz, pasivo (SMA) & Atenúa emisiones lejanas a 1090 MHz & 02 \\
+Cable de extensión SMA de bajas pérdidas & Llevar la antena a la ventana & 01 y 02 \\
+Adaptadores SMA del paquete del HackRF & Ajustar géneros de conector & 01 y 02 \\
+Analizador SIGLENT SSA3032X Plus & Medidas de espectro & 01 y 02 \\
+Adaptador N macho -- SMA hembra & Conectar las antenas a la entrada N del analizador & 01 y 02 \\
+PC con Windows 10/11, SDRangel 7.27.2 y radioconda; auriculares & Estación del Laboratorio 01 & 01 \\
+PC con Ubuntu 24.04 LTS, SDRangel 7.27.2 (snap) y \texttt{hackrf} & Estación del Laboratorio 02 & 02 \\
+Grabación de referencia \texttt{datos\_adsb/\ldots.sdriq} & Contraste con datos conocidos & 02 \\
+\bottomrule
+\end{longtable}
+
+\section{Tres reglas que no se negocian}
+\label{sec:reglas}
+
+\begin{alerta}[Seguridad]
+\begin{enumerate}
+  \item \textbf{Solo se recibe.} No añada en SDRangel nada que diga \emph{Output}, \emph{Modulator} o \emph{TX}, y no conecte nunca el HackRF al analizador. Emitir en 1030/1090 MHz interfiere con sistemas de seguridad aérea.
+  \item \textbf{Las entradas son frágiles.} Toque una superficie metálica antes de manipular conectores. Conecte y desconecte con el receptor detenido. Apriete las tuercas SMA a mano y no gire el cuerpo de la antena.
+  \item \textbf{La alimentación de antena se queda apagada.} Las casillas \gui{Bias tee} y \gui{RF amp} de SDRangel permanecen desactivadas salvo indicación expresa del instructor.
+\end{enumerate}
+Detalle de límites, descargas electrostáticas y emplazamientos cercanos a radares: \anexoA{sec:a-seguridad}.
+\end{alerta}
+
+\section{La idea que une los dos laboratorios}
+
+Una pantalla llena de colores no prueba nada por sí sola. Cada vez que observe algo, pregúntese qué demuestra:
+
+\begin{enumerate}
+  \item \textbf{Energía}: hay actividad en una frecuencia.
+  \item \textbf{Demodulación}: se recuperó la señal que transportaba la portadora (el audio).
+  \item \textbf{Sincronización}: el receptor reconoció la estructura de un mensaje (un preámbulo).
+  \item \textbf{Trama válida}: unos bits superaron la comprobación de su protocolo.
+  \item \textbf{Información}: campos transmitidos por el emisor (dirección, altitud).
+  \item \textbf{Información derivada}: algo que calculó el receptor (una posición).
+  \item \textbf{Información externa}: algo que vino de una base de datos (el modelo del avión).
+\end{enumerate}
+
+Cada entregable le pedirá declarar el nivel de su evidencia. La escalera completa, con ejemplos, está en el \anexoA{sec:a-escalera}.

@@ -1,0 +1,302 @@
+% Manual · Laboratorio 01 — Windows: radiodifusión FM con HackRF One, SDRangel y SIGLENT.
+
+\PortadillaLaboratorio{Laboratorio 01 · Windows 10/11 · 210 minutos}{De las ondas de radio al sonido: recepción FM, SDR y análisis de espectro}{Su misión: sintonizar una emisora de FM real, recuperar su audio y medir la misma señal con un analizador de espectro. Al final sabrá explicar qué le dijo cada instrumento y qué no podía decirle.}
+
+\section{Ficha del laboratorio}
+\label{sec:w-plan}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.73\linewidth}@{}}
+\toprule
+\endhead
+\textbf{Al terminar podrá} & montar y verificar una estación SDR receptora; configurar SDRangel distinguiendo el dispositivo del canal; localizar, demodular y escuchar una emisora; medirla con el SIGLENT (centro, span, referencia, RBW, VBW, detector, marcadores); comprobar con experimentos el efecto de la sintonía, el ancho de banda y la ganancia; y separar la detección de energía de la recuperación de información. \\
+\textbf{Antes de venir} & Responda el cuestionario diagnóstico (Anexo~B, p.~\pageref{B-sec:b-diagw}) y lea el \anexoA{sec:a-fm}. \\
+\textbf{Equipo} & HackRF One, antena ANT500, cable de extensión SMA, adaptador N -- SMA, SIGLENT SSA3032X Plus, PC con Windows y auriculares (sección~\ref{sec:banco}). \\
+\textbf{Registro} & Hojas W1 a W9 del Anexo B. \\
+\bottomrule
+\end{longtable}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.62\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.16\linewidth}@{}}
+\toprule
+\textbf{Etapa} & \textbf{Minutos} & \textbf{Acumulado} \\
+\midrule
+\endhead
+Orientación: misión, equipo y reglas & 15 & 15 \\
+1 · Montar la estación & 15 & 30 \\
+2 · Windows reconoce el HackRF & 15 & 45 \\
+3 · El receptor en SDRangel & 25 & 70 \\
+4 · Encontrar y escuchar una emisora & 40 & 110 \\
+5 · Medir con el analizador & 40 & 150 \\
+6 · Cuatro experimentos & 40 & 190 \\
+7 · Cierre y entrega & 20 & 210 \\
+\bottomrule
+\end{longtable}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_cadena_fm}}
+\caption{Las dos configuraciones del laboratorio. Primero, la antena en el HackRF (etapas 1--4); después, la misma antena en el analizador (etapa 5). Los dos instrumentos nunca se conectan entre sí.}
+\label{fig:cadenafm}
+\end{figure}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 1 · Montar la estación}
+\label{sec:w-equipo}
+
+\Puente{Todo empieza en el conector. Un receptor bien configurado con la antena en el puerto equivocado no recibe nada y no da ningún error.}
+
+\Paso{Identifique los puertos del HackRF}
+{Carcasa del HackRF One.}
+{Tres conectores SMA hembra: \textbf{ANTENNA} (señal de radio) y \textbf{CLKIN}/\textbf{CLKOUT} (reloj). Un USB y dos pulsadores.}
+{La antena solo funciona en ANTENNA.}
+{Usted señala el puerto ANTENNA sin dudar.}
+{}
+{Si la serigrafía no se lee, pregunte antes de conectar.}
+
+\Paso{Monte la antena ANT500}
+{Puerto ANTENNA; la tuerca SMA de la antena.}
+{Enrósquela a mano. Extiéndala hasta unos \valor{75 cm} y póngala vertical.}
+{75 cm es un cuarto de la longitud de onda a 100 MHz: la antena resuena en el centro de la banda de FM.}
+{La antena queda firme y vertical.}
+{Mueva la antena con suavidad: el conector no tiene holgura.}
+{Si la rosca no entra con suavidad, no fuerce: compruebe que no mezcla conectores distintos (\anexoA{sec:a-antenas}).}
+
+\Paso{Conecte el USB}
+{Un puerto USB del PC, directo (sin concentrador).}
+{Cable de datos del HackRF.}
+{El flujo de muestras necesita un enlace USB 2.0 estable.}
+{Se encienden los LED del HackRF; Windows emite el sonido de dispositivo conectado.}
+{}
+{Ningún LED: otro cable y otro puerto.}
+
+Anote los datos del puesto en la \hoja{W1}.
+
+\begin{logro}
+La estación está montada: antena en el puerto correcto, a la longitud correcta, y el HackRF alimentado.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 2 · Windows reconoce el HackRF}
+\label{sec:w-windows}
+
+\Puente{Antes de abrir SDRangel, compruebe que Windows ve el HackRF. Si este paso falla, ningún ajuste posterior lo arreglará.}
+
+\Paso{Compruebe el controlador}
+{\tecla{Win}+\tecla{X} $\rightarrow$ \menu{Administrador de dispositivos}.}
+{Busque \textbf{HackRF One} entre los dispositivos USB.}
+{Windows necesita el controlador WinUSB para que SDRangel use el HackRF.}
+{«HackRF One» sin triángulo amarillo.}
+{Desconecte el USB: la entrada desaparece. Reconéctelo: vuelve.}
+{Triángulo amarillo en \menu{Otros dispositivos}: avise al instructor (\anexoA{sec:a-windows}).}
+
+\Comando{hackrf_info}
+{Pedir al HackRF que se identifique. Ábralo en \menu{Inicio $\rightarrow$ radioconda Prompt}, con SDRangel cerrado.}
+{\texttt{Found HackRF}, \texttt{Board ID Number: 2 (HackRF One)}, número de serie y versión de firmware.}
+{\texttt{No HackRF boards found}.}
+{Cierre cualquier programa SDR, reconecte el USB y repita.}
+
+\begin{logro}
+Windows reconoce el HackRF y usted conoce su número de serie y su firmware (\hoja{W1}).
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 3 · El receptor en SDRangel}
+\label{sec:w-sdrangel}
+
+\Puente{SDRangel separa dos ideas: el \emph{dispositivo} (el HackRF, que observa una ventana de frecuencias) y los \emph{canales} (procesadores que extraen una señal de esa ventana). Primero se configura el dispositivo.}
+
+\Paso{Abra SDRangel}
+{\menu{Inicio $\rightarrow$ SDRangel}. Cierre antes el radioconda Prompt.}
+{Si no ve la barra de herramientas: \menu{Workspaces $\rightarrow$ New}.}
+{El HackRF admite una sola aplicación a la vez.}
+{La ventana principal con un espacio de trabajo vacío.}
+{}
+{}
+
+\Paso{Añada el receptor HackRF}
+{\tecla{Ctrl}+\tecla{R} $\rightarrow$ diálogo \emph{Choose a receiving device\ldots}}
+{La entrada \textbf{HackRF} con su número de serie $\rightarrow$ \gui{OK}.}
+{}
+{Una ventana \textbf{HackRF Input} y una ventana de espectro.}
+{El número de serie coincide con el de la etapa 2.}
+{Si solo aparecen \texttt{FileInput}, \texttt{TestSource} o similares, SDRangel no ve el HackRF: ciérrelo, reconecte el USB y repita.}
+\label{paso:w-seldisp}
+
+\Paso{Configure el dispositivo}
+{Ventana \textbf{HackRF Input}.}
+{\gui{Bias tee} y \gui{RF amp} \valor{desactivados}; selector \gui{SR}; tasa \valor{2\,400\,000 S/s}; decimación \valor{1}; \gui{Fc} \valor{Cen}; \gui{DC} e \gui{IQ} \valor{activados}; \gui{BBF} \valor{automático}; \gui{LNA} \valor{16 dB}; \gui{VGA} \valor{16 dB}.}
+{Ganancias moderadas para no saturar con emisoras fuertes; 2,4 MSa/s muestran 2,4 MHz de espectro a la vez.}
+{Los valores quedan como se indican.}
+{Léalos en voz alta con su compañero.}
+{}
+
+\Paso{Arranque en el inicio de la banda}
+{Dial de frecuencia (en kHz) y botón de arranque.}
+{\valor{89\,000 kHz}. El triángulo azul pasa a cuadrado verde.}
+{}
+{Un piso de ruido con picos; la cascada se desplaza hacia abajo.}
+{Esto es solo energía (nivel 1): todavía no ha identificado ninguna emisora.}
+{Cuadrado rojo: el HackRF se desconectó o lo usa otro programa. Detenga, reconecte y arranque.}
+
+\Profundice{cómo se convierte la onda en muestras I/Q y qué hace cada ganancia, \anexoA{sec:a-sdr}; espectro y cascada, \anexoA{sec:a-espectro}}
+
+\begin{logro}
+El HackRF entrega muestras y usted ve 2,4 MHz de la banda de FM en tiempo real.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 4 · Encontrar y escuchar una emisora}
+\label{sec:w-fm}
+
+\Puente{Ahora se pasa de la energía a la información: elegir una emisora, situar un canal sobre ella y escuchar. Escriba primero su predicción en la \hoja{W2}.}
+
+\Paso{Recorra la banda}
+{Dial de frecuencia del dispositivo.}
+{89, 91, 93, \ldots, 107 MHz; espere unos segundos en cada posición.}
+{Con una ventana de 2,4 MHz, saltos de 2 MHz cubren la banda con solape.}
+{Bloques de unos 200 kHz que sobresalen del ruido y forman trazas continuas en la cascada.}
+{Anote las 3--5 emisoras más altas en la \hoja{W2}. Ignore la línea estrecha que aparece \emph{siempre} en el centro: es un artefacto del receptor (pico DC), no una emisora.}
+{Sin emisoras: revise el conector y lleve la antena a una ventana con el cable de extensión.}
+
+\begin{figure}[H]
+\centering
+\resizebox{0.9\linewidth}{!}{\input{figuras/fig_sintonia_offset}}
+\caption{El dispositivo fija el centro de la ventana; el canal elige qué parte de ella se demodula. Centrar el dispositivo 300 kHz por encima de la emisora la aleja del pico DC.}
+\label{fig:offset}
+\end{figure}
+
+\Paso{Sitúe la emisora fuera del centro}
+{Dial de frecuencia del dispositivo.}
+{$f_{\mathrm{dispositivo}} = f_{\mathrm{emisora}} + 300$ kHz. Ejemplo: emisora en 100,9 MHz $\Rightarrow$ \valor{101\,200 kHz}.}
+{Demodular encima del pico DC degrada el audio.}
+{La emisora aparece 300 kHz a la izquierda del centro.}
+{}
+{}
+
+\Paso{Añada el demodulador de FM de radiodifusión}
+{Icono de añadir canal, arriba en la ventana \textbf{HackRF Input}.}
+{\textbf{Broadcast FM Demodulator} $\rightarrow$ \gui{Apply} $\rightarrow$ \gui{Close}.}
+{Es el demodulador para FM comercial (canal ancho, estéreo y RDS); \emph{NFM} es para radios de voz.}
+{Una ventana \textbf{Broadcast FM Demod} y una franja de color sobre el espectro.}
+{}
+{}
+
+\Paso{Configure el canal}
+{Ventana \textbf{Broadcast FM Demod}.}
+{Desplazamiento \valor{$-300$ kHz} ($-300\,000$ Hz en los diales: rueda del ratón o flechas sobre cada dígito); \gui{RF BW} \valor{180 kHz}; \gui{AF BW} \valor{15 kHz}; de-énfasis \valor{75 $\mu$s}; volumen \valor{2--5}; squelch al mínimo.}
+{El desplazamiento lleva el canal a la emisora. En América el de-énfasis es de 75 $\mu$s; SDRangel trae 50 $\mu$s por defecto.}
+{La franja cubre la emisora y el medidor del canal se mueve.}
+{La potencia del canal sube varios dB sobre la emisora y baja al apartarlo.}
+{La franja no cubre la emisora: revise el signo del desplazamiento.}
+
+\Paso{Escuche}
+{Auriculares; ventana \textbf{Broadcast FM Demod}.}
+{Audio sin silenciar.}
+{El audio inteligible demuestra la demodulación (nivel 2).}
+{Voz o música reconocibles. Si activa \emph{Stereo} y la señal es buena, el botón se pone verde; con \emph{RDS} puede aparecer el nombre de la emisora.}
+{Aparte el canal 200 kHz: el audio se pierde o cambia de emisora. Vuelva a $-300$ kHz.}
+{Hay señal pero no se oye nada: mute, squelch y \menu{Preferences $\rightarrow$ Audio} (\anexoA{sec:a-diagfm}).}
+
+Complete la \hoja{W3}.
+
+\Profundice{por qué una emisora de FM ocupa unos 200 kHz y qué son la señal MPX, el piloto y el RDS, \anexoA{sec:a-fm}}
+
+\begin{logro}
+Ha recuperado información de una señal de radio real: nivel 2 de la escalera de evidencia.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 5 · Medir con el analizador}
+\label{sec:w-siglent}
+
+\Puente{El SDR le permitió escuchar. El analizador le permitirá \emph{medir}: niveles absolutos en dBm y anchos con marcadores. Se usa la misma antena, trasladada, para comparar en igualdad de condiciones.}
+
+\Paso{Prepare el analizador}
+{Interruptor de encendido; tecla \gui{Preset}; menú \gui{TG}.}
+{\gui{Preset} tras el arranque. Generador de seguimiento (TG) \valor{apagado}.}
+{\gui{Preset} parte de un estado conocido; el TG es una salida y debe quedar apagado.}
+{Barrido completo con el piso de ruido.}
+{Ningún indicador de TG activo en pantalla.}
+{}
+
+\Paso{Traslade la antena}
+{Detenga el HackRF en SDRangel. ANT500 $\rightarrow$ adaptador N macho -- SMA hembra $\rightarrow$ \textbf{RF INPUT}.}
+{Toque una superficie metálica antes de conectar.}
+{No hay divisor: la antena se usa por turnos.}
+{La antena queda firme y vertical sobre el analizador.}
+{}
+{}
+
+\Paso{Vea la banda completa}
+{\gui{Frequency $\rightarrow$ Center Freq}; \gui{Span}; \gui{Amplitude $\rightarrow$ Ref Level}; \gui{Amplitude $\rightarrow$ Attenuator}; \gui{BW}.}
+{Centro \valor{98 MHz}; span \valor{20 MHz}; referencia \valor{$-20$ dBm}; atenuación \valor{Auto}; preamplificador \valor{apagado}; RBW y VBW \valor{Auto}.}
+{20 MHz cubren 88--108 MHz.}
+{Varias emisoras como picos sobre el ruido.}
+{Las más altas coinciden con su \hoja{W2}.}
+{Solo ruido: active \gui{Amplitude $\rightarrow$ Preamp} y baje la referencia a $-40$ dBm.}
+
+\Paso{Acérquese a su emisora}
+{\gui{Frequency}, \gui{Span}, \gui{BW}, \gui{Detect}.}
+{Centro $= f_{\mathrm{emisora}}$; span \valor{1 MHz}; RBW \valor{10 kHz}; VBW \valor{10 kHz}; detector \valor{Pos Peak}.}
+{Una RBW de 10 kHz resuelve la forma de un canal de 200 kHz.}
+{Un bloque de unos 200 kHz cuya forma cambia con el audio.}
+{}
+{}
+
+\Paso{Acumule y mida}
+{\gui{Trace} $\rightarrow$ \valor{Max Hold}; después \gui{Peak} y \gui{Marker Fn $\rightarrow$ N dB BW}.}
+{Max Hold durante 30 s; marcador en el pico; \valor{N = $-26$ dB}.}
+{El máximo acumulado muestra el ancho realmente ocupado; \emph{N dB BW} mide el ancho entre los puntos a $N$ dB del pico.}
+{Frecuencia y nivel del pico en dBm y un ancho del orden de 150--300 kHz.}
+{}
+{Sin \emph{N dB BW}: dos marcadores delta a $-26$ dB a cada lado del pico.}
+
+Complete la \hoja{W4}. Si le queda tiempo, pruebe la tecla \gui{Demod} del analizador: también puede demodular FM y reproducirla por su conector de auriculares.
+
+\begin{importante}[Qué significa ese número en dBm]
+Es la potencia \emph{en la entrada del analizador}, medida con su RBW, a través de esta antena y este adaptador. No es la potencia del transmisor ni puede compararse directamente con los dB de SDRangel, que son relativos a la escala digital (\anexoA{sec:a-analizador}).
+\end{importante}
+
+Al terminar, devuelva la antena al HackRF y arranque de nuevo el receptor.
+
+\begin{logro}
+Tiene una medida absoluta (dBm) y un ancho ocupado de la misma emisora que escuchó.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 6 · Cuatro experimentos}
+\label{sec:w-exp}
+
+\Puente{Ya sabe obtener el resultado; ahora va a averiguar de qué depende. En cada experimento escriba primero su predicción en la hoja indicada, cambie \emph{una sola} cosa, observe y explique.}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.55\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}@{}}
+\toprule
+\textbf{Experimento} & \textbf{Qué cambia} & \textbf{Registro} \\
+\midrule
+\endhead
+1 · Sintonía & Desplazamiento del canal: $-250$, $-200$ y $-100$ kHz (50, 100 y 200 kHz fuera de la emisora). Vuelva a $-300$. & \hoja{W5} \\
+2 · Ancho de banda & \gui{RF BW} 80, 180 y 250 kHz; después \gui{AF BW} 3, 8 y 15 kHz. Termine en 180/15. & \hoja{W6} \\
+3 · Ganancia & LNA/VGA: 8/8, 16/16, 32/30 y 40/40 dB, esperando 10 s en cada una. \gui{RF amp} apagado. Termine en 16/16. & \hoja{W7} \\
+4 · Instrumentos & Compare lo que puede y no puede decirle cada instrumento. & \hoja{W8} \\
+\bottomrule
+\end{longtable}
+
+\Profundice{cómo reconocer la saturación y por qué la ganancia no mejora siempre la señal, \anexoA{sec:a-sdr}}
+
+\begin{logro}
+Puede explicar, con sus propios datos, qué controla la calidad de la recepción y qué no.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 7 · Cierre y entrega}
+\label{sec:w-evid}
+
+\begin{enumerate}
+  \item Detenga el HackRF en SDRangel y cierre el programa; desconecte el USB y después la antena.
+  \item Apague el analizador y guarde el adaptador N.
+  \item Complete la interpretación final (\hoja{W9}) y reúna los entregables de la lista del Anexo B (p.~\pageref{B-sec:b-entregaw}).
+  \item Responda el cuestionario final (Anexo B, p.~\pageref{B-sec:b-finalw}).
+\end{enumerate}
+
+\begin{logro}[Laboratorio 01 completado]
+Ha recorrido toda la cadena de un receptor, de la onda al sonido, y ha medido la señal con un instrumento independiente. En el Laboratorio 02 aplicará lo mismo a señales mucho más difíciles: ráfagas de 120 $\mu$s que solo tienen sentido si se decodifican.
+\end{logro}

@@ -1,15 +1,15 @@
 % Laboratorio 02: arquitectura física y lógica de la estación receptora pasiva.
-\begin{tikzpicture}[node distance=5mm and 7mm]
-  \node[bloqueext,minimum width=27mm] (xpdr) {Transpondedor de la\\aeronave (Mode S,\\ADS-B Out 1090ES)};
-  \node[bloque,right=22mm of xpdr,minimum width=18mm] (ant) {Antena\\receptora};
-  \node[bloque,right=of ant,minimum width=21mm] (hrf) {\textbf{HackRF One}\\1090,000 MHz\\(solo RX)};
-  \node[bloque,right=of hrf,minimum width=20mm] (pc) {Ubuntu 24.04\\USB + udev};
-  \node[bloquealt,right=of pc,minimum width=23mm] (in) {SDRangel\\\textbf{HackRF Input}\\I/Q a 4 MSa/s};
+\begin{tikzpicture}[node distance=5mm and 6mm]
+  \node[bloqueext,minimum width=25mm] (xpdr) {Transpondedor de la\\aeronave (Mode S,\\ADS-B Out 1090ES)};
+  \node[bloque,right=20mm of xpdr,minimum width=20mm] (ant) {Antena\\1090 MHz\\(ventana)};
+  \node[bloque,right=of ant,minimum width=18mm] (fil) {Filtro\\1090 MHz\\(pasivo)};
+  \node[bloque,right=of fil,minimum width=20mm] (hrf) {\textbf{HackRF One}\\1090,000 MHz\\(solo RX)};
+  \node[bloquealt,right=of hrf,minimum width=25mm] (in) {Ubuntu 24.04\\SDRangel\\\textbf{HackRF Input}};
   \draw[flecha,decorate,decoration={snake,amplitude=1.1mm,segment length=3mm,post length=2.5mm}] (xpdr) -- (ant);
   \node[rotulo] at ($(xpdr.east)!0.5!(ant.west)+(0,6mm)$) {1090 MHz\\ráfagas PPM};
-  \draw[flecha] (ant) -- (hrf);
-  \draw[flecha] (hrf) -- (pc);
-  \draw[flecha] (pc) -- (in);
+  \draw[flecha] (ant) -- node[above,rotulo]{3 m} (fil);
+  \draw[flecha] (fil) -- (hrf);
+  \draw[flecha] (hrf) -- node[above,rotulo]{USB} (in);
 
   \node[bloquealt,below=11mm of in,minimum width=27mm] (dem) {\textbf{ADS-B Demodulator}\\preámbulo, bits, paridad};
   \node[bloquealt,left=of dem,minimum width=23mm] (msg) {Tramas válidas\\(DF, ICAO, TC)};
@@ -19,7 +19,7 @@
 
   \node[bloqueext,below=10mm of map,minimum width=30mm] (pos) {\menu{Preferences} $\rightarrow$ \textbf{My Position}\\(referencia CPR y distancia)};
   \node[bloqueext,below=10mm of msg,minimum width=30mm,xshift=-6mm] (db) {Bases externas descargadas\\(enriquecen; \emph{no} son RF)};
-  \node[bloqueinst,below=10mm of dem,minimum width=25mm,xshift=8mm] (file) {\textbf{FileInput} (.sdriq)\\respaldo grabado};
+  \node[bloqueinst,below=10mm of dem,minimum width=25mm,xshift=8mm] (file) {\textbf{FileInput} (.sdriq)\\grabación de referencia};
   \draw[flechadash] (pos) -- (map);
   \draw[flechadash] (db.north) -- (tab.south east);
   \draw[flechadash] (file.north) -- ([xshift=8mm]dem.south);

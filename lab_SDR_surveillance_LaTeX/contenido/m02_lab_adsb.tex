@@ -1,0 +1,355 @@
+% Manual · Laboratorio 02 — Ubuntu 24.04: estación receptora ADS-B/Mode S en 1090 MHz.
+
+\PortadillaLaboratorio{Laboratorio 02 · Ubuntu 24.04 LTS · 225 minutos}{Del pulso de 1090 MHz a la aeronave en el mapa: recepción y decodificación ADS-B/Mode S}{Su misión: montar una estación pasiva que reciba los mensajes que emiten los aviones, demostrar que esos mensajes son válidos y llevarlos a una tabla y a un mapa. Terminará contrastando su estación con una grabación de contenido conocido.}
+
+\section{Ficha del laboratorio}
+\label{sec:u-plan}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.73\linewidth}@{}}
+\toprule
+\endhead
+\textbf{Al terminar podrá} & preparar Ubuntu y verificar el HackRF y sus permisos; configurar una cadena de recepción en 1090 MHz; obtener y reconocer tramas Mode S y ADS-B válidas; interpretar una tabla de aeronaves y un mapa; explicar cómo se calcula una posición y por qué puede fallar; medir la calidad de la recepción con un diseño experimental honesto; y separar la información recibida, la calculada y la consultada en bases de datos. \\
+\textbf{Antes de venir} & Responda el cuestionario diagnóstico (Anexo~B, p.~\pageref{B-sec:b-diagu}) y lea el \anexoA{sec:a-sistemas} y el \anexoA{sec:a-trama}. \\
+\textbf{Equipo} & HackRF One, antena de 1090 MHz, filtro de 1090 MHz, adaptadores SMA, adaptador N -- SMA, SIGLENT SSA3032X Plus, PC con Ubuntu 24.04 y la grabación de referencia en su carpeta personal (sección~\ref{sec:banco}). \\
+\textbf{Registro} & Hojas U1 a U11 del Anexo B. \\
+\bottomrule
+\end{longtable}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.62\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.16\linewidth}@{}}
+\toprule
+\textbf{Etapa} & \textbf{Minutos} & \textbf{Acumulado} \\
+\midrule
+\endhead
+Orientación y etapa 1 · Montar la estación de 1090 MHz & 20 & 20 \\
+2 · Comprobar Ubuntu & 20 & 40 \\
+3 · Receptor y demodulador & 30 & 70 \\
+4 · De la energía a la trama & 20 & 90 \\
+5 · La tabla de aeronaves & 20 & 110 \\
+6 · El mapa & 25 & 135 \\
+7 · Medir la recepción & 25 & 160 \\
+8 · El analizador en 1090 MHz & 20 & 180 \\
+9 · Contraste con una grabación de referencia & 25 & 205 \\
+10 · Cierre y entrega & 20 & 225 \\
+\bottomrule
+\end{longtable}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{figuras/fig_cadena_adsb}}
+\caption{Arquitectura de la estación. Las flechas continuas siguen la señal; las discontinuas son entradas que \emph{no} vienen de la aeronave: la posición configurada, las bases de datos y, en la etapa 9, el archivo grabado.}
+\label{fig:cadenaadsb}
+\end{figure}
+
+\begin{alerta}[Una estación que solo escucha]
+Su estación no interroga a nadie. Recibe las difusiones ADS-B y las respuestas de los transpondedores a radares secundarios y a equipos anticolisión. Está prohibido emitir en 1030 y 1090 MHz (sección~\ref{sec:reglas}).
+\end{alerta}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 1 · Montar la estación de 1090 MHz}
+\label{sec:u-antena}
+
+\Puente{A 1090 MHz las señales viajan casi en línea recta y las paredes las atenúan mucho. La ubicación de la antena decide más que cualquier ajuste del programa.}
+
+\Paso{Sitúe la antena}
+{La ventana con más cielo despejado; la antena de 1090 MHz y su base magnética.}
+{Vertical. Si hay una superficie metálica disponible (el marco de la ventana, una bandeja), apóyela encima.}
+{Las antenas de los aviones emiten en polarización vertical; la superficie metálica actúa como plano de tierra de la antena.}
+{La antena queda estable y vertical, con el cable de 3 m hasta el puesto.}
+{}
+{Sin ventana practicable: la recepción en interiores es posible, pero con menos alcance (etapa 7).}
+
+\Paso{Arme la cadena}
+{Cable de la antena $\rightarrow$ filtro de 1090 MHz $\rightarrow$ puerto \textbf{ANTENNA} del HackRF.}
+{Si los géneros de los conectores no encajan, use un adaptador SMA del paquete del HackRF. Apriete a mano.}
+{El filtro deja pasar la banda de 1090 MHz y atenúa emisoras lejanas (FM, televisión, telefonía) que pueden saturar el receptor. Es pasivo: no necesita alimentación.}
+{Cadena firme, sin holguras.}
+{Siga el cable con el dedo, de la antena al HackRF: no hay ningún conector suelto.}
+{}
+
+Conecte el USB a un puerto directo del PC y anote el montaje en la \hoja{U1}.
+
+\begin{logro}
+La estación está montada: antena en la mejor posición disponible, filtro en la cadena y HackRF alimentado.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 2 · Comprobar Ubuntu}
+\label{sec:u-ubuntu}
+
+\Puente{Cinco órdenes de terminal confirman que el sistema, el HackRF y SDRangel están listos. Abra una terminal con \tecla{Ctrl}+\tecla{Alt}+\tecla{T} y copie cada orden sin el símbolo \texttt{\$}.}
+
+\Comando{lsb_release -ds}
+{Confirmar la versión del sistema.}
+{\texttt{Ubuntu 24.04.x LTS}.}
+{Otra versión.}
+{Avise al instructor.}
+
+\Comando{lsusb -d 1d50:6089}
+{Comprobar que el sistema ve el HackRF en el bus USB.}
+{Una línea con \texttt{ID 1d50:6089}.}
+{Sin salida.}
+{Otro cable o puerto; \texttt{sudo dmesg | tail} muestra los mensajes al reconectar.}
+
+\Comando{hackrf_info}
+{Identificar el HackRF \emph{sin} \texttt{sudo}: así se comprueban también los permisos.}
+{\texttt{Found HackRF}, \texttt{Board ID Number: 2 (HackRF One)}, número de serie y firmware.}
+{\texttt{No HackRF boards found} aunque \texttt{lsusb} lo vea: faltan permisos.}
+{Siga el \anexoA{sec:a-ubuntu}. No use \texttt{sudo} para trabajar.}
+
+\Comando{snap connections sdrangel}
+{Comprobar que SDRangel tiene permiso para usar dispositivos USB.}
+{Una fila \texttt{raw-usb} con una conexión (no un guion).}
+{\texttt{raw-usb} sin conectar.}
+{\texttt{sudo snap connect sdrangel:raw-usb}.}
+
+\Comando{snap run sdrangel}
+{Abrir SDRangel como usuario normal (también puede abrirlo desde el menú de aplicaciones).}
+{La ventana principal de SDRangel.}
+{La ventana no aparece.}
+{Lea el mensaje de la terminal y avise al instructor.}
+
+Registre las salidas en la \hoja{U2}.
+
+\begin{logro}
+Sistema, permisos y programa verificados: lo que falle a partir de ahora será de la señal, no de la instalación.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 3 · Receptor y demodulador}
+\label{sec:u-receptor}
+
+\Puente{Como en el Laboratorio 01, primero se configura el dispositivo y después el canal. Esta vez el canal no produce audio, sino mensajes.}
+
+\Paso{Configure el HackRF en 1090 MHz}
+{\tecla{Ctrl}+\tecla{R} $\rightarrow$ \textbf{HackRF} $\rightarrow$ \gui{OK}; ventana \textbf{HackRF Input}.}
+{Frecuencia \valor{1\,090\,000 kHz}; \gui{SR} \valor{4\,000\,000 S/s}; decimación \valor{1}; \gui{Fc} \valor{Cen}; \gui{BBF} \valor{automático}; \gui{DC} e \gui{IQ} \valor{activados}; \gui{Bias tee} y \gui{RF amp} \valor{desactivados}; \gui{LNA} \valor{24 dB}; \gui{VGA} \valor{20 dB}.}
+{Los mensajes se transmiten a 2 Mchip/s: el demodulador exige al menos 2 MSa/s y trabaja por defecto a 4 MSa/s, así que la señal no se remuestrea.}
+{Todos los valores se aceptan.}
+{Léalos en voz alta con su compañero.}
+{El HackRF no aparece en la lista: vuelva a la etapa 2.}
+
+\Paso{Observe el silencio}
+{Botón de arranque; espectro y cascada.}
+{Dos minutos sin tocar nada.}
+{Para reconocer un mensaje hay que saber antes cómo se ve el ruido.}
+{Un piso casi plano de 4 MHz y, con tráfico, puntos o trazos muy breves en la cascada.}
+{Anote el nivel del piso en la \hoja{U3}.}
+{Cuadrado rojo: reconecte el USB y arranque.}
+
+\Paso{Añada el demodulador ADS-B}
+{Icono de añadir canal $\rightarrow$ \textbf{ADS-B Demodulator} $\rightarrow$ \gui{Apply} $\rightarrow$ \gui{Close}.}
+{Desplazamiento \valor{0 Hz}; \gui{SR} \valor{4M}; \gui{RF BW} \valor{2,6 MHz}; umbral de correlación \valor{7 dB}; botón \gui{S} \valor{activado}; \gui{Feed} \valor{desactivado}.}
+{El umbral fija cuánto debe parecerse una ráfaga al preámbulo para intentar decodificarla. \gui{S} añade los mensajes Mode S a los ADS-B. \gui{Feed} enviaría datos a terceros.}
+{Una ventana con controles arriba y una tabla vacía. Estos valores son los de fábrica de SDRangel 7.27.2.}
+{}
+{}
+
+\Paso{Active estadísticas, gráfico y registro}
+{Botones \gui{Display Statistics} y \gui{Display Chart}; registro con \gui{Start/stop Logging ADS-B frames to .csv File}.}
+{Archivo \texttt{\textasciitilde/adsb\_<grupo>.csv}.}
+{Las estadísticas cuentan tramas por tipo; el CSV guarda cada trama como evidencia reproducible.}
+{En pocos minutos, filas en la tabla y contadores en marcha.}
+{El total de tramas crece.}
+{Sin tramas tras 10 minutos: compruebe la cadena de la etapa 1. Si todo está bien y el cielo está vacío, adelante la etapa 9 y vuelva después.}
+
+\begin{logro}
+Su estación decodifica: cada fila de la tabla nació de ráfagas de 1090 MHz que superaron una comprobación de validez.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 4 · De la energía a la trama}
+\label{sec:u-tramas}
+
+\Puente{¿Por qué podemos fiarnos de una fila de la tabla? Porque cada mensaje recorrió una escalera: energía, preámbulo, bits y comprobación de paridad. Un pico en el espectro, por alto que sea, se queda en el primer peldaño.}
+
+\Paso{Lea lo que el demodulador está validando}
+{\gui{Display Statistics} y la columna \emph{Correlation} de la tabla.}
+{Cinco minutos de recepción.}
+{Las estadísticas reparten las tramas por \emph{Downlink Format} (DF) y \emph{Type Code} (TC); la correlación indica cuánto se parecía cada preámbulo al ideal.}
+{Varios DF, entre ellos 17 (ADS-B) y otros como 11, 4, 5, 20 o 21 (respuestas Mode S).}
+{Anote totales y distribución en la \hoja{U4}.}
+{}
+
+Después decodifique a mano una trama real (\hoja{U5}): pasará de 28 cifras hexadecimales al indicativo de un vuelo.
+
+\Profundice{el preámbulo de 8 $\mu$s, la modulación PPM, los formatos DF y su validación, \anexoA{sec:a-trama}}
+
+\begin{logro}
+Puede explicar por qué una trama es válida y cuál es la diferencia entre ver energía y recibir un mensaje.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 5 · La tabla de aeronaves}
+\label{sec:u-tabla}
+
+\Puente{Cada fila agrupa los mensajes de una dirección ICAO. Pero no todo lo que muestra una fila llegó por radio: unas columnas son datos transmitidos, otras cálculos del receptor y otras consultas a bases de datos.}
+
+\Paso{Registre tres aeronaves}
+{Tabla del demodulador.}
+{Las tres filas con más tramas (\emph{Frames}).}
+{Más tramas implican más campos y más confianza.}
+{Dirección ICAO en todas; indicativo, altitud, velocidad o posición en algunas.}
+{Para cada valor de la \hoja{U6}, indique si es transmitido (nivel 5), derivado (6) o externo (7).}
+{}
+
+Es normal que falten datos: la identificación, la altitud, la velocidad y la posición viajan en mensajes distintos, con ritmos distintos (\anexoA{sec:a-trama}).
+
+\begin{logro}
+Sabe qué columnas de la tabla son evidencia de radio y cuáles no.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 6 · El mapa}
+\label{sec:u-mapa}
+
+\Puente{Un avión no transmite su posición completa en cada mensaje. La codifica de forma compacta (CPR), y el receptor la reconstruye con dos mensajes o con una posición de referencia: la del propio receptor. Por eso hay que configurarla.}
+
+\begin{importante}[Privacidad]
+SDRangel puede tomar la posición del receptor del sistema operativo. No publique capturas con las coordenadas exactas de la estación: recórtelas o aleje el mapa.
+\end{importante}
+
+\Paso{Fije la posición del receptor}
+{\menu{Preferences $\rightarrow$ My Position}.}
+{Latitud y longitud del laboratorio con dos decimales (norte y este positivos). Anote el estado de la casilla \gui{Auto-update position}.}
+{Es la referencia para reconstruir posiciones y para calcular distancias.}
+{Los valores se conservan al reabrir el diálogo.}
+{Difieren menos de 0,05° de la ubicación real del aula.}
+{}
+
+\Paso{Abra el mapa}
+{\tecla{Ctrl}+\tecla{E} $\rightarrow$ \textbf{Map} $\rightarrow$ \gui{OK}. En la tabla, una fila con Lat/Lon $\rightarrow$ \gui{Find on Feature Map}.}
+{Mapa 2D (los mosaicos se descargan de Internet).}
+{}
+{Aviones alrededor de su estación; al seleccionar uno se resalta su fila.}
+{La posición del símbolo coincide con la de la tabla.}
+{Filas sin posición: espere mensajes de posición. Mapa en blanco: sin conexión para los mosaicos.}
+
+Complete la \hoja{U7}.
+
+\Profundice{codificación CPR, decodificación global y local, y el error de referencia que estudiará en la etapa 9, \anexoA{sec:a-cpr}}
+
+\begin{logro}
+Tiene un mapa construido con sus propias tramas y sabe qué parte de él depende de su configuración.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 7 · Medir la recepción}
+\label{sec:u-exp}
+
+\Puente{¿Recibe mejor con más ganancia? Responder exige un experimento honesto: el tráfico cambia de un minuto a otro y puede engañarle. Por eso se repite la condición inicial al final (diseño A--B--A).}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.47\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}@{}}
+\toprule
+\textbf{Condición} & \textbf{Ajuste (5 minutos cada una)} & \textbf{Qué compara} \\
+\midrule
+\endhead
+A & LNA 24 / VGA 20, umbral 7 dB, con filtro & Referencia \\
+B & LNA 32 / VGA 30, umbral 7 dB, con filtro & Efecto de la ganancia \\
+A' & Igual que A & ¿Cambió el tráfico? \\
+C & Igual que A, umbral 5 dB & Efecto del umbral \\
+D & Igual que A, \emph{sin} filtro (detenga el HackRF para retirarlo) & Efecto del filtro \\
+\bottomrule
+\end{longtable}
+
+Antes de cada condición, reinicie las estadísticas con clic derecho sobre \gui{Display Statistics}. Escriba la predicción y los resultados en la \hoja{U8}. Si A y A' difieren más que A y B, el tráfico cambió y el efecto de la ganancia no está demostrado: dígalo así. Vuelva a la condición A al terminar.
+
+\begin{logro}
+Puede defender con datos qué mejora su estación y qué no, sin confundirlo con cambios del tráfico.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 8 · El analizador en 1090 MHz}
+\label{sec:u-siglent}
+
+\Puente{Un analizador de barrido recorre las frecuencias de una en una; un mensaje dura 120 $\mu$s. Casi nunca coinciden. Con una configuración especial, el analizador puede mostrar la forma de los mensajes en el tiempo, aunque nunca su contenido.}
+
+Detenga el HackRF y lleve la antena (sin el filtro) al \textbf{RF INPUT} del analizador con el adaptador N -- SMA.
+
+\Paso{Barrido con Max Hold}
+{\gui{Frequency}, \gui{Span}, \gui{BW}, \gui{Amplitude}, \gui{Trace}.}
+{Centro \valor{1090 MHz}; span \valor{10 MHz}; RBW \valor{1 MHz}; VBW \valor{3 MHz}; referencia \valor{$-40$ dBm}; preamplificador \valor{activado}; traza \valor{Max Hold} durante 2 minutos.}
+{Max Hold acumula las pocas coincidencias entre barrido y ráfaga.}
+{Una elevación alrededor de 1090 MHz que crece con el tiempo; en \valor{Clear Write} la traza parece solo ruido.}
+{}
+{}
+
+\Paso{Span cero con disparo de vídeo}
+{\gui{Span $\rightarrow$ Zero Span}; \gui{Sweep $\rightarrow$ Sweep Time}; \gui{Trigger $\rightarrow$ Video}.}
+{Centro \valor{1090 MHz}; RBW \valor{1 MHz}; tiempo de barrido \valor{mínimo} (900 $\mu$s según el manual del equipo); nivel de disparo \valor{6--10 dB} por encima del piso.}
+{En span cero el eje horizontal es tiempo, y el disparo de vídeo congela la pantalla cuando llega una ráfaga.}
+{Bloques de unos 64 o 120 $\mu$s de ancho: mensajes cortos y largos.}
+{Mida la duración con dos marcadores en modo delta.}
+{Nunca dispara: baje el nivel en pasos de 2 dB. Dispara siempre: súbalo.}
+
+Registre en la \hoja{U9} y devuelva la cadena al HackRF.
+
+\Profundice{por qué el barrido no ve las ráfagas y qué muestra el span cero, \anexoA{sec:a-barrido}}
+
+\begin{logro}
+Ha visto la forma temporal de los mensajes de 1090 MHz y sabe por qué el analizador no puede decodificarlos.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 9 · Contraste con una grabación de referencia}
+\label{sec:u-offline}
+
+\Puente{¿Cómo saber si una estación decodifica \emph{bien}? Comparándola con datos de contenido conocido. La carpeta \texttt{datos\_adsb} contiene una grabación real de 1090 MHz, verificada con tres decodificadores, de un único avión volando cerca de Sicilia. Úsela también para descubrir un error clásico.}
+
+\begin{prediccion}
+Si reproduce una grabación hecha en Italia con la posición del receptor configurada en su aula, ¿dónde cree que aparecerá el avión en el mapa?
+\end{prediccion}
+
+\Paso{Cargue la grabación}
+{Detenga \textbf{HackRF Input}. \tecla{Ctrl}+\tecla{R} $\rightarrow$ \textbf{FileInput}; botón de abrir archivo.}
+{\texttt{\textasciitilde/datos\_adsb/modes1\_dump1090\_2MSps\_1090MHz.sdriq}; bucle \valor{activado}; aceleración \valor{1}.}
+{La cabecera del archivo aporta la tasa y la frecuencia.}
+{\valor{2000 kS/s}, \valor{1\,090\,000 kHz}, duración \valor{00:00:00.178}, fecha de inicio 05-01-2013.}
+{}
+{El archivo no abre: compruebe que está en su carpeta personal (\anexoA{sec:a-grabacion}).}
+
+\Paso{Reprodúzcala con su posición actual}
+{Icono de añadir canal de \textbf{FileInput} $\rightarrow$ \textbf{ADS-B Demodulator}; botón de reproducción.}
+{Desplazamiento \valor{0 Hz}; \gui{SR} \valor{2M}; umbral \valor{7 dB}; \gui{S} activado. \gui{My Position} sin cambios.}
+{2M coincide con la tasa del archivo.}
+{Una fila \textbf{4d2023}, indicativo \textbf{AMC421}, y una posición en el mapa.}
+{Anote esa posición en la \hoja{U10}. ¿Está cerca de Sicilia?}
+{}
+
+\Paso{Repita con una referencia correcta}
+{\menu{Preferences $\rightarrow$ My Position}.}
+{Anote sus valores. Desactive \gui{Auto-update position}. Introduzca latitud \valor{37,0} y longitud \valor{14,0}.}
+{La posición se reconstruye eligiendo la zona más cercana a la referencia; con la referencia lejos, se elige mal.}
+{La aeronave aparece junto a la costa sur de Sicilia, hacia 36,96--37,10°N y 13,79--13,86°E.}
+{Compare con los valores de referencia de la \hoja{U10}.}
+{Los valores vuelven solos: \gui{Auto-update position} sigue activada.}
+
+\Paso{Restaure su posición}
+{\menu{Preferences $\rightarrow$ My Position}.}
+{Los valores anotados y el estado anterior de \gui{Auto-update position}.}
+{Olvidarlo falsearía posiciones y distancias en vivo.}
+{}
+{Reabra el diálogo y compruebe.}
+{}
+
+\begin{importante}[Etiquete el origen]
+Toda captura de esta etapa se marca \textbf{GRABACIÓN}. El archivo tiene el tiempo comprimido y se repite en bucle: las tasas de tramas y el alcance no describen el tráfico real (\anexoA{sec:a-grabacion}).
+\end{importante}
+
+\begin{logro}
+Ha comprobado su cadena con datos conocidos y ha visto, con sus propios ojos, que una posición «decodificada» puede ser falsa sin que nada lo advierta.
+\end{logro}
+
+% ---------------------------------------------------------------------------
+\section{Etapa 10 · Cierre y entrega}
+\label{sec:u-informe}
+
+\begin{enumerate}
+  \item Detenga y cierre SDRangel. Desconecte el USB y después la cadena de antena.
+  \item Apague el analizador; guarde el filtro y los adaptadores.
+  \item Complete la interpretación final (\hoja{U11}) y reúna los entregables de la lista del Anexo B (p.~\pageref{B-sec:b-entregau}).
+  \item Responda el cuestionario final (Anexo B, p.~\pageref{B-sec:b-finalu}).
+\end{enumerate}
+
+\begin{logro}[Laboratorio 02 completado]
+Ha construido una estación de vigilancia pasiva y puede justificar cada dato que muestra: qué fue recibido, qué fue calculado, qué fue consultado y qué fue grabado.
+\end{logro}

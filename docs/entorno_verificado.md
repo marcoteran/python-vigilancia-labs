@@ -48,3 +48,11 @@ Windows 11 Enterprise 25H2 · MiKTeX 25.12 (XeTeX 4.16) · Python 3.14.6 con num
 - **SDRangel 7.27.2 para Windows** (`sdrangel-7.27.2-win64.exe`, SHA-256 `96e4d6c8…dabf74dc2`), desempaquetado en una carpeta temporal y controlado por su API REST: FileInput aceptó la grabación `.sdriq`; el ADS-B Demodulator decodificó la aeronave 4D2023/AMC421 y registró 143 tramas distintas con paridad válida. La configuración que SDRangel creó en el perfil de usuario se eliminó después.
 - **Decodificadores independientes:** `herramientas/adsb_iq.py` (242 tramas válidas) y pyModeS 3.6.0 (coincidencia 242/242).
 - **No probado:** HackRF One real, antena del kit, SIGLENT SSA3032X Plus, cualquier paso en Ubuntu 24.04 (no había Ubuntu ni WSL disponibles).
+
+## Revisión del 16 de octubre de 2026 · laboratorios SDR (edición 3.0)
+
+Windows 11 Enterprise 25H2 · MiKTeX 25.12 (XeTeX 4.16).
+
+- **LaTeX:** cuatro documentos enlazados con `xr-hyper`, tres rondas de XeLaTeX: manual (23 páginas), Anexo A (17), Anexo B (21) y guía del instructor (18). Cada uno con 0 errores, 0 cajas desbordadas, 0 referencias indefinidas y 0 glifos ausentes, sin «??» en ningún PDF. LuaLaTeX compila el manual. Todas las páginas se renderizaron a imagen y se revisaron visualmente.
+- **Sin cambios respecto de la edición 2.0:** la grabación de referencia, sus sumas SHA-256 y la evidencia de SDRangel 7.27.2, `adsb_iq.py` y pyModeS.
+- **No probado en esta sesión:** HackRF One, antenas, SIGLENT SSA3032X Plus y Ubuntu 24.04. La guía del instructor los cubre con el ensayo previo de cada curso.

@@ -1,46 +1,48 @@
-% Manual del estudiante: dos laboratorios SDR de solo recepción.
+% Manual del laboratorio (documento principal del estudiante), edición 3.0.
 %   Laboratorio 01 (Windows): radiodifusión FM con HackRF One, SDRangel y SIGLENT.
 %   Laboratorio 02 (Ubuntu 24.04): estación receptora ADS-B/Mode S en 1090 MHz.
-% La guía del instructor se compila aparte desde guia_instructor.tex.
+% La teoría está en el Anexo A (anexo_a.tex); evaluación y registro, en el Anexo B
+% (anexo_b.tex); claves y preparación, en guia_instructor.tex.
 %
-% Compilación (XeLaTeX, tres pasadas; ver README.md):
-%   xelatex -output-directory=build -jobname=laboratorio_sdr_surveillance main.tex
+% Los cuatro documentos se citan entre sí (xr-hyper): compílelos juntos con
+% compile-xelatex.bat o make, que hacen tres rondas sobre los cuatro.
 %
 % IMPORTANTE: deliberadamente NO se usa \DocumentMetadata. En instalaciones MiKTeX
 % parcialmente actualizadas activa el stack experimental latex-lab/tagpdf.
 
 \documentclass[11pt,a4paper]{scrartcl}
+\usepackage{xr-hyper}
 \usepackage[palette=signal,mode=lab,body=serif]{marco-academic}
 \input{preambulo_comun}
-\input{contenido/cuestionarios}
+\externaldocument[A-]{build/anexo_a_fundamentos_sdr}[anexo_a_fundamentos_sdr.pdf]
+\externaldocument[B-]{build/anexo_b_evaluacion_sdr}[anexo_b_evaluacion_sdr.pdf]
 
 \MASetup{
  title={Laboratorios SDR para la\\vigilancia aeronáutica},
- subtitle={Laboratorio 01 · Windows: recepción FM, SDR y análisis de espectro\\Laboratorio 02 · Ubuntu: recepción y decodificación ADS-B/Mode S en 1090 MHz},
+ subtitle={Manual del laboratorio\\Lab.\ 01 · Windows: de las ondas de radio al sonido\\Lab.\ 02 · Ubuntu: del pulso de 1090 MHz a la aeronave en el mapa},
  author={Marco Teran},
- institution={Manual del estudiante · solo recepción},
+ institution={Manual del estudiante · versión aprobada para uso en clase},
  course={Vigilancia aeronáutica · Instrumentación RF y SDR},
- code={LAB-SDR-1090 · v2.0},
- version={2.0},
- date={15 de octubre de 2026},
- header-left={Laboratorios SDR · Vigilancia aeronáutica},
+ code={LAB-SDR-1090 · v3.0},
+ version={3.0},
+ date={16 de octubre de 2026},
+ header-left={Laboratorios SDR · Manual},
  header-right={HackRF One · SDRangel 7.27.2 · SIGLENT SSA3032X Plus},
  cover-note={\textbf{Pregunta guía:} ¿cómo se pasa de energía electromagnética observable a información en la que se pueda confiar?\\[1.5mm]
-  \textbf{Modalidad RF:} \emph{exclusivamente recepción}. Ninguna actividad de este manual transmite.\\[1.5mm]
-  \textbf{Duración:} 210 min (Lab.\ 01) y 225 min (Lab.\ 02) de actividad del estudiante, más preparación previa del instructor.\\[1.5mm]
-  \textbf{Estado:} documentación revisada; la recepción en vivo con el hardware del banco está \emph{pendiente de validación} (sección~\ref{sec:estado}).}
+  \textbf{Modalidad:} solo recepción. Ninguna actividad transmite.\\[1.5mm]
+  \textbf{Duración:} 210 min (Lab.\ 01) y 225 min (Lab.\ 02).\\[1.5mm]
+  \textbf{Este manual dice qué hacer.} El \emph{Anexo A} explica por qué funciona; el \emph{Anexo B} contiene los cuestionarios y las hojas donde registrará sus resultados.}
 }
 
 \hypersetup{
-	pdftitle={Laboratorios SDR para la vigilancia aeronáutica},
+	pdftitle={Laboratorios SDR para la vigilancia aeronáutica · Manual},
 	pdfsubject={Recepción FM y ADS-B/Mode S con HackRF One, SDRangel y SIGLENT SSA3032X Plus},
-	pdfkeywords={SDR, HackRF One, SDRangel, ADS-B, Mode S, FM, SIGLENT, analizador de espectro},
+	pdfkeywords={SDR, HackRF One, SDRangel, ADS-B, Mode S, FM, SIGLENT, laboratorio},
 	pdflang={es},
 	bookmarksnumbered=true,
 	bookmarksopen=true
 }
-% marco-academic fija pdftitle/pdfsubject al iniciar el documento; se reafirman aquí.
-\AtBeginDocument{\hypersetup{pdftitle={Laboratorios SDR para la vigilancia aeronáutica},
+\AtBeginDocument{\hypersetup{pdftitle={Laboratorios SDR para la vigilancia aeronáutica · Manual},
 	pdfsubject={Recepción FM y ADS-B/Mode S con HackRF One, SDRangel y SIGLENT SSA3032X Plus}}}
 
 \begin{document}
@@ -50,15 +52,12 @@
 \clearpage
 
 \IniciarLaboratorio{0}{P}
-\input{contenido/00_comun}
+\input{contenido/m00_inicio}
 
 \IniciarLaboratorio{1}{W}
-\input{contenido/01_lab_windows_fm}
+\input{contenido/m01_lab_fm}
 
 \IniciarLaboratorio{2}{U}
-\input{contenido/02_lab_ubuntu_adsb}
-
-\IniciarLaboratorio{A}{A}
-\input{contenido/03_anexos}
+\input{contenido/m02_lab_adsb}
 
 \end{document}

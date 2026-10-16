@@ -1,40 +1,42 @@
-% Guía del instructor de los dos laboratorios SDR (documento separado).
-% Comparte preámbulo, figuras y banco de preguntas con main.tex; activa las respuestas.
-%
-% Compilación (XeLaTeX, tres pasadas):
-%   xelatex -output-directory=build -jobname=guia_instructor_sdr guia_instructor.tex
+% Guía del instructor de los dos laboratorios SDR, edición 3.0.
+% Comparte preámbulo, figuras y banco de preguntas con el manual y los anexos;
+% activa las respuestas. Compile los cuatro documentos juntos (compile-xelatex.bat o make).
 
 \documentclass[11pt,a4paper]{scrartcl}
+\usepackage{xr-hyper}
 \usepackage[palette=signal,mode=manual,body=serif]{marco-academic}
 \input{preambulo_comun}
 \input{contenido/cuestionarios}
 \guiainstructortrue
+\externaldocument[M-]{build/laboratorio_sdr_surveillance}[laboratorio_sdr_surveillance.pdf]
+\externaldocument[A-]{build/anexo_a_fundamentos_sdr}[anexo_a_fundamentos_sdr.pdf]
+\externaldocument[B-]{build/anexo_b_evaluacion_sdr}[anexo_b_evaluacion_sdr.pdf]
 
 \MASetup{
  title={Guía del instructor:\\laboratorios SDR},
- subtitle={Preparación, prueba en seco, criterios de éxito, respaldo offline, claves de evaluación y limitaciones del Laboratorio 01 (FM, Windows) y del Laboratorio 02 (ADS-B y Mode S, Ubuntu)},
+ subtitle={Preparación del banco, ensayo previo, conducción de la sesión, claves de los cuestionarios y de las hojas de registro del Laboratorio 01 (FM, Windows) y del Laboratorio 02 (ADS-B y Mode S, Ubuntu)},
  author={Marco Teran},
- institution={Documento para el instructor · no distribuir a estudiantes antes de la evaluación},
+ institution={Documento para el instructor · no distribuir a estudiantes},
  course={Vigilancia aeronáutica · Instrumentación RF y SDR},
- code={LAB-SDR-1090 · GUÍA v2.0},
- version={2.0},
- date={15 de octubre de 2026},
+ code={LAB-SDR-1090 · GUÍA v3.0},
+ version={3.0},
+ date={16 de octubre de 2026},
  header-left={Guía del instructor · Laboratorios SDR},
  header-right={Contiene respuestas},
- cover-note={\textbf{Propósito:} que ninguna sesión fracase por software sin instalar, una antena incompatible o falta de tráfico aéreo, y que la evaluación premie la interpretación honesta de la evidencia.\\[1.5mm]
-  \textbf{Contiene} las claves de los cuatro cuestionarios: no la publique junto al manual del estudiante.}
+ cover-note={\textbf{Propósito:} que cada sesión empiece con el banco listo y que la evaluación premie la interpretación honesta de la evidencia.\\[1.5mm]
+  \textbf{Contiene} las claves de los cuatro cuestionarios y las respuestas de referencia de las hojas del Anexo B: no la publique junto al material del estudiante.}
 }
 
 \hypersetup{
 	pdftitle={Guía del instructor: laboratorios SDR},
-	pdfsubject={Preparación, criterios de éxito, respaldo offline y claves de evaluación},
+	pdfsubject={Preparación, conducción de la sesión y claves de evaluación},
 	pdfkeywords={SDR, HackRF One, SDRangel, ADS-B, Mode S, FM, SIGLENT, guía del instructor},
 	pdflang={es},
 	bookmarksnumbered=true,
 	bookmarksopen=true
 }
 \AtBeginDocument{\hypersetup{pdftitle={Guía del instructor: laboratorios SDR},
-	pdfsubject={Preparación, criterios de éxito, respaldo offline y claves de evaluación}}}
+	pdfsubject={Preparación, conducción de la sesión y claves de evaluación}}}
 
 \begin{document}
 \MAMakeTitle
